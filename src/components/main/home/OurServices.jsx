@@ -1,0 +1,169 @@
+import { useState } from "react";
+import img1 from "../../../assets/images/service-img-1.png";
+import img2 from "../../../assets/images/service-img-2.png";
+import img3 from "../../../assets/images/service-img-3.png";
+import img4 from "../../../assets/images/service-img-4.png";
+
+const SERVICES = [
+  {
+    title: "Moving & Packing",
+    desc: "Stress-free local and long-distance moving with professional packing.",
+    img: img1,
+  },
+  {
+    title: "Home Cleaning",
+    desc: "Deep cleans, move-in/out, and recurring maid services.",
+    img: img2,
+  },
+  {
+    title: "Handyman & Repair",
+    desc: "Plumbing, electrical, assembly, and general home repairs.",
+    img: img3,
+  },
+  {
+    title: "Laundry Service",
+    desc: "Wash, dry, and fold services delivered to your door.",
+    img: img4,
+  },
+];
+
+export default function OurServices() {
+  const [start, setStart] = useState(0);
+  const visible = SERVICES.slice(start, start + 3);
+
+  return (
+    <section className="w-full bg-white py-16 px-6 lg:px-16">
+      <div className="max-w-[1200px] mx-auto">
+
+        {/* Header Row */}
+        <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-6 mb-10">
+
+          {/* Left */}
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center gap-2">
+              <span
+                className="w-1.5 h-1.5 rounded-full inline-block"
+                style={{ backgroundColor: "#08203C" }}
+              />
+              <span
+                className="text-sm font-medium"
+                style={{
+                  color: "#08203C",
+                  fontFamily: '"Rethink Sans", sans-serif',
+                }}
+              >
+                Our Services
+              </span>
+            </div>
+            <h2
+              className="font-extrabold text-3xl sm:text-4xl leading-tight"
+              style={{
+                color: "#08203C",
+                fontFamily: '"Rethink Sans", sans-serif',
+              }}
+            >
+              Comprehensive Home Services
+              <br />
+              You Can Count On
+            </h2>
+          </div>
+
+          {/* Right */}
+          <div className="flex flex-col items-start lg:items-end gap-4">
+            <p
+              className="text-sm leading-relaxed max-w-[340px] lg:text-right"
+              style={{
+                color: "#7a849a",
+                fontFamily: '"Rethink Sans", sans-serif',
+              }}
+            >
+              Choose a service from the list below to get an instant quote or
+              make a reservation immediately!
+            </p>
+
+            {/* Arrows */}
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setStart(Math.max(0, start - 1))}
+                className="w-10 h-10 rounded-full flex items-center justify-center border transition-all duration-200 cursor-pointer"
+                style={{
+                  border: "1.5px solid #ccc",
+                  background: "transparent",
+                  color: "#08203C",
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.borderColor = "#08203C";
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.borderColor = "#ccc";
+                }}
+              >
+                ←
+              </button>
+              <button
+                onClick={() =>
+                  setStart(Math.min(SERVICES.length - 3, start + 1))
+                }
+                className="w-10 h-10 rounded-full flex items-center justify-center border-none cursor-pointer transition-all duration-200"
+                style={{ backgroundColor: "#08203C", color: "#fff" }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.backgroundColor = "#1a3260";
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.backgroundColor = "#08203C";
+                }}
+              >
+                →
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Service Cards */}
+        <div className="flex gap-5 overflow-hidden">
+          {visible.map((s) => (
+            <div
+              key={s.title}
+              className="relative flex-1 rounded-2xl overflow-hidden cursor-pointer group"
+              style={{ minHeight: "320px" }}
+            >
+              <img
+                src={s.img}
+                alt={s.title}
+                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                style={{ minHeight: "320px" }}
+              />
+              {/* Gradient overlay */}
+              <div
+                className="absolute inset-0 rounded-2xl"
+                style={{
+                  background:
+                    "linear-gradient(0deg, rgba(13,31,60,0.92) 0%, transparent 55%)",
+                }}
+              />
+              {/* Text */}
+              <div className="absolute bottom-0 left-0 right-0 p-5">
+                <h3
+                  className="text-white font-bold text-lg mb-1"
+                  style={{ fontFamily: '"Rethink Sans", sans-serif' }}
+                >
+                  {s.title}
+                </h3>
+                <p
+                  className="text-sm leading-relaxed"
+                  style={{
+                    color: "rgba(255,255,255,0.75)",
+                    fontFamily: '"Rethink Sans", sans-serif',
+                  }}
+                >
+                  {s.desc}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+      </div>
+    </section>
+  );
+}
