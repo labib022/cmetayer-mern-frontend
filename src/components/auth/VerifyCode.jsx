@@ -1,0 +1,141 @@
+import { useState, useRef, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+
+const TIMER_SECONDS = 180; // 3:00 minutes
+
+export default function VerifyCode() {
+  const [code, setCode] = useState(["", "", "", "", "", ""]);
+  const [timer, setTimer] = useState(TIMER_SECONDS);
+  const inputRefs = useRef([]);
+  const navigate = useNavigate();
+
+  // Countdown timer
+  useEffect(() => {
+    if (timer <= 0) return;
+    const interval = setInterval(() => setTimer((t) => t - 1), 1000);
+    return () => clearInterval(interval);
+  }, [timer]);
+
+  const formatTime = (s) => {
+    const m = Math.floor(s / 60).toString().padStart(2, "0");
+    const sec = (s % 60).toString().padStart(2, "0");
+    return `${m}.${sec}`;
+  };
+
+  const handleChange = (i, val) => {
+    if (!/^\d?$/.test(val)) return;
+    const updated = [...code];
+    updated[i] = val;
+    setCode(updated);
+    if (val && i < 5) inputRefs.current[i + 1]?.focus();
+  };
+
+  const handleKeyDown = (i, e) => {
+    if (e.key === "Backspace" && !code[i] && i > 0) {
+      inputRefs.current[i - 1]?.focus();
+    }
+  };
+
+  const handlePaste = (e) => {
+    e.preventDefault();
+    const pasted = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, 6);
+    const updated = [...code];
+    pasted.split("").forEach((char, i) => { updated[i] = char; });
+    setCode(updated);
+    inputRefs.current[Math.min(pasted.length, 5)]?.focus();
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const fullCode = code.join("");
+    if (fullCode.length < 6) return;
+    console.log("Verify code:", fullCode);
+    navigate("/reset-password");
+  };
+
+  const handleResend = () => {
+    setTimer(TIMER_SECONDS);
+    setCode(["", "", "", "", "", ""]);
+    inputRefs.current[0]?.focus();
+    console.log("Resend code");
+  };
+
+  return (
+    <div className="min-h-screen w-full flex items-center justify-center bg-[#F0F0F0] px-4 py-10">
+
+      {/* Card */}
+      <div className="w-full max-w-[480px] flex flex-col items-center gap-[35px] p-8 rounded-[32px] bg-[#FAFAFA]">
+
+        {/* Header */}
+        <div className="flex flex-col items-center gap-2 text-center">
+          <h1 className="font-rethink text-[#1F1F1F] text-2xl font-medium leading-[140%] tracking-[-0.936px] m-0">
+            Enter the Code We've Sent
+          </h1>
+          <p className="font-rethink text-[#595959] text-base font-normal leading-[140%] text-center m-0">
+            We've sent a 6-digit verification code to your email address. Please enter it below.
+          </p>
+        </div>
+
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="flex flex-col gap-6 w-full">
+
+          {/* 6 Code Inputs */}
+          <div className="flex items-center justify-between gap-2 w-full">
+            {code.map((digit, i) => (
+              <input
+                key={i}
+                ref={(el) => (inputRefs.current[i] = el)}
+                type="text"
+                inputMode="numeric"
+                maxLength={1}
+                value={digit}
+                onChange={(e) => handleChange(i, e.target.value)}
+                onKeyDown={(e) => handleKeyDown(i, e)}
+                onPaste={handlePaste}
+                className="font-rethink text-center text-xl font-semibold text-[#08203C] outline-none transition-all duration-200 bg-[#F5F5F5] rounded-[4px] border border-[#08203C] focus:bg-white focus:shadow-md"
+                style={{ width: "65.667px", height: "75px" }}
+              />
+            ))}
+          </div>
+
+          {/* Resend + Timer row */}
+          <div className="flex items-center justify-between w-full">
+            <p className="font-rethink text-[#595959] text-sm font-normal leading-5 m-0">
+              Didn't receive a code?{" "}
+              <button
+                type="button"
+                onClick={handleResend}
+                className="font-rethink text-[#002426] text-sm font-normal leading-5 bg-transparent border-none cursor-pointer p-0 hover:underline"
+              >
+                Send again
+              </button>
+            </p>
+            <span className="font-rethink text-[#079455] text-sm font-normal leading-5">
+              {formatTime(timer)}
+            </span>
+          </div>
+
+          {/* Confirm Button */}
+          <button
+            type="submit"
+            className="font-rethink w-full flex items-center justify-center gap-2 py-4 px-[18px] rounded-[40px] bg-[#08203C] text-white text-base font-semibold leading-[140%] text-center border-none cursor-pointer hover:opacity-90 transition-opacity duration-200"
+          >
+            Confirm
+          </button>
+
+          {/* Back to Login */}
+          <p className="font-rethink text-[#595959] text-[15px] font-normal m-0 text-center">
+            Remember your password?{" "}
+            <Link
+              to="/login"
+              className="font-rethink text-[#08203C] font-bold no-underline hover:underline transition-all duration-200"
+            >
+              Sign in
+            </Link>
+          </p>
+
+        </form>
+      </div>
+    </div>
+  );
+}

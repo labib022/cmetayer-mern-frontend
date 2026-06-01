@@ -48,7 +48,7 @@ const VALUES = [
 export default function OurValues() {
   return (
     <section className="w-full bg-white py-16 px-6 lg:px-16">
-      <div className="max-w-[1200px] mx-auto flex flex-col lg:flex-row gap-12 lg:gap-0">
+      <div className="max-w-300 mx-auto flex flex-col lg:flex-row gap-12 lg:gap-0">
 
         {/* LEFT — Label + Title + Desc */}
         <div className="w-full lg:w-[35%] flex flex-col gap-4 pr-0 lg:pr-12">

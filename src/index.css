@@ -1,11 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Rethink+Sans:wght@400;600;700&display=swap');
 
-
 @import "tailwindcss";
 
-
-
-
+@theme {
+  --font-rethink: "Rethink Sans", sans-serif;
+}
 
 .mxw {
   max-width: 1440px;

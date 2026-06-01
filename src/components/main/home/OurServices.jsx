@@ -33,7 +33,7 @@ export default function OurServices() {
 
   return (
     <section className="w-full bg-white py-16 px-6 lg:px-16">
-      <div className="max-w-[1200px] mx-auto">
+      <div className="max-w-300 mx-auto">
 
         {/* Header Row */}
         <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-6 mb-10">
@@ -71,10 +71,11 @@ export default function OurServices() {
           {/* Right */}
           <div className="flex flex-col items-start lg:items-end gap-4">
             <p
-              className="text-sm leading-relaxed max-w-[340px] lg:text-right"
+              className="text-sm leading-relaxed max-w-85 lg:text-right "
               style={{
                 color: "#7a849a",
                 fontFamily: '"Rethink Sans", sans-serif',
+                paddingTop: "48px"
               }}
             >
               Choose a service from the list below to get an instant quote or

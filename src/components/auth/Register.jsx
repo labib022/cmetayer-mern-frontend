@@ -1,0 +1,260 @@
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import googleIcon from "../../assets/icons/arrow-icon.svg";
+
+const inputBase = "w-full outline-none transition-all duration-200 px-4 py-3.5 rounded-xl border border-[#E2E6EF] bg-white text-[#1F1F1F] text-[15px] focus:border-[#08203C]";
+
+export default function Register() {
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [agreed, setAgreed] = useState(false);
+  const [form, setForm] = useState({
+    fullName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const handleChange = (field) => (e) =>
+    setForm({ ...form, [field]: e.target.value });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (form.password !== form.confirmPassword) {
+      alert("Passwords do not match!");
+      return;
+    }
+    if (!agreed) {
+      alert("Please agree to the Privacy Policy and Terms and Condition!");
+      return;
+    }
+    console.log("Register:", form);
+  };
+
+  return (
+    <div className="min-h-screen w-full flex items-center justify-center bg-[#F0F0F0] px-4 py-10">
+
+      {/* Card */}
+      <div className="w-full max-w-[480px] flex flex-col items-center gap-[35px] p-8 rounded-[32px] bg-[#FAFAFA]">
+
+        {/* Header */}
+        <div className="flex flex-col items-center gap-2 text-center">
+          <h1
+            className="text-[#1F1F1F] text-2xl font-medium leading-[140%] tracking-[-0.936px] m-0"
+            style={{ fontFamily: '"Rethink Sans", sans-serif' }}
+          >
+            Sign up for an account
+          </h1>
+          <p
+            className="text-[#595959] text-base font-normal leading-[140%] text-center m-0"
+            style={{ fontFamily: '"Rethink Sans", sans-serif' }}
+          >
+            Sign up now for your account!
+          </p>
+        </div>
+
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="flex flex-col gap-5 w-full">
+
+          {/* Full Name */}
+          <div className="flex flex-col gap-2">
+            <label
+              className="text-[#0B1714] text-base font-semibold leading-[140%]"
+              style={{ fontFamily: '"Rethink Sans", sans-serif' }}
+            >
+              Full Name
+            </label>
+            <input
+              type="text"
+              placeholder="Enter your full name"
+              value={form.fullName}
+              onChange={handleChange("fullName")}
+              required
+              className={inputBase}
+              style={{ fontFamily: '"Rethink Sans", sans-serif' }}
+            />
+          </div>
+
+          {/* Email */}
+          <div className="flex flex-col gap-2">
+            <label
+              className="text-[#0B1714] text-base font-semibold leading-[140%]"
+              style={{ fontFamily: '"Rethink Sans", sans-serif' }}
+            >
+              Email Address
+            </label>
+            <input
+              type="email"
+              placeholder="Enter your email address"
+              value={form.email}
+              onChange={handleChange("email")}
+              required
+              className={inputBase}
+              style={{ fontFamily: '"Rethink Sans", sans-serif' }}
+            />
+          </div>
+
+          {/* Password */}
+          <div className="flex flex-col gap-2">
+            <label
+              className="text-[#0B1714] text-base font-semibold leading-[140%]"
+              style={{ fontFamily: '"Rethink Sans", sans-serif' }}
+            >
+              Password
+            </label>
+            <div className="relative w-full">
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Enter your password"
+                value={form.password}
+                onChange={handleChange("password")}
+                required
+                className={`${inputBase} pr-12`}
+                style={{ fontFamily: '"Rethink Sans", sans-serif' }}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-[#888] hover:text-[#08203C] transition-colors duration-200 bg-transparent border-none cursor-pointer p-0"
+              >
+                {showPassword ? (
+                  <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94" />
+                    <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19" />
+                    <line x1="1" y1="1" x2="23" y2="23" />
+                  </svg>
+                ) : (
+                  <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                    <circle cx="12" cy="12" r="3" />
+                  </svg>
+                )}
+              </button>
+            </div>
+          </div>
+
+          {/* Confirm Password */}
+          <div className="flex flex-col gap-2">
+            <label
+              className="text-[#0B1714] text-base font-semibold leading-[140%]"
+              style={{ fontFamily: '"Rethink Sans", sans-serif' }}
+            >
+              Confirm Password
+            </label>
+            <div className="relative w-full">
+              <input
+                type={showConfirm ? "text" : "password"}
+                placeholder="Confirm your password"
+                value={form.confirmPassword}
+                onChange={handleChange("confirmPassword")}
+                required
+                className={`${inputBase} pr-12`}
+                style={{ fontFamily: '"Rethink Sans", sans-serif' }}
+              />
+              <button
+                type="button"
+                onClick={() => setShowConfirm(!showConfirm)}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-[#888] hover:text-[#08203C] transition-colors duration-200 bg-transparent border-none cursor-pointer p-0"
+              >
+                {showConfirm ? (
+                  <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94" />
+                    <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19" />
+                    <line x1="1" y1="1" x2="23" y2="23" />
+                  </svg>
+                ) : (
+                  <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                    <circle cx="12" cy="12" r="3" />
+                  </svg>
+                )}
+              </button>
+            </div>
+          </div>
+
+          {/* Terms Checkbox */}
+          <div className="flex items-start gap-3">
+            <input
+              type="checkbox"
+              id="terms"
+              checked={agreed}
+              onChange={(e) => setAgreed(e.target.checked)}
+              className="mt-1 w-4 h-4 rounded border-[#E2E6EF] accent-[#08203C] cursor-pointer shrink-0"
+            />
+            <label
+              htmlFor="terms"
+              className="text-[#595959] text-sm leading-[140%] cursor-pointer"
+              style={{ fontFamily: '"Rethink Sans", sans-serif' }}
+            >
+              By creating an account, you agreeing to our{" "}
+              <Link
+                to="/privacy-policy"
+                className="text-[#08203C] font-bold no-underline hover:underline"
+              >
+                Privacy Policy
+              </Link>
+              , and{" "}
+              <Link
+                to="/terms"
+                className="text-[#08203C] font-bold no-underline hover:underline"
+              >
+                Terms and Condition
+              </Link>
+            </label>
+          </div>
+
+          {/* Sign Up Button */}
+          <button
+            type="submit"
+            className="w-full flex items-center justify-center gap-2 py-4 px-[18px] rounded-[40px] bg-[#08203C] text-white text-base font-semibold leading-[140%] border-none cursor-pointer hover:opacity-90 transition-opacity duration-200"
+            style={{ fontFamily: '"Rethink Sans", sans-serif' }}
+          >
+            Sign Up
+          </button>
+
+          {/* Sign In Link */}
+          <p
+            className="text-[#595959] text-[15px] font-normal m-0 text-center"
+            style={{ fontFamily: '"Rethink Sans", sans-serif' }}
+          >
+            Already had an account?{" "}
+            <Link
+              to="/login"
+              className="text-[#08203C] font-bold no-underline hover:underline transition-all duration-200"
+            >
+              Sign in
+            </Link>
+          </p>
+
+          {/* Divider */}
+          <div className="flex items-center gap-3 w-full">
+            <div className="flex-1 h-px bg-[#E2E6EF]" />
+            <span
+              className="text-[#888] text-sm"
+              style={{ fontFamily: '"Rethink Sans", sans-serif' }}
+            >
+              or
+            </span>
+            <div className="flex-1 h-px bg-[#E2E6EF]" />
+          </div>
+
+          {/* Google Sign In */}
+          <button
+            type="button"
+            className="w-full flex items-center justify-center gap-3 py-4 px-[18px] rounded-[40px] bg-[#1F1F1F] text-white text-base font-semibold leading-[140%] border-none cursor-pointer hover:opacity-90 transition-opacity duration-200"
+            style={{ fontFamily: '"Rethink Sans", sans-serif' }}
+          >
+            <img
+              src={googleIcon}
+              alt="Google"
+              className="w-5 h-5"
+              onError={(e) => { e.currentTarget.style.display = "none"; }}
+            />
+            Sign In With Google
+          </button>
+
+        </form>
+      </div>
+    </div>
+  );
+}
