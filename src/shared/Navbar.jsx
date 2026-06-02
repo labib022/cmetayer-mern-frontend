@@ -16,7 +16,7 @@ export default function Navbar() {
   const isActive = (href) => location.pathname === href;
 
   return (
-    <div className="w-full sticky top-0 py-6 z-50 bg-[#08203C]">
+    <div className="w-full sticky top-0 py-4 z-50 bg-[#08203C]">
       <div className="max-w-385 mx-auto px-4 md:px-8">
         <nav className="relative flex h-14 items-center px-4 md:px-6 bg-[#08203C]">
           {/* LEFT — Logo */}

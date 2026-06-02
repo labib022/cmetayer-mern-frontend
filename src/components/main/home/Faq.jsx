@@ -67,14 +67,14 @@ export default function FAQ() {
         {/* LEFT — FAQ List */}
         <div className="flex-1 flex flex-col">
           {FAQS.map((faq, i) => (
-            <div key={i} className="border-b border-gray-200">
+            <div key={i} className=" ">
               <button
                 onClick={() => setOpenIndex(openIndex === i ? null : i)}
-                className="w-full flex items-center justify-between text-left py-5 sm:py-6 bg-transparent border-none cursor-pointer group"
+                className="w-full  flex items-center justify-between text-left py-5 sm:py-6 border-none cursor-pointer group"
               >
                 <span
                   style={{ fontFamily: '"Rethink Sans", sans-serif' }}
-                  className={`text-sm sm:text-base font-medium leading-[150%] pr-4 transition-colors duration-200 ${
+                  className={`text-sm sm:text-base font-medium leading-[150%] pr-4  transition-colors duration-200 ${
                     openIndex === i ? "text-[#08203C]" : "text-[#111]"
                   }`}
                 >
@@ -107,7 +107,7 @@ export default function FAQ() {
 
           {/* Answer Box */}
           {openIndex !== null ? (
-            <div className="border border-gray-200 rounded-2xl p-5 sm:p-6">
+            <div className=" bg-[#FAFAFA] rounded-2xl p-5 sm:p-6">
               <span
                 style={{ fontFamily: '"Rethink Sans", sans-serif' }}
                 className="inline-block text-xs font-semibold text-[#08203C] bg-gray-100 px-3 py-1 rounded-full mb-4"
