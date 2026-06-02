@@ -3,6 +3,7 @@ import MainLayout from "../layouts/MainLayout";
 import AuthRoutes from "./AuthRoutes";
 import HomePage from "../pages/main/home/HomePage";
 import AboutPage from "../pages/about/About";
+import ContactPage from "../pages/contact/Contact";
 
 export default function AppRoutes() {
   return (
@@ -14,7 +15,7 @@ export default function AppRoutes() {
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/services" element={<div>Services Page</div>} />
-          <Route path="/contact" element={<div>Contact Page</div>} />
+          <Route path="/contact" element={<ContactPage />} />
           <Route path="/ourvalues" element={<div>Our Values</div>} />
           <Route path="/ourservices" element={<div>Our Services</div>} />
           <Route path="/clients" element={<div>Clients</div>} />

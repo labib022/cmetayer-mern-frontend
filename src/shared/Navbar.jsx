@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import logo from "/navImg.png";
+import { Link } from "react-router-dom";
 
 const NAV_LINKS = [
   { label: "Home", href: "/" },
@@ -17,9 +18,7 @@ export default function Navbar() {
   return (
     <div className="w-full sticky top-0 py-6 z-50 bg-[#08203C]">
       <div className="max-w-385 mx-auto px-4 md:px-8">
-
         <nav className="relative flex h-14 items-center px-4 md:px-6 bg-[#08203C]">
-
           {/* LEFT — Logo */}
           <div className="flex items-center shrink-0">
             <a href="/">
@@ -53,33 +52,42 @@ export default function Navbar() {
 
           {/* RIGHT — Login + Contact Button + Hamburger */}
           <div className="flex items-center gap-3 ml-auto">
-
             {/* Login Button */}
             <a
               href="/login"
-              className="font-rethink hidden md:inline-flex items-center px-8 py-3 rounded-3xl border  bg-white text-[#08203C] text-sm font-semibold leading-[140%] no-underline transition-all duration-300 ease-in-out hover:scale-105 shadow-md hover:shadow-xl shrink-0"
+              className="font-rethink hidden md:inline-flex items-center px-7 py-3 rounded-3xl border  bg-white text-[#08203C] text-sm font-semibold leading-[140%] no-underline transition-all duration-300 ease-in-out hover:scale-105 shadow-md hover:shadow-xl shrink-0"
             >
               Login
             </a>
 
             {/* Contact Us Button */}
-            <button className="group hidden md:inline-flex items-center rounded-3xl bg-white border-none cursor-pointer transition-all duration-300 ease-in-out hover:scale-105 shadow-md hover:shadow-xl shrink-0 pl-5 pr-2 py-2">
+            <Link
+              to="/contact"
+              className="group hidden md:inline-flex items-center rounded-3xl bg-white cursor-pointer transition-all duration-300 ease-in-out hover:scale-105 shadow-md hover:shadow-xl shrink-0 pl-5 pr-2 py-2"
+            >
               <span className="font-rethink text-[#08203C] text-sm font-semibold leading-[140%]">
                 Contact Us
               </span>
+
               <span className="flex items-center justify-center w-8 h-8 rounded-full bg-[#08203C] text-white text-base shrink-0 ml-2 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1">
                 →
               </span>
-            </button>
+            </Link>
 
             {/* Hamburger Mobile */}
             <button
               className="md:hidden flex flex-col gap-1.5 cursor-pointer bg-transparent border-none p-1"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
-              <span className={`block w-6 h-0.5 bg-white transition-all duration-300 ${mobileMenuOpen ? "rotate-45 translate-y-2" : ""}`} />
-              <span className={`block w-6 h-0.5 bg-white transition-all duration-300 ${mobileMenuOpen ? "opacity-0" : ""}`} />
-              <span className={`block w-6 h-0.5 bg-white transition-all duration-300 ${mobileMenuOpen ? "-rotate-45 -translate-y-2" : ""}`} />
+              <span
+                className={`block w-6 h-0.5 bg-white transition-all duration-300 ${mobileMenuOpen ? "rotate-45 translate-y-2" : ""}`}
+              />
+              <span
+                className={`block w-6 h-0.5 bg-white transition-all duration-300 ${mobileMenuOpen ? "opacity-0" : ""}`}
+              />
+              <span
+                className={`block w-6 h-0.5 bg-white transition-all duration-300 ${mobileMenuOpen ? "-rotate-45 -translate-y-2" : ""}`}
+              />
             </button>
           </div>
         </nav>
@@ -126,7 +134,6 @@ export default function Navbar() {
             </div>
           </div>
         )}
-
       </div>
     </div>
   );
