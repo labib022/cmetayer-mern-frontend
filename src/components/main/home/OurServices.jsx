@@ -12,17 +12,17 @@ const SERVICES = [
   },
   {
     title: "Home Cleaning",
-    desc: "Deep cleans, move-in/out, and recurring maid services.",
+    desc: "Deep cleans, move-in/out, and recurring with professional maid services.",
     img: img2,
   },
   {
     title: "Handyman & Repair",
-    desc: "Plumbing, electrical, assembly, and general home repairs.",
+    desc: "Plumbing, electrical, assembly, and general professional home repairs.",
     img: img3,
   },
   {
     title: "Laundry Service",
-    desc: "Wash, dry, and fold services delivered to your door.",
+    desc: "Wash, dry, and fold with professional services delivered to your door.",
     img: img4,
   },
 ];
@@ -46,21 +46,15 @@ export default function OurServices() {
                 style={{ backgroundColor: "#08203C" }}
               />
               <span
-                className="text-sm font-medium"
-                style={{
-                  color: "#08203C",
-                  fontFamily: '"Rethink Sans", sans-serif',
-                }}
+                className="font-rethink text-sm font-medium"
+                style={{ color: "#08203C" }}
               >
                 Our Services
               </span>
             </div>
             <h2
-              className="font-extrabold text-3xl sm:text-4xl leading-tight"
-              style={{
-                color: "#08203C",
-                fontFamily: '"Rethink Sans", sans-serif',
-              }}
+              className="font-rethink font-extrabold text-3xl sm:text-4xl leading-tight"
+              style={{ color: "#08203C" }}
             >
               Comprehensive Home Services
               <br />
@@ -71,12 +65,8 @@ export default function OurServices() {
           {/* Right */}
           <div className="flex flex-col items-start lg:items-end gap-4">
             <p
-              className="text-sm leading-relaxed max-w-85 lg:text-right "
-              style={{
-                color: "#7a849a",
-                fontFamily: '"Rethink Sans", sans-serif',
-                paddingTop: "48px"
-              }}
+              className="font-rethink text-sm leading-relaxed max-w-85 lg:text-right"
+              style={{ color: "#7a849a", paddingTop: "48px" }}
             >
               Choose a service from the list below to get an instant quote or
               make a reservation immediately!
@@ -86,33 +76,19 @@ export default function OurServices() {
             <div className="flex items-center gap-3">
               <button
                 onClick={() => setStart(Math.max(0, start - 1))}
-                className="w-10 h-10 rounded-full flex items-center justify-center border transition-all duration-200 cursor-pointer"
-                style={{
-                  border: "1.5px solid #ccc",
-                  background: "transparent",
-                  color: "#08203C",
-                }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.borderColor = "#08203C";
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.borderColor = "#ccc";
-                }}
+                className="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer transition-all duration-200"
+                style={{ border: "1.5px solid #ccc", background: "transparent", color: "#08203C" }}
+                onMouseOver={(e) => (e.currentTarget.style.borderColor = "#08203C")}
+                onMouseOut={(e) => (e.currentTarget.style.borderColor = "#ccc")}
               >
                 ←
               </button>
               <button
-                onClick={() =>
-                  setStart(Math.min(SERVICES.length - 3, start + 1))
-                }
+                onClick={() => setStart(Math.min(SERVICES.length - 3, start + 1))}
                 className="w-10 h-10 rounded-full flex items-center justify-center border-none cursor-pointer transition-all duration-200"
                 style={{ backgroundColor: "#08203C", color: "#fff" }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.backgroundColor = "#1a3260";
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.backgroundColor = "#08203C";
-                }}
+                onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#1a3260")}
+                onMouseOut={(e) => (e.currentTarget.style.backgroundColor = "#08203C")}
               >
                 →
               </button>
@@ -134,31 +110,46 @@ export default function OurServices() {
                 className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                 style={{ minHeight: "320px" }}
               />
+
               {/* Gradient overlay */}
               <div
                 className="absolute inset-0 rounded-2xl"
                 style={{
-                  background:
-                    "linear-gradient(0deg, rgba(13,31,60,0.92) 0%, transparent 55%)",
+                  background: "linear-gradient(0deg, rgba(13,31,60,0.92) 0%, transparent 55%)",
                 }}
               />
-              {/* Text */}
-              <div className="absolute bottom-0 left-0 right-0 p-5">
-                <h3
-                  className="text-white font-bold text-lg mb-1"
-                  style={{ fontFamily: '"Rethink Sans", sans-serif' }}
-                >
-                  {s.title}
-                </h3>
-                <p
-                  className="text-sm leading-relaxed"
+
+              {/* Glassmorphism Text Card */}
+              <div className="absolute bottom-0 left-0 right-0 p-4">
+                <div
                   style={{
-                    color: "rgba(255,255,255,0.75)",
-                    fontFamily: '"Rethink Sans", sans-serif',
+                    display: "flex",
+                    padding: "16px",
+                    flexDirection: "column",
+                    alignItems: "flex-start",
+                    gap: "8px",
+                    borderRadius: "8px",
+                    background: "rgba(8, 32, 60, 0.40)",
+                    backdropFilter: "blur(50.75px)",
+                    WebkitBackdropFilter: "blur(50.75px)",
                   }}
                 >
-                  {s.desc}
-                </p>
+                  {/* Title */}
+                  <h3
+                    className="font-rethink font-medium leading-[140%] tracking-[-0.936px] m-0"
+                    style={{ color: "#FFF", fontSize: "24px" }}
+                  >
+                    {s.title}
+                  </h3>
+
+                  {/* Description */}
+                  <p
+                    className="font-rethink font-normal leading-[140%] m-0"
+                    style={{ color: "#ECEEF0", fontSize: "12px" }}
+                  >
+                    {s.desc}
+                  </p>
+                </div>
               </div>
             </div>
           ))}

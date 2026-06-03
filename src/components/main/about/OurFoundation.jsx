@@ -19,7 +19,7 @@ const RIGHT_CARDS = [
 
 export default function OurFoundation() {
   return (
-    <section className="mxw px-4 sm:px-10 lg:px-20 py-16 sm:py-20 lg:py-30 bg-[#FAFAFA] rounded-2xl flex flex-col justify-center items-center gap-15">
+    <section className="mxw px-4 sm:px-10 lg:px-20 py-16 sm:py-20 lg:py-30  rounded-2xl flex flex-col justify-center items-center gap-15">
 
       {/* 3 Column Grid */}
       <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-6">

@@ -4,6 +4,10 @@ import AuthRoutes from "./AuthRoutes";
 import HomePage from "../pages/main/home/HomePage";
 import AboutPage from "../pages/about/About";
 import ContactPage from "../pages/contact/Contact";
+import MovingPage from "../pages/services/MovingPage";
+import CleaningPage from "../pages/services/CleaningPage";
+import LaundryPage from "../pages/services/LaundryPage";
+import RepairPage from "../pages/services/RepairPage";
 
 export default function AppRoutes() {
   return (
@@ -14,7 +18,6 @@ export default function AppRoutes() {
         <Route element={<MainLayout />}>
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<AboutPage />} />
-          <Route path="/services" element={<div>Services Page</div>} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/ourvalues" element={<div>Our Values</div>} />
           <Route path="/ourservices" element={<div>Our Services</div>} />
@@ -23,6 +26,12 @@ export default function AppRoutes() {
           <Route path="/quote" element={<div>Quote</div>} />
           <Route path="/footer" element={<div>Footer</div>} />
           <Route path="/ourfoundation" element={<div>Our Foundation</div>} />
+
+          {/* ── Service Routes ── */}
+          <Route path="/services/moving" element={<MovingPage />} />
+          <Route path="/services/cleaning" element={<CleaningPage />} />
+          <Route path="/services/laundry" element={<LaundryPage />} />
+          <Route path="/services/repair" element={<RepairPage />} />
         </Route>
 
         {/* ── Auth Routes — Navbar/Footer ছাড়া ── */}

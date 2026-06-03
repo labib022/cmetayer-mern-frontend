@@ -96,7 +96,7 @@ export default function OurValues() {
         {/* RIGHT — 2x2 Grid */}
         <div
           className="w-full lg:w-[65%] grid grid-cols-1 sm:grid-cols-2"
-          style={{ border: "1px dashed #dde1ec", borderRadius: "16px", overflow: "hidden" }}
+          style={{ borderRadius: "16px", overflow: "hidden" }}
         >
           {VALUES.map((v, i) => (
             <div

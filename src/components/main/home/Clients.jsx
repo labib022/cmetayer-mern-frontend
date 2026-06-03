@@ -37,8 +37,8 @@ const PersonCard = ({ card }) => (
   <div
     className="shrink-0 cursor-pointer"
     style={{
-      width: "360px",
-      height: "420px",
+      width: "300px",
+      height: "350px",
       borderRadius: "16px",
       background: `url(${card.img}) lightgray -0.113px 0.446px / 100% 128.571% no-repeat`,
       transition: "transform 0.3s ease, box-shadow 0.3s ease",
@@ -52,8 +52,8 @@ const StatDarkCard = ({ card }) => (
   <div
     className="shrink-0 cursor-pointer"
     style={{
-      width: "360px",
-      height: "420px",
+      width: "300px",
+      height: "350px",
       padding: "24px",
       borderRadius: "24px",
       background: "#08203C",
@@ -83,8 +83,8 @@ const StatLightCard = ({ card }) => (
   <div
     className="shrink-0 cursor-pointer"
     style={{
-      width: "360px",
-      height: "420px",
+      width: "300px",
+      height: "350px",
       padding: "24px",
       borderRadius: "24px",
       background: "rgba(8, 32, 60, 0.08)",

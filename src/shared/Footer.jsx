@@ -1,6 +1,10 @@
 import logo from "/navImg.png";
+import { Link } from "react-router-dom";
 
-const QUICK_LINKS = ["About", "Services"];
+const QUICK_LINKS = [
+  { label: "About", to: "/about" },
+  { label: "Services", to: "/services" },
+];
 const LEGAL_LINKS = ["Privacy Policy", "Terms of Service"];
 const SOCIAL = ["Instagram", "LinkedIn", "X"];
 
@@ -21,7 +25,9 @@ export default function Footer() {
               >
                 Stay Updated with
               </h3>
-              <img src={logo} alt="Logo" className="h-14 w-34 object-contain" />
+              <Link to="/" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
+                <img src={logo} alt="Logo" className="h-14 w-34 object-contain cursor-pointer" />
+              </Link>
             </div>
 
             <p
@@ -60,14 +66,15 @@ export default function Footer() {
               </h4>
               <div className="flex flex-col gap-4">
                 {QUICK_LINKS.map((link) => (
-                  <a
-                    key={link}
-                    href="#"
+                  <Link
+                    key={link.label}
+                    to={link.to}
+                    onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
                     className="text-[#E0E0E0] text-sm no-underline hover:text-white transition-colors duration-200"
                     style={{ fontFamily: '"Rethink Sans", sans-serif' }}
                   >
-                    {link}
-                  </a>
+                    {link.label}
+                  </Link>
                 ))}
               </div>
             </div>
