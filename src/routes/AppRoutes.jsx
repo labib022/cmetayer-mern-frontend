@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout";
 import AuthRoutes from "./AuthRoutes";
-import HomePage from "../pages/main/home/HomePage";
+import HomePage from "../pages/main/home/Homepage";
 import AboutPage from "../pages/about/About";
 import ContactPage from "../pages/contact/Contact";
 import MovingPage from "../pages/services/moving/MovingPage";
