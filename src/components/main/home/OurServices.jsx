@@ -77,7 +77,7 @@ export default function OurServices() {
               <button
                 onClick={() => setStart(Math.max(0, start - 1))}
                 className="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer transition-all duration-200"
-                style={{ border: "1.5px solid #ccc", background: "transparent", color: "#08203C" }}
+                style={{ border: "1.5px solid #ccc", background: "#08203C", color: "#fff" }}
                 onMouseOver={(e) => (e.currentTarget.style.borderColor = "#08203C")}
                 onMouseOut={(e) => (e.currentTarget.style.borderColor = "#ccc")}
               >

@@ -121,7 +121,7 @@ export default function Clients() {
           display: flex;
           gap: 40px;
           width: max-content;
-          animation: marqueeLeft 30s linear infinite;
+          animation: marqueeLeft 15s linear infinite;
         }
         .clients-track:hover {
           animation-play-state: paused;
