@@ -1,5 +1,6 @@
 import movingImg from "../../../../assets/images/moving-img-1.png";
 import { MdCheckCircle } from "react-icons/md";
+import { Link } from "react-router-dom";
 
 const INCLUDED_SERVICES = [
   "Professional packing with quality materials",
@@ -17,10 +18,8 @@ export default function MovingDescription() {
         style={{ padding: "96px 64px" }}
       >
         <div className="flex flex-col lg:flex-row items-start gap-16 w-full">
-
           {/* LEFT — Text Content */}
           <div className="flex flex-col gap-8 flex-1">
-
             {/* Description */}
             <div className="flex flex-col gap-4">
               <h2
@@ -58,7 +57,11 @@ export default function MovingDescription() {
               <div className="flex flex-col gap-4">
                 {INCLUDED_SERVICES.map((item) => (
                   <div key={item} className="flex items-center gap-3">
-                    <MdCheckCircle size={22} color="#08203C" className="shrink-0" />
+                    <MdCheckCircle
+                      size={22}
+                      color="#08203C"
+                      className="shrink-0"
+                    />
                     <span
                       className="font-rethink font-normal leading-[140%]"
                       style={{ color: "#656565", fontSize: "18px" }}
@@ -118,8 +121,9 @@ export default function MovingDescription() {
               </div>
 
               {/* Book Now Button */}
-              <button
-                className="flex items-center justify-between cursor-pointer border-none hover:opacity-90 transition-opacity duration-200"
+              <Link
+                to="/services/moving/book/step-1"
+                className="flex items-center justify-between cursor-pointer hover:opacity-90 transition-opacity duration-200 no-underline"
                 style={{
                   padding: "8px 8px 8px 24px",
                   borderRadius: "24px",
@@ -128,9 +132,7 @@ export default function MovingDescription() {
                   maxWidth: "180px",
                 }}
               >
-                <span
-                  className="font-rethink text-white font-semibold text-base leading-[140%]"
-                >
+                <span className="font-rethink text-white font-semibold text-base leading-[140%]">
                   Book Now
                 </span>
                 <span
@@ -139,10 +141,9 @@ export default function MovingDescription() {
                 >
                   →
                 </span>
-              </button>
+              </Link>
             </div>
           </div>
-
         </div>
       </div>
     </section>

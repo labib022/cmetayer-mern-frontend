@@ -4,10 +4,11 @@ import AuthRoutes from "./AuthRoutes";
 import HomePage from "../pages/main/home/HomePage";
 import AboutPage from "../pages/about/About";
 import ContactPage from "../pages/contact/Contact";
-import MovingPage from "../pages/services/MovingPage";
-import CleaningPage from "../pages/services/CleaningPage";
-import LaundryPage from "../pages/services/LaundryPage";
-import RepairPage from "../pages/services/RepairPage";
+import MovingPage from "../pages/services/moving/MovingPage";
+import CleaningPage from "../pages/services/cleaning/CleaningPage";
+import LaundryPage from "../pages/services/laundry/LaundryPage";
+import RepairPage from "../pages/services/repair/RepairPage";
+import MovingBookingPage from "../pages/services/moving/MovingBookingPage";
 
 export default function AppRoutes() {
   return (
@@ -33,6 +34,9 @@ export default function AppRoutes() {
           <Route path="/services/laundry" element={<LaundryPage />} />
           <Route path="/services/repair" element={<RepairPage />} />
         </Route>
+
+        {/* ── Moving Booking — Navbar/Footer ছাড়া ── */}
+        <Route path="/services/moving/book/*" element={<MovingBookingPage />} />
 
         {/* ── Auth Routes — Navbar/Footer ছাড়া ── */}
         <Route path="/*" element={<AuthRoutes />} />
