@@ -1,14 +1,13 @@
 import { useState } from "react";
-import img2 from "../../../../assets/images/service-img-2.png";
+import img1 from "../../../../assets/images/service-img-1.png";
 import img3 from "../../../../assets/images/service-img-3.png";
 import img4 from "../../../../assets/images/service-img-4.png";
 
 const SERVICES = [
-  
   {
-    title: "Home Cleaning",
-    desc: "Deep cleans, move-in/out, and recurring with professional maid services.",
-    img: img2,
+    title: "Moving & Packing",
+    desc: "Stress-free local and long-distance moving with professional packing.",
+    img: img1,
   },
   {
     title: "Handyman & Repair",
@@ -48,12 +47,10 @@ export default function OurServices() {
               </span>
             </div>
             <h2
-              className="font-rethink font-extrabold text-3xl sm:text-4xl leading-tight"
+              className="font-rethink font-extrabold text-3xl sm:text-4xl pt-2 leading-tight"
               style={{ color: "#08203C" }}
             >
-              Comprehensive Home Services
-              <br />
-              You Can Count On
+             You May Also Like
             </h2>
           </div>
 
@@ -67,8 +64,8 @@ export default function OurServices() {
               make a reservation immediately!
             </p>
 
-           
-           
+            {/* Arrows */}
+          
           </div>
         </div>
 

@@ -75,7 +75,7 @@ export default function OurTeam() {
           display: flex;
           gap: 20px;
           width: max-content;
-          animation: teamMarquee 30s linear infinite;
+          animation: teamMarquee 10s linear infinite;
         }
         .team-track:hover {
           animation-play-state: paused;

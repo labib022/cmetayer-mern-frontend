@@ -1,6 +1,6 @@
 import { useState } from "react";
 import faq1 from "../../../assets/images/faq-image-1.png";
-import faq2 from "../../../assets/images/hero-img.png";
+import faq2 from "../../../assets/images/hero-img-1.png";
 import faq3 from "../../../assets/images/service-img-2.png";
 
 const FAQS = [

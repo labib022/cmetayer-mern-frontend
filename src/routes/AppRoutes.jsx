@@ -9,6 +9,8 @@ import CleaningPage from "../pages/services/cleaning/CleaningPage";
 import LaundryPage from "../pages/services/laundry/LaundryPage";
 import RepairPage from "../pages/services/repair/RepairPage";
 import MovingBookingPage from "../pages/services/moving/MovingBookingPage";
+import CleaningBookingPage from "../pages/services/cleaning/CleaningBookingPage";
+import LaundryBookingPage from "../pages/services/laundry/LaundryBookingPage";
 
 export default function AppRoutes() {
   return (
@@ -37,6 +39,14 @@ export default function AppRoutes() {
 
         {/* ── Moving Booking — Navbar/Footer ছাড়া ── */}
         <Route path="/services/moving/book/*" element={<MovingBookingPage />} />
+
+         {/* ── cleaning Booking — Navbar/Footer ছাড়া ── */}
+        <Route path="/services/cleaning/book/*" element={<CleaningBookingPage />} />
+
+         {/* ── laundry Booking — Navbar/Footer ছাড়া ── */}
+        <Route path="/services/laundry/laundry-booking/*" element={<LaundryBookingPage />} />
+
+
 
         {/* ── Auth Routes — Navbar/Footer ছাড়া ── */}
         <Route path="/*" element={<AuthRoutes />} />

@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
-import StepOne from "../../../components/main/services/moving/booking/StepOne";
-import StepTwo from "../../../components/main/services/moving/booking/StepTwo";
-import StepThree from "../../../components/main/services/moving/booking/StepAThree";
-import StepSuccess from "../../../components/main/services/moving/booking/StepSuccess";
+import StepOne from "../../../components/main/services/moving/movingbooking/StepOne";
+import StepTwo from "../../../components/main/services/moving/movingbooking/StepTwo";
+import StepThree from "../../../components/main/services/moving/movingbooking/StepAThree";
+import StepSuccess from "../../../components/main/services/moving/movingbooking/StepSuccess";
 
 export default function MovingBookingPage() {
   const [bookingData, setBookingData] = useState({

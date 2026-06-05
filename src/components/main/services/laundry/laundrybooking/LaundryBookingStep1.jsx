@@ -1,0 +1,264 @@
+import { Link, useNavigate } from "react-router-dom";
+import { MdCalendarToday, MdShoppingCart } from "react-icons/md";
+
+const BAG_SIZES = [
+  { label: "Small (up to 10 lbs)", price: 25 },
+  { label: "Medium (up to 20 lbs)", price: 35 },
+  { label: "Large (up to 30 lbs)", price: 45 },
+  { label: "Extra Large (up to 40 lbs)", price: 55 },
+];
+
+const WASH_TYPES = [
+  { label: "Standard Clothing", desc: "Shirts, pants, socks, underwear" },
+  { label: "Delicates", desc: "Silk, lace, lingerie, fine fabrics" },
+  { label: "Bedding & Linens", desc: "Sheets, duvet covers, pillowcases" },
+  { label: "Heavy Items", desc: "Towels, jeans, hoodies, blankets" },
+  { label: "Work Uniforms", desc: "Professional and industrial wear" },
+];
+
+const DETERGENTS = [
+  "Standard Premium Detergent",
+  "Hypoallergenic / Sensitive Skin",
+  "Eco-Friendly / Natural",
+  "Fragrance-Free",
+  "Baby-Safe Detergent",
+];
+
+const SERVICE_FEE_RATE = 0.14; // 14%
+const VAT_RATE = 0.08; // 8%
+
+const inputClass = "w-full font-rethink text-sm text-[#656565] bg-white rounded-xl border border-[#E3E8EF] outline-none transition-all duration-200 px-4 py-3 focus:border-[#08203C] appearance-none cursor-pointer";
+
+export default function LaundryBookingStep1({ data, setData }) {
+  const navigate = useNavigate();
+  const handleClose = () => navigate("/services/laundry");
+
+  const bagObj = BAG_SIZES.find((b) => b.label === data.bagSize) || BAG_SIZES[1];
+  const basePrice = bagObj.price;
+  const serviceFee = basePrice * SERVICE_FEE_RATE;
+  const tax = (basePrice + serviceFee) * VAT_RATE;
+  const total = basePrice + serviceFee + tax;
+
+  return (
+    <div className="min-h-screen w-full flex items-center justify-center bg-[#F0F0F0] px-4 py-10">
+      <div
+        className="w-full max-w-[860px] flex flex-col gap-[35px] relative"
+        style={{
+          padding: "80px 32px 32px 32px",
+          borderRadius: "32px",
+          background: "#FAFAFA",
+        }}
+      >
+        {/* Close */}
+        <button
+          onClick={handleClose}
+          className="absolute top-6 right-6 w-9 h-9 flex items-center justify-center rounded-full bg-white border border-[#E3E8EF] text-[#0B1714] cursor-pointer hover:bg-gray-100 transition-colors duration-200 text-lg"
+        >
+          ✕
+        </button>
+
+        {/* Title */}
+        <h1
+          className="font-rethink font-medium leading-[130%] tracking-[-1.248px] m-0"
+          style={{ color: "#0F172B", fontSize: "32px" }}
+        >
+          Customize Laundry
+        </h1>
+
+        {/* Main Grid */}
+        <div className="flex flex-col lg:flex-row gap-6 w-full">
+
+          {/* LEFT — Form */}
+          <div
+            className="flex flex-col gap-5 flex-1"
+            style={{
+              padding: "20px",
+              borderRadius: "16px",
+              background: "#fff",
+              border: "1px solid #E3E8EF",
+            }}
+          >
+            <h2
+              className="font-rethink font-medium leading-[140%] tracking-[-0.936px] m-0"
+              style={{ color: "#0F172B", fontSize: "24px" }}
+            >
+              Home Size
+            </h2>
+
+            {/* Select Bag Size */}
+            <div className="flex flex-col gap-2">
+              <label className="font-rethink font-semibold text-[#0B1714] text-base leading-[140%]">
+                Select Bag Size
+              </label>
+              <div className="relative">
+                <select
+                  value={data.bagSize || BAG_SIZES[1].label}
+                  onChange={(e) => setData({ ...data, bagSize: e.target.value })}
+                  className={inputClass}
+                  onFocus={(e) => (e.target.style.borderColor = "#08203C")}
+                  onBlur={(e) => (e.target.style.borderColor = "#E3E8EF")}
+                >
+                  {BAG_SIZES.map((b) => (
+                    <option key={b.label} value={b.label}>{b.label}</option>
+                  ))}
+                </select>
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[#aab0be] pointer-events-none">▾</span>
+              </div>
+            </div>
+
+            {/* What are we washing */}
+            <div className="flex flex-col gap-2">
+              <label className="font-rethink font-semibold text-[#0B1714] text-base leading-[140%]">
+                What are we washing?
+              </label>
+              <div className="relative">
+                <select
+                  value={data.washType || WASH_TYPES[0].label}
+                  onChange={(e) => setData({ ...data, washType: e.target.value })}
+                  className={inputClass}
+                  onFocus={(e) => (e.target.style.borderColor = "#08203C")}
+                  onBlur={(e) => (e.target.style.borderColor = "#E3E8EF")}
+                  style={{ height: "auto" }}
+                >
+                  {WASH_TYPES.map((w) => (
+                    <option key={w.label} value={w.label}>{w.label} — {w.desc}</option>
+                  ))}
+                </select>
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[#aab0be] pointer-events-none">▾</span>
+              </div>
+              {/* Show description */}
+              {data.washType && (
+                <p className="font-rethink text-xs text-[#aab0be] mt-1">
+                  {WASH_TYPES.find((w) => w.label === data.washType)?.desc}
+                </p>
+              )}
+            </div>
+
+            {/* Detergent Preferences */}
+            <div className="flex flex-col gap-2">
+              <label className="font-rethink font-semibold text-[#0B1714] text-base leading-[140%]">
+                Detergent Preferences
+              </label>
+              <div className="relative">
+                <select
+                  value={data.detergent || DETERGENTS[0]}
+                  onChange={(e) => setData({ ...data, detergent: e.target.value })}
+                  className={inputClass}
+                  onFocus={(e) => (e.target.style.borderColor = "#08203C")}
+                  onBlur={(e) => (e.target.style.borderColor = "#E3E8EF")}
+                >
+                  {DETERGENTS.map((d) => (
+                    <option key={d} value={d}>{d}</option>
+                  ))}
+                </select>
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[#aab0be] pointer-events-none">▾</span>
+              </div>
+            </div>
+
+            {/* Service Date & Time */}
+            <div className="flex flex-col gap-2">
+              <label className="font-rethink font-semibold text-[#0B1714] text-base leading-[140%]">
+                Service Date &amp; Time
+              </label>
+              <div className="relative">
+                <input
+                  type="datetime-local"
+                  value={data.serviceDate || ""}
+                  onChange={(e) => setData({ ...data, serviceDate: e.target.value })}
+                  className="w-full font-rethink text-sm text-[#656565] bg-white rounded-xl border border-[#E3E8EF] outline-none transition-all duration-200 px-4 py-3 pr-10 focus:border-[#08203C]"
+                  onFocus={(e) => (e.target.style.borderColor = "#08203C")}
+                  onBlur={(e) => (e.target.style.borderColor = "#E3E8EF")}
+                />
+                <MdCalendarToday size={16} color="#aab0be" className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+              </div>
+            </div>
+          </div>
+
+          {/* RIGHT — Order Summary */}
+          <div
+            className="flex flex-col gap-4 w-full lg:w-[240px] shrink-0"
+            style={{
+              padding: "20px",
+              borderRadius: "16px",
+              background: "#fff",
+              border: "1px solid #E3E8EF",
+            }}
+          >
+            <div className="flex items-center gap-2">
+              <MdShoppingCart size={18} color="#0B1714" />
+              <h3 className="font-rethink font-semibold text-[#0B1714] text-base m-0">
+                Order Summary
+              </h3>
+            </div>
+
+            <div className="flex flex-col gap-3">
+              <div className="flex items-center justify-between">
+                <span className="font-rethink text-sm text-[#656565]">Wash &amp; Fold</span>
+                <span className="font-rethink text-sm font-medium text-[#0B1714]">${basePrice}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="font-rethink text-sm text-[#656565]">Service Fee</span>
+                <span className="font-rethink text-sm font-medium text-[#0B1714]">${serviceFee.toFixed(2)}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="font-rethink text-sm text-[#656565]">Taxes</span>
+                <span className="font-rethink text-sm font-medium text-[#0B1714]">${tax.toFixed(2)}</span>
+              </div>
+            </div>
+
+            <div className="w-full h-px bg-[#E3E8EF]" />
+
+            <div className="flex items-center justify-between">
+              <span className="font-rethink font-medium text-[#0B1714] text-base">Total</span>
+              <span
+                className="font-rethink font-bold tracking-[-1.248px]"
+                style={{ color: "#08203C", fontSize: "28px" }}
+              >
+                ${total.toFixed(2)}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Buttons */}
+        <div className="flex items-center gap-4 w-full">
+          <Link
+            to="/services/laundry"
+            className="font-rethink font-semibold text-sm text-[#0B1714] cursor-pointer hover:bg-[#e0e2e6] transition-colors duration-200 no-underline flex items-center justify-center"
+            style={{
+              width: "173px",
+              height: "48px",
+              borderRadius: "24px",
+              background: "#ECEEF0",
+            }}
+          >
+            Back
+          </Link>
+
+          <Link
+            to="/services/laundry/laundry-booking/success"
+            className="flex items-center justify-between cursor-pointer hover:opacity-90 transition-opacity duration-200 no-underline"
+            style={{
+              padding: "8px 8px 8px 24px",
+              borderRadius: "24px",
+              background: "#08203C",
+              flex: "1 0 0",
+              height: "48px",
+            }}
+          >
+            <span className="font-rethink text-white font-semibold text-base leading-[140%]">
+              Next Step
+            </span>
+            <span
+              className="flex items-center justify-center w-10 h-10 rounded-full text-white text-base shrink-0"
+              style={{ backgroundColor: "rgba(255,255,255,0.15)" }}
+            >
+              →
+            </span>
+          </Link>
+        </div>
+
+      </div>
+    </div>
+  );
+}
