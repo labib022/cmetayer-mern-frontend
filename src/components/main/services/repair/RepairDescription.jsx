@@ -1,16 +1,16 @@
-import movingImg from "../../../../assets/images/hero-img-4.png";
+import movingImg from "../../../../assets/images/service-img-3.png";
 import { MdCheckCircle } from "react-icons/md";
 import { Link } from "react-router-dom";
 
 const INCLUDED_SERVICES = [
-  "Standard home cleaning",
-  "Deep cleaning services",
-  "Move-in/move-out cleaning",
-  "Recurring maid services",
-  "Specialized cleaning for pets and allergies",
+  "Professional packing with quality materials",
+  "Careful loading and unloading",
+  "Secure transportation in modern vehicles",
+  "Furniture disassembly and reassembly",
+  "Unpacking and setup in your new home",
 ];
 
-export default function MovingDescription() {
+export default function RepairDescription() {
   return (
     <section className="w-full bg-white">
       <div className="max-w-360 mx-auto flex flex-col items-center gap-10 lg:gap-16 px-4 py-12 sm:px-8 sm:py-16 md:px-12 md:py-20 lg:px-16 lg:py-24">
@@ -23,14 +23,15 @@ export default function MovingDescription() {
             {/* Description */}
             <div className="flex flex-col gap-3 lg:gap-4">
               <h2 className="font-rethink font-bold leading-[140%] tracking-[-0.936px] m-0 text-[#0E1109] text-xl sm:text-2xl">
-                About Us
+                Description
               </h2>
               <p className="font-rethink font-normal leading-[140%] m-0 text-[#677489] text-base sm:text-lg">
-                Easy Lift & Clean provides top-notch home cleaning services. Our
-                skilled team offers everything from standard cleaning to deep
-                cleans, move-in/move-out services, and recurring maid services.
-                We ensure your home sparkles! Book today for a spotless
-                experience!
+                Easy Lift & Clean is your buddy for all things home! Whether you
+                need a quick fix or a major overhaul, our fantastic team is here
+                for you. We handle everything from plumbing and electrical work
+                to carpentry and beyond. Trust us to keep your home looking
+                great! Plus, we offer 24/7 support for any emergencies.
+                Experience hassle-free home care with us today!
               </p>
             </div>
 
@@ -64,7 +65,7 @@ export default function MovingDescription() {
             }}
           >
             {/* Price Card */}
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 sm:gap-5 w-full p-4 sm:p-[18px] rounded-3xl border border-[#E3E8EF] bg-white">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 sm:gap-5 w-full p-4 sm:p-4 rounded-3xl border border-[#E3E8EF] bg-white">
 
               {/* Price Info */}
               <div className="flex flex-col gap-1">
@@ -83,7 +84,7 @@ export default function MovingDescription() {
 
               {/* Book Now Button */}
               <Link
-                to="/services/cleaning/book/step-1"
+                to="/services/repair/book/step-1"
                 className="flex items-center justify-between cursor-pointer hover:opacity-90 transition-opacity duration-200 no-underline w-full sm:flex-1 sm:max-w-[180px] pl-6 pr-2 py-2 rounded-3xl bg-[#08203C]"
               >
                 <span className="font-rethink text-white font-semibold text-base leading-[140%]">

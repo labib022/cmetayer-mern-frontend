@@ -11,6 +11,7 @@ import RepairPage from "../pages/services/repair/RepairPage";
 import MovingBookingPage from "../pages/services/moving/MovingBookingPage";
 import CleaningBookingPage from "../pages/services/cleaning/CleaningBookingPage";
 import LaundryBookingPage from "../pages/services/laundry/LaundryBookingPage";
+import RepairBookingPage from "../pages/services/repair/RepairBookingPage";
 
 export default function AppRoutes() {
   return (
@@ -45,6 +46,9 @@ export default function AppRoutes() {
 
          {/* ── laundry Booking — Navbar/Footer ছাড়া ── */}
         <Route path="/services/laundry/laundry-booking/*" element={<LaundryBookingPage />} />
+
+        {/* ── laundry Booking — Navbar/Footer ছাড়া ── */}
+        <Route path="/services/repair/book/*" element={<RepairBookingPage />} />
 
 
 

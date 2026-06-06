@@ -42,7 +42,7 @@ export default function LaundryBookingStep1({ data, setData }) {
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-[#F0F0F0] px-4 py-10">
       <div
-        className="w-full max-w-[860px] flex flex-col gap-[35px] relative"
+        className="w-full max-w-215 flex flex-col gap-8 relative"
         style={{
           padding: "80px 32px 32px 32px",
           borderRadius: "32px",
@@ -66,7 +66,7 @@ export default function LaundryBookingStep1({ data, setData }) {
         </h1>
 
         {/* Main Grid */}
-        <div className="flex flex-col lg:flex-row gap-6 w-full">
+        <div className="flex flex-col lg:flex-row gap-6 w-full"> 
 
           {/* LEFT — Form */}
           <div
@@ -176,7 +176,7 @@ export default function LaundryBookingStep1({ data, setData }) {
 
           {/* RIGHT — Order Summary */}
           <div
-            className="flex flex-col gap-4 w-full lg:w-[240px] shrink-0"
+            className="flex flex-col gap-4 w-full lg:w-60 shrink-0"
             style={{
               padding: "20px",
               borderRadius: "16px",
