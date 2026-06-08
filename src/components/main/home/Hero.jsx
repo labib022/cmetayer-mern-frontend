@@ -4,93 +4,92 @@ import heroImg2 from "../../../assets/images/hero-img-2.png";
 import heroImg3 from "../../../assets/images/hero-img-3.png";
 import heroImg4 from "../../../assets/images/hero-img-4.png";
 
-
 export default function Hero() {
   const services = [
-  {
-    title: "Moving",
-    img: heroImg1,
-    desc: "Full-service moving, packing, and heavy lifting for homes and offices",
-    iconBg: "#f0f4ff",
-    icon: (
-      <svg
-        width="20"
-        height="20"
-        fill="none"
-        stroke="#08203C"
-        strokeWidth="1.8"
-        viewBox="0 0 24 24"
-      >
-        <rect x="1" y="3" width="15" height="13" rx="2" />
-        <path d="M16 8h4l3 5v4h-7V8z" />
-        <circle cx="5.5" cy="18.5" r="2.5" />
-        <circle cx="18.5" cy="18.5" r="2.5" />
-      </svg>
-    ),
-  },
-  {
-    title: "Packing",
-    img: heroImg2,
-    desc: "Professional packing with quality materials to keep your items safe",
-    iconBg: "#edfaf3",
-    icon: (
-      <svg
-        width="20"
-        height="20"
-        fill="none"
-        stroke="#0a6640"
-        strokeWidth="1.8"
-        viewBox="0 0 24 24"
-      >
-        <rect x="2" y="7" width="20" height="14" rx="2" />
-        <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
-        <line x1="12" y1="12" x2="12" y2="17" />
-        <line x1="9.5" y1="14.5" x2="14.5" y2="14.5" />
-      </svg>
-    ),
-  },
-  {
-    title: "Storage",
-    img: heroImg3,
-    desc: "Secure short and long-term storage solutions for any size load",
-    iconBg: "#f5f0ff",
-    icon: (
-      <svg
-        width="20"
-        height="20"
-        fill="none"
-        stroke="#7c3aed"
-        strokeWidth="1.8"
-        viewBox="0 0 24 24"
-      >
-        <rect x="2" y="4" width="20" height="5" rx="1" />
-        <rect x="2" y="12" width="20" height="5" rx="1" />
-        <line x1="6" y1="6.5" x2="6.01" y2="6.5" />
-        <line x1="6" y1="14.5" x2="6.01" y2="14.5" />
-      </svg>
-    ),
-  },
-  {
-    title: "Office Relocation",
-    img: heroImg4,
-    desc: "Hassle-free office moves with minimal downtime for your business",
-    iconBg: "#fff7ed",
-    icon: (
-      <svg
-        width="20"
-        height="20"
-        fill="none"
-        stroke="#b45309"
-        strokeWidth="1.8"
-        viewBox="0 0 24 24"
-      >
-        <rect x="2" y="3" width="20" height="14" rx="2" />
-        <path d="M8 21h8M12 17v4" />
-      </svg>
-    ),
-  },
-];
-const FADE_DURATION = 400;
+    {
+      title: "Moving",
+      img: heroImg1,
+      desc: "Full-service moving, packing, and heavy lifting for homes and offices",
+      iconBg: "#f0f4ff",
+      icon: (
+        <svg
+          width="20"
+          height="20"
+          fill="none"
+          stroke="#08203C"
+          strokeWidth="1.8"
+          viewBox="0 0 24 24"
+        >
+          <rect x="1" y="3" width="15" height="13" rx="2" />
+          <path d="M16 8h4l3 5v4h-7V8z" />
+          <circle cx="5.5" cy="18.5" r="2.5" />
+          <circle cx="18.5" cy="18.5" r="2.5" />
+        </svg>
+      ),
+    },
+    {
+      title: "Packing",
+      img: heroImg2,
+      desc: "Professional packing with quality materials to keep your items safe",
+      iconBg: "#edfaf3",
+      icon: (
+        <svg
+          width="20"
+          height="20"
+          fill="none"
+          stroke="#0a6640"
+          strokeWidth="1.8"
+          viewBox="0 0 24 24"
+        >
+          <rect x="2" y="7" width="20" height="14" rx="2" />
+          <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
+          <line x1="12" y1="12" x2="12" y2="17" />
+          <line x1="9.5" y1="14.5" x2="14.5" y2="14.5" />
+        </svg>
+      ),
+    },
+    {
+      title: "Storage",
+      img: heroImg3,
+      desc: "Secure short and long-term storage solutions for any size load",
+      iconBg: "#f5f0ff",
+      icon: (
+        <svg
+          width="20"
+          height="20"
+          fill="none"
+          stroke="#7c3aed"
+          strokeWidth="1.8"
+          viewBox="0 0 24 24"
+        >
+          <rect x="2" y="4" width="20" height="5" rx="1" />
+          <rect x="2" y="12" width="20" height="5" rx="1" />
+          <line x1="6" y1="6.5" x2="6.01" y2="6.5" />
+          <line x1="6" y1="14.5" x2="6.01" y2="14.5" />
+        </svg>
+      ),
+    },
+    {
+      title: "Office Relocation",
+      img: heroImg4,
+      desc: "Hassle-free office moves with minimal downtime for your business",
+      iconBg: "#fff7ed",
+      icon: (
+        <svg
+          width="20"
+          height="20"
+          fill="none"
+          stroke="#b45309"
+          strokeWidth="1.8"
+          viewBox="0 0 24 24"
+        >
+          <rect x="2" y="3" width="20" height="14" rx="2" />
+          <path d="M8 21h8M12 17v4" />
+        </svg>
+      ),
+    },
+  ];
+  const FADE_DURATION = 400;
   const [current, setCurrent] = useState(0);
   const [displayed, setDisplayed] = useState(0); // যেটা actually render হচ্ছে
   const [isFading, setIsFading] = useState(false);
@@ -227,7 +226,6 @@ const FADE_DURATION = 400;
               {active.icon}
             </div>
 
-            {/* ✅ শুধু এই div টা fade হয়, card নড়ে না */}
             <div
               style={{
                 opacity: isFading ? 0 : 1,
