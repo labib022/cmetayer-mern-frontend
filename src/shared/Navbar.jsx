@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useLocation, Link } from "react-router-dom";
-import logo from "/navImg.png";
+import logo from "/navImg.svg";
 
 const NAV_LINKS = [
   { label: "Home", href: "/" },
@@ -58,7 +58,7 @@ useEffect(() => {
               <img
                 src={logo}
                 alt="Logo"
-                className="h-12 md:h-12 w-auto object-contain"
+                className="h-12 md:h-24 w-auto object-contain"
               />
             </a>
           </div>
