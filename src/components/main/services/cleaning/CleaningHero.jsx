@@ -1,8 +1,8 @@
 export default function CleaningHero() {
   return (
-    <section className="w-full px-2 sm:px-6 lg:px-16 py-4 bg-[#08203C]">
+    <section className=" px-2 sm:px-6 lg:px-16 py-4 bg-[#08203C] mx-2 mb-2 rounded-b-3xl">
       <div
-        className="w-full flex flex-col justify-center items-center gap-16 sm:gap-20 px-6 sm:px-10 md:px-16 lg:px-20 pt-10 pb-16 sm:pb-20 rounded-3xl"
+        className="mxw flex flex-col justify-center items-center gap-16 sm:gap-20 px-6 sm:px-10 md:px-16 lg:px-20 pt-10 pb-16 sm:pb-20 rounded-3xl"
         style={{ backgroundColor: "#08203C" }}
       >
         <div className="flex flex-col items-center gap-6 text-center w-full max-w-225">

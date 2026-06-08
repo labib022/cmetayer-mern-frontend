@@ -23,10 +23,9 @@ export default function Navbar() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
   const dropdownRef = useRef(null);
-
+const [scrolled, setScrolled] = useState(false);
   const isActive = (href) =>
-    location.pathname === href ||
-    location.pathname.startsWith(href + "/");
+    location.pathname === href || location.pathname.startsWith(href + "/");
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -38,12 +37,21 @@ export default function Navbar() {
     document.addEventListener("mousedown", handleClick);
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
+useEffect(() => {
+  const handleScroll = () => setScrolled(window.scrollY > 10);
+  window.addEventListener("scroll", handleScroll);
+  return () => window.removeEventListener("scroll", handleScroll);
+}, []);
+
 
   return (
-    <div className="w-full sticky top-0 py-4 z-50 bg-[#08203C]">
-      <div className="max-w-385 mx-auto px-4 md:px-8">
+   <div
+  className={`sticky top-0 py-4 z-50 bg-[#08203C] transition-all duration-300 ${
+    scrolled ? "" : "mt-2 mx-2 rounded-t-3xl"
+  }`}
+>
+      <div className="mxw mx-2">
         <nav className="relative flex h-14 items-center px-4 md:px-6 bg-[#08203C]">
-
           {/* LEFT — Logo */}
           <div className="flex items-center shrink-0">
             <a href="/">
@@ -60,11 +68,7 @@ export default function Navbar() {
             {NAV_LINKS.map((link) =>
               link.dropdown ? (
                 // Services with dropdown
-                <div
-                  key={link.label}
-                  ref={dropdownRef}
-                  className="relative"
-                >
+                <div key={link.label} ref={dropdownRef} className="relative">
                   <button
                     onClick={() => setDropdownOpen(!dropdownOpen)}
                     className={`flex items-center gap-1.5 no-underline transition-colors duration-200 text-sm lg:text-base leading-[140%] font-rethink bg-transparent border-none cursor-pointer ${
@@ -81,7 +85,9 @@ export default function Navbar() {
                       className="transition-transform duration-200"
                       style={{
                         display: "inline-block",
-                        transform: dropdownOpen ? "rotate(180deg)" : "rotate(0deg)",
+                        transform: dropdownOpen
+                          ? "rotate(180deg)"
+                          : "rotate(0deg)",
                         fontSize: "10px",
                         marginLeft: "2px",
                       }}
@@ -129,13 +135,12 @@ export default function Navbar() {
                   )}
                   {link.label}
                 </a>
-              )
+              ),
             )}
           </div>
 
           {/* RIGHT — Login + Contact Button + Hamburger */}
           <div className="flex items-center gap-3 ml-auto">
-
             {/* Login Button */}
             <a
               href="/login"
@@ -162,9 +167,15 @@ export default function Navbar() {
               className="md:hidden flex flex-col gap-1.5 cursor-pointer bg-transparent border-none p-1"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
-              <span className={`block w-6 h-0.5 bg-white transition-all duration-300 ${mobileMenuOpen ? "rotate-45 translate-y-2" : ""}`} />
-              <span className={`block w-6 h-0.5 bg-white transition-all duration-300 ${mobileMenuOpen ? "opacity-0" : ""}`} />
-              <span className={`block w-6 h-0.5 bg-white transition-all duration-300 ${mobileMenuOpen ? "-rotate-45 -translate-y-2" : ""}`} />
+              <span
+                className={`block w-6 h-0.5 bg-white transition-all duration-300 ${mobileMenuOpen ? "rotate-45 translate-y-2" : ""}`}
+              />
+              <span
+                className={`block w-6 h-0.5 bg-white transition-all duration-300 ${mobileMenuOpen ? "opacity-0" : ""}`}
+              />
+              <span
+                className={`block w-6 h-0.5 bg-white transition-all duration-300 ${mobileMenuOpen ? "-rotate-45 -translate-y-2" : ""}`}
+              />
             </button>
           </div>
         </nav>
@@ -190,7 +201,17 @@ export default function Navbar() {
                         )}
                         {link.label}
                       </span>
-                      <span style={{ transform: mobileServicesOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s", fontSize: "10px" }}>▾</span>
+                      <span
+                        style={{
+                          transform: mobileServicesOpen
+                            ? "rotate(180deg)"
+                            : "rotate(0deg)",
+                          transition: "transform 0.2s",
+                          fontSize: "10px",
+                        }}
+                      >
+                        ▾
+                      </span>
                     </button>
 
                     {/* Mobile Dropdown */}
@@ -200,7 +221,10 @@ export default function Navbar() {
                           <Link
                             key={item.label}
                             to={item.href}
-                            onClick={() => { setMobileMenuOpen(false); setMobileServicesOpen(false); }}
+                            onClick={() => {
+                              setMobileMenuOpen(false);
+                              setMobileServicesOpen(false);
+                            }}
                             className={`block py-2 px-3 rounded-xl font-rethink text-sm no-underline transition-colors duration-150 ${
                               location.pathname === item.href
                                 ? "text-white font-semibold bg-white/10"
@@ -229,7 +253,7 @@ export default function Navbar() {
                     )}
                     {link.label}
                   </a>
-                )
+                ),
               )}
 
               {/* Mobile Login */}
@@ -252,7 +276,6 @@ export default function Navbar() {
             </div>
           </div>
         )}
-
       </div>
     </div>
   );

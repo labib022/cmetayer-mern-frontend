@@ -1,8 +1,8 @@
 export default function ContactHero() {
   return (
-    <section className="w-full bg-[#08203C] px-4 sm:px-6 lg:px-16 py-4">
+    <section className=" bg-[#08203C] px-4 sm:px-6 lg:px-16 py-4 mx-2 mb-2 rounded-b-3xl">
       <div
-        className="w-full flex flex-col justify-center items-center gap-16 sm:gap-20 px-6 sm:px-10 md:px-16 lg:px-20 pt-10 pb-16 sm:pb-20 rounded-3xl"
+        className="mxw flex flex-col justify-center items-center gap-16 sm:gap-20 px-6 sm:px-10 md:px-16 lg:px-20 pt-10 pb-16 sm:pb-20 rounded-3xl"
         style={{ backgroundColor: "#08203C" }}
       >
         {/* Heading + Subtext */}

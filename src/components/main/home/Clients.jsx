@@ -40,7 +40,7 @@ const PersonCard = ({ card }) => (
       width: "300px",
       height: "350px",
       borderRadius: "16px",
-      background: `url(${card.img}) lightgray -0.113px 0.446px / 100% 128.571% no-repeat`,
+      background: `url(${card.img}) lightgray center / cover no-repeat`,
       transition: "transform 0.3s ease, box-shadow 0.3s ease",
     }}
     onMouseEnter={hoverOn}
@@ -68,13 +68,62 @@ const StatDarkCard = ({ card }) => (
     onMouseLeave={hoverOff}
   >
     <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-      <span style={{ color: "#fff", fontFamily: '"Rethink Sans", sans-serif', fontSize: "24px", fontWeight: 700 }}>{card.logo}</span>
-      <span style={{ color: "rgba(255,255,255,0.75)", fontFamily: '"Rethink Sans", sans-serif', fontSize: "14px", fontWeight: 500 }}>{card.company}</span>
+      <span
+        style={{
+          color: "#fff",
+          fontFamily: '"Rethink Sans", sans-serif',
+          fontSize: "24px",
+          fontWeight: 700,
+        }}
+      >
+        {card.logo}
+      </span>
+      <span
+        style={{
+          color: "rgba(255,255,255,0.75)",
+          fontFamily: '"Rethink Sans", sans-serif',
+          fontSize: "14px",
+          fontWeight: 500,
+        }}
+      >
+        {card.company}
+      </span>
     </div>
     <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-      <p style={{ color: "#fff", fontFamily: '"Rethink Sans", sans-serif', fontSize: "48px", fontWeight: 800, lineHeight: "1", margin: 0 }}>{card.stat}</p>
-      <p style={{ color: "#fff", fontFamily: '"Rethink Sans", sans-serif', fontSize: "16px", fontWeight: 700, margin: 0 }}>{card.label}</p>
-      <p style={{ color: "rgba(255,255,255,0.7)", fontFamily: '"Rethink Sans", sans-serif', fontSize: "14px", margin: 0, lineHeight: "1.5" }}>{card.desc}</p>
+      <p
+        style={{
+          color: "#fff",
+          fontFamily: '"Rethink Sans", sans-serif',
+          fontSize: "48px",
+          fontWeight: 800,
+          lineHeight: "1",
+          margin: 0,
+        }}
+      >
+        {card.stat}
+      </p>
+      <p
+        style={{
+          color: "#fff",
+          fontFamily: '"Rethink Sans", sans-serif',
+          fontSize: "16px",
+          fontWeight: 700,
+          margin: 0,
+        }}
+      >
+        {card.label}
+      </p>
+      <p
+        style={{
+          color: "rgba(255,255,255,0.7)",
+          fontFamily: '"Rethink Sans", sans-serif',
+          fontSize: "14px",
+          margin: 0,
+          lineHeight: "1.5",
+        }}
+      >
+        {card.desc}
+      </p>
     </div>
   </div>
 );
@@ -98,13 +147,62 @@ const StatLightCard = ({ card }) => (
     onMouseLeave={hoverOff}
   >
     <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-      <span style={{ color: "#08203C", fontFamily: '"Rethink Sans", sans-serif', fontSize: "24px", fontWeight: 700 }}>{card.logo}</span>
-      <span style={{ color: "#08203C", fontFamily: '"Rethink Sans", sans-serif', fontSize: "14px", fontWeight: 500 }}>{card.company}</span>
+      <span
+        style={{
+          color: "#08203C",
+          fontFamily: '"Rethink Sans", sans-serif',
+          fontSize: "24px",
+          fontWeight: 700,
+        }}
+      >
+        {card.logo}
+      </span>
+      <span
+        style={{
+          color: "#08203C",
+          fontFamily: '"Rethink Sans", sans-serif',
+          fontSize: "14px",
+          fontWeight: 500,
+        }}
+      >
+        {card.company}
+      </span>
     </div>
     <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-      <p style={{ color: "#08203C", fontFamily: '"Rethink Sans", sans-serif', fontSize: "48px", fontWeight: 800, lineHeight: "1", margin: 0 }}>{card.stat}</p>
-      <p style={{ color: "#08203C", fontFamily: '"Rethink Sans", sans-serif', fontSize: "16px", fontWeight: 700, margin: 0 }}>{card.label}</p>
-      <p style={{ color: "#656565", fontFamily: '"Rethink Sans", sans-serif', fontSize: "14px", margin: 0, lineHeight: "1.5" }}>{card.desc}</p>
+      <p
+        style={{
+          color: "#08203C",
+          fontFamily: '"Rethink Sans", sans-serif',
+          fontSize: "48px",
+          fontWeight: 800,
+          lineHeight: "1",
+          margin: 0,
+        }}
+      >
+        {card.stat}
+      </p>
+      <p
+        style={{
+          color: "#08203C",
+          fontFamily: '"Rethink Sans", sans-serif',
+          fontSize: "16px",
+          fontWeight: 700,
+          margin: 0,
+        }}
+      >
+        {card.label}
+      </p>
+      <p
+        style={{
+          color: "#656565",
+          fontFamily: '"Rethink Sans", sans-serif',
+          fontSize: "14px",
+          margin: 0,
+          lineHeight: "1.5",
+        }}
+      >
+        {card.desc}
+      </p>
     </div>
   </div>
 );
@@ -133,18 +231,51 @@ export default function Clients() {
         <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-6">
           <div className="flex flex-col gap-3">
             <div className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full inline-block" style={{ backgroundColor: "#08203C" }} />
-              <span style={{ color: "#08203C", fontFamily: '"Rethink Sans", sans-serif', fontSize: "13px", fontWeight: 500 }}>
+              <span
+                className="w-1.5 h-1.5 rounded-full inline-block"
+                style={{ backgroundColor: "#08203C" }}
+              />
+              <span
+                style={{
+                  color: "#08203C",
+                  fontFamily: '"Rethink Sans", sans-serif',
+                  fontSize: "13px",
+                  fontWeight: 500,
+                }}
+              >
                 Clients
               </span>
             </div>
-            <h2 style={{ color: "#08203C", fontFamily: '"Rethink Sans", sans-serif', fontSize: "clamp(24px, 3vw, 36px)", fontWeight: 800, lineHeight: "1.2", margin: 0 }}>
-              Trusted by Home and<br />Property Owners
+            <h2
+              style={{
+                color: "#08203C",
+                fontFamily: '"Rethink Sans", sans-serif',
+                fontSize: "clamp(24px, 3vw, 36px)",
+                fontWeight: 800,
+                lineHeight: "1.2",
+                margin: 0,
+              }}
+            >
+              Trusted by Home and
+              <br />
+              Property Owners
             </h2>
           </div>
           <div className="flex flex-col items-start lg:items-end gap-4">
-            <p style={{ color: "#7a849a", fontFamily: '"Rethink Sans", sans-serif', fontSize: "14px", lineHeight: "1.6", maxWidth: "340px", textAlign: "right", margin: 0, paddingTop: "48px" }}>
-              From family homes to rentals, clients choose for reliable, professional cleaning.
+            <p
+              style={{
+                color: "#7a849a",
+                fontFamily: '"Rethink Sans", sans-serif',
+                fontSize: "14px",
+                lineHeight: "1.6",
+                maxWidth: "340px",
+                textAlign: "right",
+                margin: 0,
+                paddingTop: "48px",
+              }}
+            >
+              From family homes to rentals, clients choose for reliable,
+              professional cleaning.
             </p>
           </div>
         </div>
@@ -154,9 +285,12 @@ export default function Clients() {
       <div className="w-full overflow-hidden">
         <div className="clients-track py-8 px-5">
           {LOOPED_CARDS.map((card, i) => {
-            if (card.type === "person")     return <PersonCard    key={i} card={card} />;
-            if (card.type === "stat-dark")  return <StatDarkCard  key={i} card={card} />;
-            if (card.type === "stat-light") return <StatLightCard key={i} card={card} />;
+            if (card.type === "person")
+              return <PersonCard key={i} card={card} />;
+            if (card.type === "stat-dark")
+              return <StatDarkCard key={i} card={card} />;
+            if (card.type === "stat-light")
+              return <StatLightCard key={i} card={card} />;
             return null;
           })}
         </div>
