@@ -47,10 +47,8 @@ export default function GetAQuote() {
         <div className="relative w-full lg:w-160 shrink-0">
           {/* Rotated background layer */}
           <div
-            className="absolute inset-0 rounded-3xl"
+            className="absolute inset-0 rounded-3xl hidden sm:block"
             style={{
-              width: "640px",
-              height: "532px",
               background: "#ECEEF0",
               borderRadius: "24px",
               transform: "rotate(4deg)",
@@ -60,7 +58,7 @@ export default function GetAQuote() {
 
           {/* Actual Form Card */}
           <div
-            className="relative flex flex-col justify-center items-start gap-6 p-6 sm:p-8 rounded-3xl bg-white"
+            className="relative flex flex-col justify-center items-start gap-6 p-5 sm:p-8 rounded-3xl bg-white"
             style={{
               boxShadow: "0 8px 24px 0 rgba(3, 62, 72, 0.08)",
               borderRadius: "24px",
@@ -80,8 +78,9 @@ export default function GetAQuote() {
             <div className="w-full flex flex-col gap-4">
               {/* Row 1 — Name + Email */}
               <div className="flex flex-col sm:flex-row gap-4">
+                {/* ✅ mobile-এ full width, sm+ এ flex-1 */}
                 <div
-                  className="flex flex-col gap-2 flex-1 p-4 rounded-lg"
+                  className="flex flex-col gap-2 w-full sm:flex-1 p-4 rounded-lg"
                   style={{ background: "rgba(17,17,17,0.02)" }}
                 >
                   <label
@@ -93,12 +92,12 @@ export default function GetAQuote() {
                   <input
                     type="text"
                     placeholder="Full Name"
-                    className="bg-transparent border-none outline-none text-sm text-[#999] leading-[140%] h-6"
+                    className="bg-transparent border-none outline-none text-sm text-[#999] leading-[140%] h-6 w-full"
                     style={{ fontFamily: '"Rethink Sans", sans-serif' }}
                   />
                 </div>
                 <div
-                  className="flex flex-col gap-2 flex-1 p-4 rounded-lg"
+                  className="flex flex-col gap-2 w-full sm:flex-1 p-4 rounded-lg"
                   style={{ background: "rgba(17,17,17,0.02)" }}
                 >
                   <label
@@ -110,7 +109,7 @@ export default function GetAQuote() {
                   <input
                     type="email"
                     placeholder="Email Address"
-                    className="bg-transparent border-none outline-none text-sm text-[#999] leading-[140%] h-6"
+                    className="bg-transparent border-none outline-none text-sm text-[#999] leading-[140%] h-6 w-full"
                     style={{ fontFamily: '"Rethink Sans", sans-serif' }}
                   />
                 </div>
@@ -119,7 +118,7 @@ export default function GetAQuote() {
               {/* Row 2 — Phone + Service */}
               <div className="flex flex-col sm:flex-row gap-4">
                 <div
-                  className="flex flex-col gap-2 flex-1 p-4 rounded-lg"
+                  className="flex flex-col gap-2 w-full sm:flex-1 p-4 rounded-lg"
                   style={{ background: "rgba(17,17,17,0.02)" }}
                 >
                   <label
@@ -131,12 +130,12 @@ export default function GetAQuote() {
                   <input
                     type="tel"
                     placeholder="Phone Number"
-                    className="bg-transparent border-none outline-none text-sm text-[#999] leading-[140%] h-6"
+                    className="bg-transparent border-none outline-none text-sm text-[#999] leading-[140%] h-6 w-full"
                     style={{ fontFamily: '"Rethink Sans", sans-serif' }}
                   />
                 </div>
                 <div
-                  className="flex flex-col gap-2 flex-1 p-4 rounded-lg"
+                  className="flex flex-col gap-2 w-full sm:flex-1 p-4 rounded-lg"
                   style={{ background: "rgba(17,17,17,0.02)" }}
                 >
                   <label
@@ -146,7 +145,7 @@ export default function GetAQuote() {
                     Service Needed
                   </label>
                   <select
-                    className="bg-transparent border-none outline-none text-sm text-[#999] leading-[140%] h-6 cursor-pointer"
+                    className="bg-transparent border-none outline-none text-sm text-[#999] leading-[140%] h-6 cursor-pointer w-full"
                     style={{ fontFamily: '"Rethink Sans", sans-serif' }}
                     defaultValue=""
                   >
@@ -176,7 +175,7 @@ export default function GetAQuote() {
                 <textarea
                   placeholder="Tell Us about Your Specific Requests"
                   rows={4}
-                  className="bg-transparent border-none outline-none text-sm text-[#999] leading-[140%] resize-none"
+                  className="bg-transparent border-none outline-none text-sm text-[#999] leading-[140%] resize-none w-full"
                   style={{ fontFamily: '"Rethink Sans", sans-serif' }}
                 />
               </div>

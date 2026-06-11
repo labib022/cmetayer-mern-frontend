@@ -37,8 +37,8 @@ const PersonCard = ({ card }) => (
   <div
     className="shrink-0 cursor-pointer"
     style={{
-      width: "300px",
-      height: "350px",
+      width: "clamp(220px, 28vw, 300px)",
+      height: "clamp(260px, 32vw, 350px)",
       borderRadius: "16px",
       background: `url(${card.img}) lightgray center / cover no-repeat`,
       transition: "transform 0.3s ease, box-shadow 0.3s ease",
@@ -52,9 +52,9 @@ const StatDarkCard = ({ card }) => (
   <div
     className="shrink-0 cursor-pointer"
     style={{
-      width: "300px",
-      height: "350px",
-      padding: "24px",
+      width: "clamp(220px, 28vw, 300px)",
+      height: "clamp(260px, 32vw, 350px)",
+      padding: "20px",
       borderRadius: "24px",
       background: "#08203C",
       boxShadow: "7px 3px 0 0 #ECEEF0",
@@ -72,7 +72,7 @@ const StatDarkCard = ({ card }) => (
         style={{
           color: "#fff",
           fontFamily: '"Rethink Sans", sans-serif',
-          fontSize: "24px",
+          fontSize: "clamp(18px, 2vw, 24px)",
           fontWeight: 700,
         }}
       >
@@ -82,7 +82,7 @@ const StatDarkCard = ({ card }) => (
         style={{
           color: "rgba(255,255,255,0.75)",
           fontFamily: '"Rethink Sans", sans-serif',
-          fontSize: "14px",
+          fontSize: "clamp(12px, 1.2vw, 14px)",
           fontWeight: 500,
         }}
       >
@@ -94,7 +94,7 @@ const StatDarkCard = ({ card }) => (
         style={{
           color: "#fff",
           fontFamily: '"Rethink Sans", sans-serif',
-          fontSize: "48px",
+          fontSize: "clamp(32px, 4vw, 48px)",
           fontWeight: 800,
           lineHeight: "1",
           margin: 0,
@@ -106,7 +106,7 @@ const StatDarkCard = ({ card }) => (
         style={{
           color: "#fff",
           fontFamily: '"Rethink Sans", sans-serif',
-          fontSize: "16px",
+          fontSize: "clamp(13px, 1.4vw, 16px)",
           fontWeight: 700,
           margin: 0,
         }}
@@ -117,7 +117,7 @@ const StatDarkCard = ({ card }) => (
         style={{
           color: "rgba(255,255,255,0.7)",
           fontFamily: '"Rethink Sans", sans-serif',
-          fontSize: "14px",
+          fontSize: "clamp(11px, 1.2vw, 14px)",
           margin: 0,
           lineHeight: "1.5",
         }}
@@ -132,9 +132,9 @@ const StatLightCard = ({ card }) => (
   <div
     className="shrink-0 cursor-pointer"
     style={{
-      width: "300px",
-      height: "350px",
-      padding: "24px",
+      width: "clamp(220px, 28vw, 300px)",
+      height: "clamp(260px, 32vw, 350px)",
+      padding: "20px",
       borderRadius: "24px",
       background: "rgba(8, 32, 60, 0.08)",
       display: "flex",
@@ -151,7 +151,7 @@ const StatLightCard = ({ card }) => (
         style={{
           color: "#08203C",
           fontFamily: '"Rethink Sans", sans-serif',
-          fontSize: "24px",
+          fontSize: "clamp(18px, 2vw, 24px)",
           fontWeight: 700,
         }}
       >
@@ -161,7 +161,7 @@ const StatLightCard = ({ card }) => (
         style={{
           color: "#08203C",
           fontFamily: '"Rethink Sans", sans-serif',
-          fontSize: "14px",
+          fontSize: "clamp(12px, 1.2vw, 14px)",
           fontWeight: 500,
         }}
       >
@@ -173,7 +173,7 @@ const StatLightCard = ({ card }) => (
         style={{
           color: "#08203C",
           fontFamily: '"Rethink Sans", sans-serif',
-          fontSize: "48px",
+          fontSize: "clamp(32px, 4vw, 48px)",
           fontWeight: 800,
           lineHeight: "1",
           margin: 0,
@@ -185,7 +185,7 @@ const StatLightCard = ({ card }) => (
         style={{
           color: "#08203C",
           fontFamily: '"Rethink Sans", sans-serif',
-          fontSize: "16px",
+          fontSize: "clamp(13px, 1.4vw, 16px)",
           fontWeight: 700,
           margin: 0,
         }}
@@ -196,7 +196,7 @@ const StatLightCard = ({ card }) => (
         style={{
           color: "#656565",
           fontFamily: '"Rethink Sans", sans-serif',
-          fontSize: "14px",
+          fontSize: "clamp(11px, 1.2vw, 14px)",
           margin: 0,
           lineHeight: "1.5",
         }}
@@ -229,6 +229,8 @@ export default function Clients() {
       {/* HEADER */}
       <div className="max-w-300 mx-auto px-6 lg:px-16 mb-10">
         <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-6">
+
+          {/* Left */}
           <div className="flex flex-col gap-3">
             <div className="flex items-center gap-2">
               <span
@@ -261,6 +263,8 @@ export default function Clients() {
               Property Owners
             </h2>
           </div>
+
+          {/* Right — ✅ mobile-এ left align, lg-এ right align */}
           <div className="flex flex-col items-start lg:items-end gap-4">
             <p
               style={{
@@ -269,15 +273,17 @@ export default function Clients() {
                 fontSize: "14px",
                 lineHeight: "1.6",
                 maxWidth: "340px",
-                textAlign: "right",
                 margin: 0,
-                paddingTop: "48px",
+                paddingTop: "0px",   
+                textAlign: "left",    
               }}
+              className="lg:text-right lg:pt-12"
             >
               From family homes to rentals, clients choose for reliable,
               professional cleaning.
             </p>
           </div>
+
         </div>
       </div>
 
