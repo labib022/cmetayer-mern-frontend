@@ -1,6 +1,6 @@
 export default function RepairHero() {
   return (
-    <section className=" px-2 sm:px-6 lg:px-16 py-4 bg-[#08203C] mx-2 mb-2 rounded-b-3xl">
+    <section className="px-2 sm:px-6 lg:px-16 py-4 bg-[#08203C] mx-2 mb-2 rounded-b-3xl">
       <div
         className="mxw flex flex-col justify-center items-center gap-16 sm:gap-20 px-6 sm:px-10 md:px-16 lg:px-20 pt-10 pb-16 sm:pb-20 rounded-3xl"
         style={{ backgroundColor: "#08203C" }}
@@ -11,6 +11,7 @@ export default function RepairHero() {
           <h1
             className="font-rethink text-white text-center font-bold leading-[120%] tracking-[-1.872px] m-0 text-4xl sm:text-5xl lg:text-[48px]"
           >
+            <span className="block">Tall Boss Construction</span>
             Home Repair Services
           </h1>
 
