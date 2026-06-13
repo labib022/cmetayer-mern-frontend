@@ -262,7 +262,7 @@ export default function RepairBookingPage() {
             }}
           >
             <span
-              className="font-rethink text-white font-semibold leading-[140%]"
+              className="w-full text-center font-rethink text-white font-semibold leading-[140%]"
               style={{ fontSize: "16px" }}
             >
               Submit Request

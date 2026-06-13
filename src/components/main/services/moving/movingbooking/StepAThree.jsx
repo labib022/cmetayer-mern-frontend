@@ -159,7 +159,7 @@ export default function StepThree({ data, setData }) {
               flex: "1 0 0",
             }}
           >
-            <span className="font-rethink text-white font-semibold text-base leading-[140%]">
+            <span className="w-full text-center font-rethink text-white font-semibold text-base leading-[140%]">
               Next Step
             </span>
             <span

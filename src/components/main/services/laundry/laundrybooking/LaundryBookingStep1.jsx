@@ -246,7 +246,7 @@ export default function LaundryBookingStep1({ data, setData }) {
               height: "48px",
             }}
           >
-            <span className="font-rethink text-white font-semibold text-base leading-[140%]">
+            <span className="w-full text-center font-rethink text-white font-semibold text-base leading-[140%]">
               Next Step
             </span>
             <span
