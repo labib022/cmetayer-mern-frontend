@@ -1,4 +1,3 @@
-
 import { Link, useNavigate } from "react-router-dom";
 import { MdCalendarToday, MdShoppingCart } from "react-icons/md";
 
@@ -13,7 +12,7 @@ const SERVICE_CATEGORIES = [
 const FREQUENCY_OPTIONS = [
   { label: "One-time (0%)", discount: 0 },
   { label: "Weekly (-15%)", discount: 0.15 },
-  { label: "Bi-weekly (-10%)", discount: 0.10 },
+  { label: "Bi-weekly (-10%)", discount: 0.1 },
   { label: "Monthly (-5%)", discount: 0.05 },
 ];
 
@@ -26,20 +25,24 @@ export default function CleaningBookingStep1({ data, setData }) {
   const handleClose = () => navigate("/services/cleaning");
 
   const inc = (field) => setData({ ...data, [field]: (data[field] || 1) + 1 });
-  const dec = (field) => setData({ ...data, [field]: Math.max(1, (data[field] || 1) - 1) });
+  const dec = (field) =>
+    setData({ ...data, [field]: Math.max(1, (data[field] || 1) - 1) });
 
   const bedrooms = data.bedrooms || 1;
   const bathrooms = data.bathrooms || 1;
   const category = data.serviceCategory || SERVICE_CATEGORIES[0];
   const frequency = data.frequency || FREQUENCY_OPTIONS[0].label;
-  const freqObj = FREQUENCY_OPTIONS.find((f) => f.label === frequency) || FREQUENCY_OPTIONS[0];
+  const freqObj =
+    FREQUENCY_OPTIONS.find((f) => f.label === frequency) ||
+    FREQUENCY_OPTIONS[0];
 
   const baseTotal = BASE_PRICE * bedrooms * bathrooms;
   const discounted = baseTotal * (1 - freqObj.discount);
   const tax = discounted * VAT_RATE;
   const total = discounted + tax;
 
-  const inputClass = "w-full font-rethink text-sm text-[#656565] bg-white rounded-xl border border-[#E3E8EF] outline-none transition-all duration-200 px-4 py-3 focus:border-[#08203C]";
+  const inputClass =
+    "w-full font-rethink text-sm text-[#656565] bg-white rounded-xl border border-[#E3E8EF] outline-none transition-all duration-200 px-4 py-3 focus:border-[#08203C]";
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-[#F0F0F0] px-4 py-10">
@@ -69,7 +72,6 @@ export default function CleaningBookingStep1({ data, setData }) {
 
         {/* Main Grid */}
         <div className="flex flex-col lg:flex-row gap-6 w-full">
-
           {/* LEFT — Form */}
           <div
             className="flex flex-col gap-5 flex-1"
@@ -90,7 +92,9 @@ export default function CleaningBookingStep1({ data, setData }) {
 
             {/* Bedrooms */}
             <div className="flex items-center justify-between py-3 border-b border-[#E3E8EF]">
-              <span className="font-rethink font-medium text-[#0B1714] text-base">Bedrooms</span>
+              <span className="font-rethink font-medium text-[#0B1714] text-base">
+                Bedrooms
+              </span>
               <div className="flex items-center gap-4">
                 <button
                   onClick={() => dec("bedrooms")}
@@ -98,7 +102,9 @@ export default function CleaningBookingStep1({ data, setData }) {
                 >
                   −
                 </button>
-                <span className="font-rethink font-medium text-[#0B1714] w-4 text-center">{bedrooms}</span>
+                <span className="font-rethink font-medium text-[#0B1714] w-4 text-center">
+                  {bedrooms}
+                </span>
                 <button
                   onClick={() => inc("bedrooms")}
                   className="w-8 h-8 rounded-full border border-[#E3E8EF] bg-white flex items-center justify-center cursor-pointer hover:border-[#08203C] transition-colors duration-200 text-[#0B1714] font-bold"
@@ -110,7 +116,9 @@ export default function CleaningBookingStep1({ data, setData }) {
 
             {/* Bathrooms */}
             <div className="flex items-center justify-between py-3 border-b border-[#E3E8EF]">
-              <span className="font-rethink font-medium text-[#0B1714] text-base">Bathrooms</span>
+              <span className="font-rethink font-medium text-[#0B1714] text-base">
+                Bathrooms
+              </span>
               <div className="flex items-center gap-4">
                 <button
                   onClick={() => dec("bathrooms")}
@@ -118,7 +126,9 @@ export default function CleaningBookingStep1({ data, setData }) {
                 >
                   −
                 </button>
-                <span className="font-rethink font-medium text-[#0B1714] w-4 text-center">{bathrooms}</span>
+                <span className="font-rethink font-medium text-[#0B1714] w-4 text-center">
+                  {bathrooms}
+                </span>
                 <button
                   onClick={() => inc("bathrooms")}
                   className="w-8 h-8 rounded-full border border-[#E3E8EF] bg-white flex items-center justify-center cursor-pointer hover:border-[#08203C] transition-colors duration-200 text-[#0B1714] font-bold"
@@ -136,14 +146,20 @@ export default function CleaningBookingStep1({ data, setData }) {
               <div className="relative">
                 <select
                   value={category}
-                  onChange={(e) => setData({ ...data, serviceCategory: e.target.value })}
+                  onChange={(e) =>
+                    setData({ ...data, serviceCategory: e.target.value })
+                  }
                   className={`${inputClass} appearance-none cursor-pointer`}
                 >
                   {SERVICE_CATEGORIES.map((s) => (
-                    <option key={s} value={s}>{s}</option>
+                    <option key={s} value={s}>
+                      {s}
+                    </option>
                   ))}
                 </select>
-                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[#aab0be] pointer-events-none">▾</span>
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[#aab0be] pointer-events-none">
+                  ▾
+                </span>
               </div>
             </div>
 
@@ -156,12 +172,18 @@ export default function CleaningBookingStep1({ data, setData }) {
                 <input
                   type="datetime-local"
                   value={data.serviceDate || ""}
-                  onChange={(e) => setData({ ...data, serviceDate: e.target.value })}
+                  onChange={(e) =>
+                    setData({ ...data, serviceDate: e.target.value })
+                  }
                   className={`${inputClass} pr-10`}
                   onFocus={(e) => (e.target.style.borderColor = "#08203C")}
                   onBlur={(e) => (e.target.style.borderColor = "#E3E8EF")}
                 />
-                <MdCalendarToday size={16} color="#aab0be" className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <MdCalendarToday
+                  size={16}
+                  color="#aab0be"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none"
+                />
               </div>
             </div>
 
@@ -173,14 +195,20 @@ export default function CleaningBookingStep1({ data, setData }) {
               <div className="relative">
                 <select
                   value={frequency}
-                  onChange={(e) => setData({ ...data, frequency: e.target.value })}
+                  onChange={(e) =>
+                    setData({ ...data, frequency: e.target.value })
+                  }
                   className={`${inputClass} appearance-none cursor-pointer`}
                 >
                   {FREQUENCY_OPTIONS.map((f) => (
-                    <option key={f.label} value={f.label}>{f.label}</option>
+                    <option key={f.label} value={f.label}>
+                      {f.label}
+                    </option>
                   ))}
                 </select>
-                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[#aab0be] pointer-events-none">▾</span>
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[#aab0be] pointer-events-none">
+                  ▾
+                </span>
               </div>
             </div>
           </div>
@@ -216,14 +244,20 @@ export default function CleaningBookingStep1({ data, setData }) {
 
               {/* Service */}
               <div className="flex items-center justify-between">
-                <span className="font-rethink text-sm text-[#656565]">{category}</span>
-                <span className="font-rethink text-sm font-medium text-[#0B1714]">x1</span>
+                <span className="font-rethink text-sm text-[#656565]">
+                  {category}
+                </span>
+                <span className="font-rethink text-sm font-medium text-[#0B1714]">
+                  x1
+                </span>
               </div>
 
               {/* Discount if any */}
               {freqObj.discount > 0 && (
                 <div className="flex items-center justify-between">
-                  <span className="font-rethink text-sm text-[#079455]">Discount</span>
+                  <span className="font-rethink text-sm text-[#079455]">
+                    Discount
+                  </span>
                   <span className="font-rethink text-sm font-medium text-[#079455]">
                     -{(freqObj.discount * 100).toFixed(0)}%
                   </span>
@@ -232,7 +266,9 @@ export default function CleaningBookingStep1({ data, setData }) {
 
               {/* Taxes */}
               <div className="flex items-center justify-between">
-                <span className="font-rethink text-sm text-[#656565]">Taxes (8%)</span>
+                <span className="font-rethink text-sm text-[#656565]">
+                  Taxes (8%)
+                </span>
                 <span className="font-rethink text-sm font-medium text-[#0B1714]">
                   ${tax.toFixed(2)}
                 </span>
@@ -244,7 +280,9 @@ export default function CleaningBookingStep1({ data, setData }) {
 
             {/* Total */}
             <div className="flex items-center justify-between">
-              <span className="font-rethink font-medium text-[#0B1714] text-base">Total</span>
+              <span className="font-rethink font-medium text-[#0B1714] text-base">
+                Total
+              </span>
               <span
                 className="font-rethink font-bold tracking-[-1.248px]"
                 style={{ color: "#08203C", fontSize: "28px" }}
@@ -278,10 +316,10 @@ export default function CleaningBookingStep1({ data, setData }) {
               borderRadius: "24px",
               background: "#08203C",
               flex: "1 0 0",
-              height: "48px"
+              height: "48px",
             }}
           >
-            <span className="font-rethink text-white font-semibold text-base leading-[140%]">
+            <span className="font-rethink text-white font-semibold text-base leading-[140%] w-full text-center">
               Next Step
             </span>
             <span
@@ -292,7 +330,6 @@ export default function CleaningBookingStep1({ data, setData }) {
             </span>
           </Link>
         </div>
-
       </div>
     </div>
   );
