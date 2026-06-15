@@ -1,13 +1,27 @@
 import { useState, useRef, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { toast } from "sonner";
+import {
+  useVerifyOtpMutation,
+  useResendOtpMutation,
+} from "../../redux/features/auth/authApi";
 
-const TIMER_SECONDS = 180; // 3:00 minutes
+const TIMER_SECONDS = 180;
 
 export default function VerifyCode() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const email = location.state?.email || "";
+  const flow = location.state?.flow || "verify-account";
+  const purpose = flow === "forgot-password" ? "password_reset" : "signup";
+
   const [code, setCode] = useState(["", "", "", "", "", ""]);
   const [timer, setTimer] = useState(TIMER_SECONDS);
   const inputRefs = useRef([]);
-  const navigate = useNavigate();
+
+  const [verifyOtp, { isLoading: isVerifying }] = useVerifyOtpMutation();
+  const [resendOtp, { isLoading: isResending }] = useResendOtpMutation();
 
   // Countdown timer
   useEffect(() => {
@@ -17,7 +31,9 @@ export default function VerifyCode() {
   }, [timer]);
 
   const formatTime = (s) => {
-    const m = Math.floor(s / 60).toString().padStart(2, "0");
+    const m = Math.floor(s / 60)
+      .toString()
+      .padStart(2, "0");
     const sec = (s % 60).toString().padStart(2, "0");
     return `${m}.${sec}`;
   };
@@ -38,47 +54,81 @@ export default function VerifyCode() {
 
   const handlePaste = (e) => {
     e.preventDefault();
-    const pasted = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, 6);
+    const pasted = e.clipboardData
+      .getData("text")
+      .replace(/\D/g, "")
+      .slice(0, 6);
     const updated = [...code];
-    pasted.split("").forEach((char, i) => { updated[i] = char; });
+    pasted.split("").forEach((char, i) => {
+      updated[i] = char;
+    });
     setCode(updated);
     inputRefs.current[Math.min(pasted.length, 5)]?.focus();
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const fullCode = code.join("");
-    if (fullCode.length < 6) return;
-    console.log("Verify code:", fullCode);
-    navigate("/reset-password");
+    if (fullCode.length < 6) {
+      toast.error("Please enter the complete 6-digit code.");
+      return;
+    }
+
+    try {
+      await verifyOtp({
+        email,
+        otp: fullCode,
+        purpose,
+      }).unwrap();
+
+      toast.success("Email verified successfully!");
+
+      if (purpose === "password_reset") {
+        navigate("/reset-password", { state: { email } });
+      } else {
+        navigate("/login");
+      }
+    } catch (err) {
+      toast.error(
+        err?.data?.message || "Invalid or expired code. Please try again.",
+      );
+    }
   };
 
-  const handleResend = () => {
-    setTimer(TIMER_SECONDS);
-    setCode(["", "", "", "", "", ""]);
-    inputRefs.current[0]?.focus();
-    console.log("Resend code");
+  const handleResend = async () => {
+    if (!email) {
+      toast.error("Email not found. Please go back and try again.");
+      return;
+    }
+    try {
+      await resendOtp({ email, purpose }).unwrap();
+      toast.success("Code resent successfully!");
+      setTimer(TIMER_SECONDS);
+      setCode(["", "", "", "", "", ""]);
+      inputRefs.current[0]?.focus();
+    } catch (err) {
+      toast.error(err?.data?.message || "Failed to resend code.");
+    }
   };
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-[#F0F0F0] px-4 py-10">
-
       {/* Card */}
-      <div className="w-full max-w-[480px] flex flex-col items-center gap-[35px] p-8 rounded-[32px] bg-[#FAFAFA]">
-
+      <div className="w-full max-w-120 flex flex-col items-center gap-[35px] p-8 rounded-4xl bg-[#FAFAFA]">
         {/* Header */}
         <div className="flex flex-col items-center gap-2 text-center">
           <h1 className="font-rethink text-[#1F1F1F] text-2xl font-medium leading-[140%] tracking-[-0.936px] m-0">
             Enter the Code We've Sent
           </h1>
           <p className="font-rethink text-[#595959] text-base font-normal leading-[140%] text-center m-0">
-            We've sent a 6-digit verification code to your email address. Please enter it below.
+            We've sent a 6-digit verification code to{" "}
+            <span className="font-semibold text-[#08203C]">{email}</span>.
+            Please enter it below.
           </p>
         </div>
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="flex flex-col gap-6 w-full">
-
           {/* 6 Code Inputs */}
           <div className="flex items-center justify-between gap-2 w-full">
             {code.map((digit, i) => (
@@ -92,7 +142,7 @@ export default function VerifyCode() {
                 onChange={(e) => handleChange(i, e.target.value)}
                 onKeyDown={(e) => handleKeyDown(i, e)}
                 onPaste={handlePaste}
-                className="font-rethink text-center text-xl font-semibold text-[#08203C] outline-none transition-all duration-200 bg-[#F5F5F5] rounded-[4px] border border-[#08203C] focus:bg-white focus:shadow-md"
+                className="font-rethink text-center text-xl font-semibold text-[#08203C] outline-none transition-all duration-200 bg-[#F5F5F5] rounded-sm border border-[#08203C] focus:bg-white focus:shadow-md"
                 style={{ width: "65.667px", height: "75px" }}
               />
             ))}
@@ -105,9 +155,10 @@ export default function VerifyCode() {
               <button
                 type="button"
                 onClick={handleResend}
-                className="font-rethink text-[#002426] text-sm font-normal leading-5 bg-transparent border-none cursor-pointer p-0 hover:underline"
+                disabled={isResending || timer > 0}
+                className="font-rethink text-[#002426] text-sm font-normal leading-5 bg-transparent border-none cursor-pointer p-0 hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Send again
+                {isResending ? "Sending..." : "Send again"}
               </button>
             </p>
             <span className="font-rethink text-[#079455] text-sm font-normal leading-5">
@@ -118,9 +169,10 @@ export default function VerifyCode() {
           {/* Confirm Button */}
           <button
             type="submit"
-            className="font-rethink w-full flex items-center justify-center gap-2 py-4 px-[18px] rounded-[40px] bg-[#08203C] text-white text-base font-semibold leading-[140%] text-center border-none cursor-pointer hover:opacity-90 transition-opacity duration-200"
+            disabled={isVerifying}
+            className="font-rethink w-full flex items-center justify-center gap-2 py-4 px-[18px] rounded-[40px] bg-[#08203C] text-white text-base font-semibold leading-[140%] text-center border-none cursor-pointer hover:opacity-90 transition-opacity duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            Confirm
+            {isVerifying ? "Verifying..." : "Confirm"}
           </button>
 
           {/* Back to Login */}
@@ -133,7 +185,6 @@ export default function VerifyCode() {
               Sign in
             </Link>
           </p>
-
         </form>
       </div>
     </div>

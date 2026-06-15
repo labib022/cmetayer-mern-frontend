@@ -1,10 +1,15 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import googleIcon from "../../assets/icons/arrow-icon.svg";
+import { useSignUpMutation } from "../../redux/features/auth/authApi";
 
 const inputBase = "w-full outline-none transition-all duration-200 px-4 py-3.5 rounded-xl border border-[#E2E6EF] bg-white text-[#1F1F1F] text-[15px] focus:border-[#08203C]";
 
 export default function Register() {
+  const navigate = useNavigate();
+  const [signUp, { isLoading }] = useSignUpMutation();
+
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [agreed, setAgreed] = useState(false);
@@ -18,24 +23,40 @@ export default function Register() {
   const handleChange = (field) => (e) =>
     setForm({ ...form, [field]: e.target.value });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (form.password !== form.confirmPassword) {
-      alert("Passwords do not match!");
+      toast.error("Passwords do not match!");
       return;
     }
     if (!agreed) {
-      alert("Please agree to the Privacy Policy and Terms and Condition!");
+      toast.error("Please agree to the Privacy Policy and Terms and Condition!");
       return;
     }
-    console.log("Register:", form);
+
+    try {
+      await signUp({
+        full_name: form.fullName,
+        email: form.email,
+        password: form.password,
+        confirm_password: form.confirmPassword,
+        privacy_and_terms_accepted: true,
+      }).unwrap();
+
+      toast.success("Registration successful! Please verify your email.");
+      // ✅ OTP verify page এ email পাঠাও
+      navigate("/verify-code", { state: { email: form.email, purpose: "signup" } });
+    } catch (err) {
+      toast.error(err?.data?.message || "Registration failed. Please try again.");
+    }
   };
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-[#F0F0F0] px-4 py-10">
 
       {/* Card */}
-      <div className="w-full max-w-[480px] flex flex-col items-center gap-[35px] p-8 rounded-[32px] bg-[#FAFAFA]">
+      <div className="w-full max-w-120 flex flex-col items-center gap-[35px] p-8 rounded-4xl bg-[#FAFAFA]">
 
         {/* Header */}
         <div className="flex flex-col items-center gap-2 text-center">
@@ -187,17 +208,11 @@ export default function Register() {
               style={{ fontFamily: '"Rethink Sans", sans-serif' }}
             >
               By creating an account, you agreeing to our{" "}
-              <Link
-                to="/privacy-policy"
-                className="text-[#08203C] font-bold no-underline hover:underline"
-              >
+              <Link to="/privacy-policy" className="text-[#08203C] font-bold no-underline hover:underline">
                 Privacy Policy
               </Link>
               , and{" "}
-              <Link
-                to="/terms"
-                className="text-[#08203C] font-bold no-underline hover:underline"
-              >
+              <Link to="/terms" className="text-[#08203C] font-bold no-underline hover:underline">
                 Terms and Condition
               </Link>
             </label>
@@ -206,10 +221,11 @@ export default function Register() {
           {/* Sign Up Button */}
           <button
             type="submit"
-            className="w-full flex items-center justify-center gap-2 py-4 px-[18px] rounded-[40px] bg-[#08203C] text-white text-base font-semibold leading-[140%] border-none cursor-pointer hover:opacity-90 transition-opacity duration-200"
+            disabled={isLoading}
+            className="w-full flex items-center justify-center gap-2 py-4 px-[18px] rounded-[40px] bg-[#08203C] text-white text-base font-semibold leading-[140%] border-none cursor-pointer hover:opacity-90 transition-opacity duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
             style={{ fontFamily: '"Rethink Sans", sans-serif' }}
           >
-            Sign Up
+            {isLoading ? "Signing up..." : "Sign Up"}
           </button>
 
           {/* Sign In Link */}

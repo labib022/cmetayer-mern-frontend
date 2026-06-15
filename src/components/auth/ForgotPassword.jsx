@@ -1,19 +1,27 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+import { useSendOtpMutation } from "../../redux/features/auth/authApi";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
+  const navigate = useNavigate();
+  const [sendOtp, { isLoading }] = useSendOtpMutation();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Send code to:", email);
+    try {
+      await sendOtp({ email }).unwrap();
+      toast.success("OTP sent! Check your email.");
+      navigate("/verify-code", { state: { email, flow: "forgot-password" } });
+    } catch (err) {
+      toast.error(err?.data?.message || "Failed to send OTP. Try again.");
+    }
   };
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-[#F0F0F0] px-4 py-10">
-
-      {/* Card */}
-      <div className="w-full max-w-[480px] flex flex-col items-center gap-[35px] p-8 rounded-[32px] bg-[#FAFAFA]">
+      <div className="w-full max-w-120 flex flex-col items-center gap-[35px] p-8 rounded-4xl bg-[#FAFAFA]">
 
         {/* Header */}
         <div className="flex flex-col items-center gap-2 text-center">
@@ -41,7 +49,8 @@ export default function ForgotPassword() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="font-rethink w-full outline-none transition-all duration-200 p-3 rounded-xl border border-[#E2E6EF] bg-white text-[#1F1F1F] text-[15px] focus:border-[#08203C]"
+              disabled={isLoading}
+              className="font-rethink w-full outline-none transition-all duration-200 p-3 rounded-xl border border-[#E2E6EF] bg-white text-[#1F1F1F] text-[15px] focus:border-[#08203C] disabled:opacity-60"
               onFocus={(e) => (e.target.style.borderColor = "#08203C")}
               onBlur={(e) => (e.target.style.borderColor = "#E2E6EF")}
             />
@@ -56,9 +65,10 @@ export default function ForgotPassword() {
           {/* Send a Code Button */}
           <button
             type="submit"
-            className="font-rethink w-full flex items-center justify-center gap-2 py-4 px-[18px] rounded-[40px] bg-[#08203C] text-white text-base font-semibold leading-[140%] border-none cursor-pointer hover:opacity-90 transition-opacity duration-200"
+            disabled={isLoading}
+            className="font-rethink w-full flex items-center justify-center gap-2 py-4 px-[18px] rounded-[40px] bg-[#08203C] text-white text-base font-semibold leading-[140%] border-none cursor-pointer hover:opacity-90 transition-opacity duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            Send a Code
+            {isLoading ? "Sending..." : "Send a Code"}
           </button>
 
           {/* Back to Login */}
