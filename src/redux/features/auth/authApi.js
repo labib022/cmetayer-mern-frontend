@@ -135,6 +135,18 @@ export const authApi = createApi({
         return { url: "/token/refresh/", method: "POST", body: fd };
       },
     }),
+
+    // ✅ Google Auth
+    googleAuth: builder.mutation({
+      query: (data) => {
+        const fd = new FormData();
+        fd.append("id_token", data.id_token);
+        if (data.access_token) {
+          fd.append("access_token", data.access_token);
+        }
+        return { url: "/google-auth/", method: "POST", body: fd };
+      },
+    }),
   }),
 });
 
@@ -151,4 +163,5 @@ export const {
   useUpdateProfileMutation,
   useUpdateAvatarMutation,
   useRefreshTokenMutation,
+  useGoogleAuthMutation,
 } = authApi;

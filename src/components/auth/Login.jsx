@@ -2,8 +2,10 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { toast } from "sonner";
+import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { auth, googleProvider } from "../../firebase/firebase.config";
 import googleIcon from "../../assets/icons/google-logo.svg";
-import { useSignInMutation } from "../../redux/features/auth/authApi";
+import { useSignInMutation, useGoogleAuthMutation } from "../../redux/features/auth/authApi";
 import { setCredentials } from "../../redux/features/auth/authSlice";
 
 const inputBase =
@@ -14,9 +16,11 @@ export default function Login() {
   const dispatch = useDispatch();
 
   const [showPassword, setShowPassword] = useState(false);
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [form, setForm] = useState({ email: "", password: "" });
 
   const [signIn, { isLoading }] = useSignInMutation();
+  const [googleAuth] = useGoogleAuthMutation();
 
   const handleChange = (field) => (e) =>
     setForm({ ...form, [field]: e.target.value });
@@ -49,6 +53,40 @@ export default function Login() {
       } else {
         toast.error(data?.message || "Login failed. Please try again.");
       }
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    setIsGoogleLoading(true);
+    try {
+      const firebaseResult = await signInWithPopup(auth, googleProvider);
+      const credential = GoogleAuthProvider.credentialFromResult(firebaseResult);
+      const oauthIdToken = credential?.idToken;
+      const accessToken = credential?.accessToken;
+
+      if (!oauthIdToken) {
+        throw new Error("Unable to retrieve Google OAuth ID token.");
+      }
+
+      const result = await googleAuth({ id_token: oauthIdToken, access_token: accessToken }).unwrap();
+
+      dispatch(
+        setCredentials({
+          user: result.data.user,
+          access: result.data.access,
+          refresh: result.data.refresh,
+        }),
+      );
+
+      toast.success("Google login successful!");
+      navigate("/");
+    } catch (err) {
+      if (err?.code === "auth/popup-closed-by-user") {
+        return;
+      }
+      toast.error(err?.data?.message || err.message || "Google login failed. Try again.");
+    } finally {
+      setIsGoogleLoading(false);
     }
   };
 
@@ -118,27 +156,13 @@ export default function Login() {
                 className="absolute right-4 top-1/2 -translate-y-1/2 text-[#888] hover:text-[#08203C] transition-colors duration-200 bg-transparent border-none cursor-pointer p-0"
               >
                 {showPassword ? (
-                  <svg
-                    width="20"
-                    height="20"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.8"
-                    viewBox="0 0 24 24"
-                  >
+                  <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
                     <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94" />
                     <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19" />
                     <line x1="1" y1="1" x2="23" y2="23" />
                   </svg>
                 ) : (
-                  <svg
-                    width="20"
-                    height="20"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.8"
-                    viewBox="0 0 24 24"
-                  >
+                  <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
                     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
                     <circle cx="12" cy="12" r="3" />
                   </svg>
@@ -171,10 +195,7 @@ export default function Login() {
           {/* Divider */}
           <div className="flex items-center gap-3 w-full">
             <div className="flex-1 h-px bg-[#E2E6EF]" />
-            <span
-              className="text-[#888] text-sm"
-              style={{ fontFamily: '"Rethink Sans", sans-serif' }}
-            >
+            <span className="text-[#888] text-sm" style={{ fontFamily: '"Rethink Sans", sans-serif' }}>
               or
             </span>
             <div className="flex-1 h-px bg-[#E2E6EF]" />
@@ -183,18 +204,18 @@ export default function Login() {
           {/* Google Sign In */}
           <button
             type="button"
-            className="w-full flex items-center justify-center gap-3 py-4 px-5 rounded-[40px] bg-[#1F1F1F] text-white text-base font-semibold leading-[140%] border-none cursor-pointer hover:opacity-90 transition-opacity duration-200"
+            onClick={handleGoogleLogin}
+            disabled={isGoogleLoading}
+            className="w-full flex items-center justify-center gap-3 py-4 px-5 rounded-[40px] bg-[#1F1F1F] text-white text-base font-semibold leading-[140%] border-none cursor-pointer hover:opacity-90 transition-opacity duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
             style={{ fontFamily: '"Rethink Sans", sans-serif' }}
           >
             <img
               src={googleIcon}
               alt="Google"
               className="w-5 h-5"
-              onError={(e) => {
-                e.currentTarget.style.display = "none";
-              }}
+              onError={(e) => { e.currentTarget.style.display = "none"; }}
             />
-            Sign In With Google
+            {isGoogleLoading ? "Connecting..." : "Sign In With Google"}
           </button>
         </form>
 

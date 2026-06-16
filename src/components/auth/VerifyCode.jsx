@@ -16,6 +16,10 @@ export default function VerifyCode() {
   const flow = location.state?.flow || "verify-account";
   const purpose = flow === "forgot-password" ? "password_reset" : "signup";
 
+  console.log("STATE:", location.state);
+  console.log("flow:", flow);
+  console.log("purpose:", purpose);
+
   const [code, setCode] = useState(["", "", "", "", "", ""]);
   const [timer, setTimer] = useState(TIMER_SECONDS);
   const inputRefs = useRef([]);
@@ -35,7 +39,7 @@ export default function VerifyCode() {
       .toString()
       .padStart(2, "0");
     const sec = (s % 60).toString().padStart(2, "0");
-    return `${m}.${sec}`;
+    return `${m}:${sec}`;
   };
 
   const handleChange = (i, val) => {
@@ -75,15 +79,15 @@ export default function VerifyCode() {
     }
 
     try {
-      await verifyOtp({
+      const result = await verifyOtp({
         email,
         otp: fullCode,
         purpose,
-      }).unwrap();
-
+      }).unwrap(); // ← change
+      console.log("VERIFY RESULT:", result); // ← add
       toast.success("Email verified successfully!");
 
-      if (purpose === "password_reset") {
+      if (flow === "forgot-password") {
         navigate("/reset-password", { state: { email } });
       } else {
         navigate("/login");
@@ -96,10 +100,6 @@ export default function VerifyCode() {
   };
 
   const handleResend = async () => {
-    if (!email) {
-      toast.error("Email not found. Please go back and try again.");
-      return;
-    }
     try {
       await resendOtp({ email, purpose }).unwrap();
       toast.success("Code resent successfully!");
@@ -113,7 +113,6 @@ export default function VerifyCode() {
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-[#F0F0F0] px-4 py-10">
-      {/* Card */}
       <div className="w-full max-w-120 flex flex-col items-center gap-[35px] p-8 rounded-4xl bg-[#FAFAFA]">
         {/* Header */}
         <div className="flex flex-col items-center gap-2 text-center">
@@ -142,7 +141,7 @@ export default function VerifyCode() {
                 onChange={(e) => handleChange(i, e.target.value)}
                 onKeyDown={(e) => handleKeyDown(i, e)}
                 onPaste={handlePaste}
-                className="font-rethink text-center text-xl font-semibold text-[#08203C] outline-none transition-all duration-200 bg-[#F5F5F5] rounded-sm border border-[#08203C] focus:bg-white focus:shadow-md"
+                className="font-rethink text-center text-xl font-semibold text-[#08203C] outline-none transition-all duration-200 bg-[#F5F5F5] rounded-[4px] border border-[#08203C] focus:bg-white focus:shadow-md"
                 style={{ width: "65.667px", height: "75px" }}
               />
             ))}
@@ -161,8 +160,10 @@ export default function VerifyCode() {
                 {isResending ? "Sending..." : "Send again"}
               </button>
             </p>
-            <span className="font-rethink text-[#079455] text-sm font-normal leading-5">
-              {formatTime(timer)}
+            <span
+              className={`font-rethink text-sm font-normal leading-5 ${timer > 0 ? "text-[#079455]" : "text-[#595959]"}`}
+            >
+              {timer > 0 ? formatTime(timer) : "Expired"}
             </span>
           </div>
 
