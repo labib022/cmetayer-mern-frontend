@@ -12,6 +12,8 @@ import MovingBookingPage from "../pages/services/moving/MovingBookingPage";
 import CleaningBookingPage from "../pages/services/cleaning/CleaningBookingPage";
 import LaundryBookingPage from "../pages/services/laundry/LaundryBookingPage";
 import RepairBookingPage from "../pages/services/repair/RepairBookingPage";
+import PrivacyPolicyPage from "../shared/PrivacyPolicy";
+import TermsAndConditionsPage from "../shared/TermsandCondition";
 
 export default function AppRoutes() {
   return (
@@ -31,6 +33,13 @@ export default function AppRoutes() {
           <Route path="/footer" element={<div>Footer</div>} />
           <Route path="/ourfoundation" element={<div>Our Foundation</div>} />
 
+
+              {/* ADD THESE TWO ROUTES */}
+          <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+          <Route path="/terms-and-conditions" element={<TermsAndConditionsPage />} />
+
+
+
           {/* ── Service Routes ── */}
           <Route path="/services/moving" element={<MovingPage />} />
           <Route path="/services/cleaning" element={<CleaningPage />} />
@@ -49,6 +58,9 @@ export default function AppRoutes() {
 
         {/* ── laundry Booking — Navbar/Footer ছাড়া ── */}
         <Route path="/services/repair/book/*" element={<RepairBookingPage />} />
+
+
+        
 
 
 

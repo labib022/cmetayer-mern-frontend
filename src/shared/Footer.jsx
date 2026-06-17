@@ -3,20 +3,29 @@ import { Link } from "react-router-dom";
 
 const QUICK_LINKS = [
   { label: "About", to: "/about" },
-  { label: "Services", to: "/services" },
+  { label: "Services", to: "services/moving" },
 ];
-const LEGAL_LINKS = ["Privacy Policy", "Terms of Service"];
-const SOCIAL = ["Instagram", "LinkedIn", "X"];
+
+const LEGAL_LINKS = [
+  { label: "Privacy Policy", to: "/privacy-policy" },
+  { label: "Terms & Conditions", to: "/terms-and-conditions" },
+];
+
+const SOCIAL = [
+  { label: "Instagram", href: "https://instagram.com" },
+  { label: "LinkedIn", href: "https://linkedin.com" },
+  { label: "X", href: "https://x.com" },
+];
 
 export default function Footer() {
   return (
     <footer className="w-full px-2 pb-2 pt-14 bg-transparent">
-      <div className="w-full bg-[#08203C] rounded-3xl flex flex-col gap-16 ">
+      <div className="w-full bg-[#08203C] rounded-3xl flex flex-col gap-16">
         {/* ── TOP SECTION ── */}
         <div className="p-5 sm:p-10 lg:p-12">
           <div className="flex flex-col lg:flex-row justify-between items-start gap-10 lg:gap-8 px-0 sm:px-4 lg:px-6">
             {/* LEFT — Brand + Email */}
-            <div className="flex flex-col gap-6 ">
+            <div className="flex flex-col gap-6">
               <div className="relative flex items-center gap-3">
                 <h3
                   className="text-white text-xl sm:text-2xl font-semibold leading-[140%]"
@@ -26,9 +35,7 @@ export default function Footer() {
                 </h3>
                 <Link
                   to="/"
-                  onClick={() =>
-                    window.scrollTo({ top: 0, behavior: "smooth" })
-                  }
+                  onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
                 >
                   <img
                     src={logo}
@@ -42,8 +49,7 @@ export default function Footer() {
                 className="text-[#E0E0E0] text-base font-bold leading-[140%] m-0"
                 style={{ fontFamily: '"Rethink Sans", sans-serif' }}
               >
-                Get cleaning tips, special offers, and updates delivered to your
-                inbox.
+                Get cleaning tips, special offers, and updates delivered to your inbox.
               </p>
 
               <div
@@ -75,6 +81,7 @@ export default function Footer() {
 
             {/* RIGHT — Quick Links + Legal */}
             <div className="flex gap-12 sm:gap-16 lg:gap-20">
+              {/* Quick Links */}
               <div className="flex flex-col gap-6 w-42">
                 <h4
                   className="text-white text-base font-semibold leading-[140%] m-0"
@@ -87,9 +94,7 @@ export default function Footer() {
                     <Link
                       key={link.label}
                       to={link.to}
-                      onClick={() =>
-                        window.scrollTo({ top: 0, behavior: "smooth" })
-                      }
+                      onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
                       className="text-[#E0E0E0] text-sm no-underline hover:text-white transition-colors duration-200"
                       style={{ fontFamily: '"Rethink Sans", sans-serif' }}
                     >
@@ -99,6 +104,7 @@ export default function Footer() {
                 </div>
               </div>
 
+              {/* Legal */}
               <div className="flex flex-col gap-6 w-42">
                 <h4
                   className="text-white text-base font-semibold leading-[140%] m-0"
@@ -108,20 +114,22 @@ export default function Footer() {
                 </h4>
                 <div className="flex flex-col gap-4">
                   {LEGAL_LINKS.map((link) => (
-                    <a
-                      key={link}
-                      href="#"
+                    <Link
+                      key={link.label}
+                      to={link.to}
+                      onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
                       className="text-[#E0E0E0] text-sm no-underline hover:text-white transition-colors duration-200"
                       style={{ fontFamily: '"Rethink Sans", sans-serif' }}
                     >
-                      {link}
-                    </a>
+                      {link.label}
+                    </Link>
                   ))}
                 </div>
               </div>
             </div>
           </div>
         </div>
+
         {/* ── BOTTOM WHITE BOX ── */}
         <div className="p-2">
           <div className="w-full bg-white rounded-2xl p-8 sm:p-10 lg:p-12 flex flex-col sm:flex-row flex-wrap gap-10 sm:gap-12">
@@ -135,10 +143,7 @@ export default function Footer() {
               </p>
               <p
                 className="text-[#111] text-lg sm:text-xl font-medium leading-[140%] m-0"
-                style={{
-                  fontFamily: '"Rethink Sans", sans-serif',
-                  letterSpacing: "-0.78px",
-                }}
+                style={{ fontFamily: '"Rethink Sans", sans-serif', letterSpacing: "-0.78px" }}
               >
                 120 King Street West, Suite 1400, Toronto, Ontario, Canada
               </p>
@@ -155,10 +160,7 @@ export default function Footer() {
               <a
                 href="mailto:hello@cleanzy.ca"
                 className="text-[#111] text-lg sm:text-xl font-medium leading-[140%] no-underline hover:opacity-70 transition-opacity"
-                style={{
-                  fontFamily: '"Rethink Sans", sans-serif',
-                  letterSpacing: "-0.78px",
-                }}
+                style={{ fontFamily: '"Rethink Sans", sans-serif', letterSpacing: "-0.78px" }}
               >
                 hello@cleanzy.ca
               </a>
@@ -175,16 +177,13 @@ export default function Footer() {
               <a
                 href="tel:+14165550198"
                 className="text-[#111] text-lg sm:text-xl font-medium leading-[140%] no-underline hover:opacity-70 transition-opacity"
-                style={{
-                  fontFamily: '"Rethink Sans", sans-serif',
-                  letterSpacing: "-0.78px",
-                }}
+                style={{ fontFamily: '"Rethink Sans", sans-serif', letterSpacing: "-0.78px" }}
               >
                 +1 (416) 555-0198
               </a>
             </div>
 
-            {/* Social Media */}
+            {/* ✅ Social Media — dynamic, real links */}
             <div className="flex flex-col gap-2 flex-1 min-w-40">
               <p
                 className="text-[#444] text-base font-bold leading-[140%] m-0"
@@ -195,12 +194,14 @@ export default function Footer() {
               <div className="flex flex-wrap gap-2">
                 {SOCIAL.map((s) => (
                   <a
-                    key={s}
-                    href="#"
+                    key={s.label}
+                    href={s.href}
+                    target="_blank"
+                    rel="noreferrer"
                     className="no-underline px-4 py-1.5 rounded-full border border-[#E0E0E0] text-[#111] text-sm font-medium hover:bg-[#08203C] hover:text-white hover:border-[#08203C] transition-all duration-300"
                     style={{ fontFamily: '"Rethink Sans", sans-serif' }}
                   >
-                    {s}
+                    {s.label}
                   </a>
                 ))}
               </div>
