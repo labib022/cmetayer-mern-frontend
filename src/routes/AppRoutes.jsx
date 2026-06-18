@@ -14,6 +14,7 @@ import LaundryBookingPage from "../pages/services/laundry/LaundryBookingPage";
 import RepairBookingPage from "../pages/services/repair/RepairBookingPage";
 import PrivacyPolicyPage from "../shared/PrivacyPolicy";
 import TermsAndConditionsPage from "../shared/TermsandCondition";
+import Profile from "../shared/Profile"; 
 
 export default function AppRoutes() {
   return (
@@ -32,37 +33,30 @@ export default function AppRoutes() {
           <Route path="/quote" element={<div>Quote</div>} />
           <Route path="/footer" element={<div>Footer</div>} />
           <Route path="/ourfoundation" element={<div>Our Foundation</div>} />
-
-
-              {/* ADD THESE TWO ROUTES */}
           <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
           <Route path="/terms-and-conditions" element={<TermsAndConditionsPage />} />
-
-
 
           {/* ── Service Routes ── */}
           <Route path="/services/moving" element={<MovingPage />} />
           <Route path="/services/cleaning" element={<CleaningPage />} />
           <Route path="/services/laundry" element={<LaundryPage />} />
           <Route path="/services/repair" element={<RepairPage />} />
+
+          {/* ✅ Profile Route — Navbar + Footer সহ */}
+          <Route path="/profile" element={<Profile />} />
         </Route>
 
         {/* ── Moving Booking — Navbar/Footer ছাড়া ── */}
         <Route path="/services/moving/book/*" element={<MovingBookingPage />} />
 
-         {/* ── cleaning Booking — Navbar/Footer ছাড়া ── */}
+        {/* ── Cleaning Booking — Navbar/Footer ছাড়া ── */}
         <Route path="/services/cleaning/book/*" element={<CleaningBookingPage />} />
 
-         {/* ── laundry Booking — Navbar/Footer ছাড়া ── */}
+        {/* ── Laundry Booking — Navbar/Footer ছাড়া ── */}
         <Route path="/services/laundry/laundry-booking/*" element={<LaundryBookingPage />} />
 
-        {/* ── laundry Booking — Navbar/Footer ছাড়া ── */}
+        {/* ── Repair Booking — Navbar/Footer ছাড়া ── */}
         <Route path="/services/repair/book/*" element={<RepairBookingPage />} />
-
-
-        
-
-
 
         {/* ── Auth Routes — Navbar/Footer ছাড়া ── */}
         <Route path="/*" element={<AuthRoutes />} />

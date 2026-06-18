@@ -7,6 +7,7 @@ import { auth, googleProvider } from "../../firebase/firebase.config";
 import googleIcon from "../../assets/icons/arrow-icon.svg";
 import { useSignUpMutation, useGoogleAuthMutation } from "../../redux/features/auth/authApi";
 import { setCredentials } from "../../redux/features/auth/authSlice";
+import { RegisterSkeleton } from "../common/Skeleton";
 
 const inputBase = "w-full outline-none transition-all duration-200 px-4 py-3.5 rounded-xl border border-[#E2E6EF] bg-white text-[#1F1F1F] text-[15px] focus:border-[#08203C]";
 
@@ -14,9 +15,9 @@ export default function Register() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  // ✅ সব hooks আগে
   const [signUp, { isLoading }] = useSignUpMutation();
   const [googleAuth] = useGoogleAuthMutation();
-
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [agreed, setAgreed] = useState(false);
@@ -53,7 +54,7 @@ export default function Register() {
       }).unwrap();
 
       toast.success("Registration successful! Please verify your email.");
-      navigate("/verify-code", { state: { email: form.email, flow: "verify-account" } });
+      navigate("/verify-code", { state: { email: form.email, purpose: "signup" } });
     } catch (err) {
       toast.error(err?.data?.message || "Registration failed. Please try again.");
     }
@@ -71,7 +72,10 @@ export default function Register() {
         throw new Error("Unable to retrieve Google OAuth ID token.");
       }
 
-      const result = await googleAuth({ id_token: oauthIdToken, access_token: accessToken }).unwrap();
+      const result = await googleAuth({
+        id_token: oauthIdToken,
+        access_token: accessToken,
+      }).unwrap();
 
       dispatch(
         setCredentials({
@@ -91,9 +95,12 @@ export default function Register() {
     }
   };
 
+  // ✅ সব hooks এর পরে early return
+  if (isGoogleLoading) return <RegisterSkeleton />;
+
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-[#F0F0F0] px-4 py-10">
-      <div className="w-full max-w-120 flex flex-col items-center gap-[35px] p-8 rounded-4xl bg-[#FAFAFA]">
+      <div className="w-full max-w-120 flex flex-col items-center gap-9 p-8 rounded-4xl bg-[#FAFAFA]">
 
         {/* Header */}
         <div className="flex flex-col items-center gap-2 text-center">
@@ -161,7 +168,11 @@ export default function Register() {
                 className={`${inputBase} pr-12`}
                 style={{ fontFamily: '"Rethink Sans", sans-serif' }}
               />
-              <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-[#888] hover:text-[#08203C] transition-colors duration-200 bg-transparent border-none cursor-pointer p-0">
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-[#888] hover:text-[#08203C] transition-colors duration-200 bg-transparent border-none cursor-pointer p-0"
+              >
                 {showPassword ? (
                   <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
                     <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94" />
@@ -193,7 +204,11 @@ export default function Register() {
                 className={`${inputBase} pr-12`}
                 style={{ fontFamily: '"Rethink Sans", sans-serif' }}
               />
-              <button type="button" onClick={() => setShowConfirm(!showConfirm)} className="absolute right-4 top-1/2 -translate-y-1/2 text-[#888] hover:text-[#08203C] transition-colors duration-200 bg-transparent border-none cursor-pointer p-0">
+              <button
+                type="button"
+                onClick={() => setShowConfirm(!showConfirm)}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-[#888] hover:text-[#08203C] transition-colors duration-200 bg-transparent border-none cursor-pointer p-0"
+              >
                 {showConfirm ? (
                   <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
                     <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94" />
@@ -221,9 +236,13 @@ export default function Register() {
             />
             <label htmlFor="terms" className="text-[#595959] text-sm leading-[140%] cursor-pointer" style={{ fontFamily: '"Rethink Sans", sans-serif' }}>
               By creating an account, you agreeing to our{" "}
-              <Link to="/privacy-policy" className="text-[#08203C] font-bold no-underline hover:underline">Privacy Policy</Link>
+              <Link to="/privacy-policy" className="text-[#08203C] font-bold no-underline hover:underline">
+                Privacy Policy
+              </Link>
               , and{" "}
-              <Link to="/terms" className="text-[#08203C] font-bold no-underline hover:underline">Terms and Condition</Link>
+              <Link to="/terms" className="text-[#08203C] font-bold no-underline hover:underline">
+                Terms and Condition
+              </Link>
             </label>
           </div>
 

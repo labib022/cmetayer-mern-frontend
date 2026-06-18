@@ -1,6 +1,3 @@
-
-// ─── Main Component ───────────────────────────────────────────────────────────
-
 const TermsAndConditionsPage = () => {
   const heading = "Terms and Conditions";
 
@@ -57,19 +54,21 @@ const TermsAndConditionsPage = () => {
 
   return (
     <div className="w-full bg-white font-sans">
-      <div className="mxw w-full mx-auto flex flex-col items-center pt-20 md:pt-24">
-        {/* ── Hero Header ──────────────────────────────────────────────── */}
-        <div className="w-full flex flex-col justify-center items-center gap-5 md:gap-6 py-20 md:py-25 rounded-3xl bg-[#08203C]">
+
+      {/* ── Hero Header ── */}
+      <section className="font-rethink bg-[#08203C] px-4 sm:px-6 lg:px-16 py-4 mx-2 mb-2 rounded-b-3xl">
+        <div className="w-full flex flex-col justify-center items-center gap-5 md:gap-6 py-20 md:py-25">
           <h1 className="text-white text-center font-bold text-[32px] md:text-[48px] leading-tight px-6">
             {heading}
           </h1>
-
-          <p className="text-white/90 text-center text-sm md:text-base leading-relaxed max-w-200 w-full px-6">
+          <p className="text-white/90 text-center text-sm md:text-lg leading-relaxed font-medium max-w-200 w-full px-6">
             {subHeading}
           </p>
         </div>
+      </section>
 
-        {/* ── Content ──────────────────────────────────────────────────── */}
+      {/* ── Content ── */}
+      <div className="w-full flex flex-col items-center">
         <div className="w-full max-w-275 px-6 md:px-10 mt-16 md:mt-20 pb-24">
           <style>{`
             .cms-rich-content p {
@@ -147,6 +146,7 @@ const TermsAndConditionsPage = () => {
           />
         </div>
       </div>
+
     </div>
   );
 };

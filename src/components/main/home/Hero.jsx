@@ -91,7 +91,7 @@ export default function Hero() {
   ];
   const FADE_DURATION = 400;
   const [current, setCurrent] = useState(0);
-  const [displayed, setDisplayed] = useState(0); // যেটা actually render হচ্ছে
+  const [displayed, setDisplayed] = useState(0); 
   const [isFading, setIsFading] = useState(false);
   const timerRef = useRef(null);
 
@@ -102,7 +102,7 @@ export default function Hero() {
     setIsFading(true);
 
     setTimeout(() => {
-      // Step 2: content swap (invisible অবস্থায়)
+      // Step 2: content swap 
       setDisplayed(next);
       setCurrent(next);
 
@@ -117,10 +117,11 @@ export default function Hero() {
       setCurrent((prev) => {
         const next = (prev + 1) % services.length;
         goTo(next);
-        return prev; // setCurrent টা goTo-র ভেতরে হবে
+        return prev;
       });
     }, 3500);
     return () => clearInterval(timerRef.current);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFading]);
 
   const active = services[displayed];
@@ -182,7 +183,7 @@ export default function Hero() {
         </div>
 
         {/* RIGHT — Image full height */}
-        <div className="relative w-3/4 lg:w-1/2 min-h-[400px] lg:min-h-full">
+        <div className="relative w-3/4 lg:w-1/2 min-h-100 lg:min-h-full">
           {/* Image fade */}
           <img
             src={active.img}

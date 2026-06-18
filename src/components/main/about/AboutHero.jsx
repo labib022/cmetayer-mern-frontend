@@ -13,7 +13,7 @@ export default function AboutHero() {
           </h1>
 
           <p
-            className="text-white text-center font-normal leading-[26px] text-base m-0 w-full max-w-186"
+            className="text-white text-center font-normal leading-6 text-base m-0 w-full max-w-186"
             style={{ fontFamily: '"Plus Jakarta Sans", sans-serif' }}
           >
             Easy Lift &amp; Clean was founded to revolutionize how you manage

@@ -13,7 +13,7 @@ const INCLUDED_SERVICES = [
 export default function MovingDescription() {
   return (
     <section className="w-full bg-white">
-      <div className="max-w-[1440px] mx-auto flex flex-col items-center gap-10 lg:gap-16 px-4 py-12 sm:px-8 sm:py-16 md:px-12 md:py-20 lg:px-16 lg:py-24">
+      <div className="max-w-360 mx-auto flex flex-col items-center gap-10 lg:gap-16 px-4 py-12 sm:px-8 sm:py-16 md:px-12 md:py-20 lg:px-16 lg:py-24">
 
         <div className="flex flex-col lg:flex-row items-start gap-10 lg:gap-16 w-full">
 
@@ -38,7 +38,7 @@ export default function MovingDescription() {
             {/* Included Services */}
             <div className="flex flex-col gap-4 lg:gap-5">
               <h3
-                className="m-0 font-semibold leading-[26px] text-[#0E1109] text-lg sm:text-xl"
+                className="m-0 font-semibold leading-6.5 text-[#0E1109] text-lg sm:text-xl"
                 style={{ fontFamily: '"Plus Jakarta Sans", sans-serif' }}
               >
                 Included Services
@@ -59,13 +59,13 @@ export default function MovingDescription() {
 
           {/* RIGHT — Image + Price Card */}
           <div
-            className="flex flex-col justify-end items-center gap-5 shrink-0 w-full lg:w-[551px] min-h-[300px] sm:min-h-[400px] lg:h-[517px] p-3 rounded-3xl border border-[#E3E8EF]"
+            className="flex flex-col justify-end items-center gap-5 shrink-0 w-full lg:w-[551px] min-h-75 sm:min-h-100 lg:h-[517px] p-3 rounded-3xl border border-[#E3E8EF]"
             style={{
               background: `url(${movingImg}) lightgray 50% / cover no-repeat`,
             }}
           >
             {/* Price Card */}
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 sm:gap-5 w-full p-4 sm:p-[18px] rounded-3xl border border-[#E3E8EF] bg-white">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 sm:gap-5 w-full p-4 sm:p-4 rounded-3xl border border-[#E3E8EF] bg-white">
 
               {/* Price Info */}
               <div className="flex flex-col gap-1">
@@ -85,7 +85,7 @@ export default function MovingDescription() {
               {/* Book Now Button */}
               <Link
                 to="/services/moving/book/step-1"
-                className="flex items-center justify-between cursor-pointer hover:opacity-90 transition-opacity duration-200 no-underline w-full sm:flex-1 sm:max-w-[180px] pl-6 pr-2 py-2 rounded-3xl bg-[#08203C]"
+                className="flex items-center justify-between cursor-pointer hover:opacity-90 transition-opacity duration-200 no-underline w-full sm:flex-1 sm:max-w-45 pl-6 pr-2 py-2 rounded-3xl bg-[#08203C]"
               >
                 <span className="font-rethink text-white font-semibold text-base leading-[140%]">
                   Book Now

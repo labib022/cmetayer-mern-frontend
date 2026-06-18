@@ -58,7 +58,7 @@ export default function MovingDescription() {
 
           {/* RIGHT — Image + Price Card */}
           <div
-            className="flex flex-col justify-end items-center gap-5 shrink-0 w-full lg:w-[551px] min-h-75 sm:min-h-100 lg:h-[517px] p-3 rounded-3xl border border-[#E3E8EF]"
+            className="flex flex-col justify-end items-center gap-5 shrink-0 w-full lg:w-137 min-h-75 sm:min-h-100 lg:h-129 p-3 rounded-3xl border border-[#E3E8EF]"
             style={{
               background: `url(${movingImg}) lightgray 50% / cover no-repeat`,
             }}
@@ -84,7 +84,7 @@ export default function MovingDescription() {
               {/* Book Now Button */}
               <Link
                 to="/services/cleaning/book/step-1"
-                className="flex items-center justify-between cursor-pointer hover:opacity-90 transition-opacity duration-200 no-underline w-full sm:flex-1 sm:max-w-[180px] pl-6 pr-2 py-2 rounded-3xl bg-[#08203C]"
+                className="flex items-center justify-between cursor-pointer hover:opacity-90 transition-opacity duration-200 no-underline w-full sm:flex-1 sm:max-w-45 pl-6 pr-2 py-2 rounded-3xl bg-[#08203C]"
               >
                 <span className="font-rethink text-white font-semibold text-base leading-[140%]">
                   Book Now

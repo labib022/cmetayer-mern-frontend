@@ -7,6 +7,7 @@ import { auth, googleProvider } from "../../firebase/firebase.config";
 import googleIcon from "../../assets/icons/google-logo.svg";
 import { useSignInMutation, useGoogleAuthMutation } from "../../redux/features/auth/authApi";
 import { setCredentials } from "../../redux/features/auth/authSlice";
+import { LoginSkeleton } from "../common/Skeleton";
 
 const inputBase =
   "w-full outline-none transition-all duration-200 px-4 py-3.5 rounded-xl border border-[#E2E6EF] bg-white text-[#1F1F1F] text-[15px] focus:border-[#08203C] font-[Rethink_Sans]";
@@ -15,10 +16,10 @@ export default function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  // ✅ সব hooks আগে
   const [showPassword, setShowPassword] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [form, setForm] = useState({ email: "", password: "" });
-
   const [signIn, { isLoading }] = useSignInMutation();
   const [googleAuth] = useGoogleAuthMutation();
 
@@ -68,7 +69,10 @@ export default function Login() {
         throw new Error("Unable to retrieve Google OAuth ID token.");
       }
 
-      const result = await googleAuth({ id_token: oauthIdToken, access_token: accessToken }).unwrap();
+      const result = await googleAuth({
+        id_token: oauthIdToken,
+        access_token: accessToken,
+      }).unwrap();
 
       dispatch(
         setCredentials({
@@ -81,14 +85,15 @@ export default function Login() {
       toast.success("Google login successful!");
       navigate("/");
     } catch (err) {
-      if (err?.code === "auth/popup-closed-by-user") {
-        return;
-      }
+      if (err?.code === "auth/popup-closed-by-user") return;
       toast.error(err?.data?.message || err.message || "Google login failed. Try again.");
     } finally {
       setIsGoogleLoading(false);
     }
   };
+
+  // ✅ সব hooks এর পরে early return
+  if (isGoogleLoading) return <LoginSkeleton />;
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-[#F0F0F0] px-4 py-10">
@@ -139,7 +144,6 @@ export default function Login() {
             >
               Password
             </label>
-
             <div className="relative w-full">
               <input
                 type={showPassword ? "text" : "password"}

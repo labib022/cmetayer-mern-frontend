@@ -27,7 +27,7 @@ export default function OurServices() {
 
   return (
     <section className="w-full bg-white py-12 sm:py-14 lg:py-16 px-4 sm:px-6 lg:px-16">
-      <div className="max-w-[1200px] mx-auto">
+      <div className="max-w-300 mx-auto">
 
         {/* Header Row */}
         <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-6 mb-8 sm:mb-10">
@@ -49,7 +49,7 @@ export default function OurServices() {
 
           {/* Right */}
           <div className="flex flex-col items-start lg:items-end gap-4">
-            <p className="font-rethink text-sm leading-relaxed max-w-[340px] lg:text-right text-[#7a849a] pt-0 sm:pt-6 lg:pt-12">
+            <p className="font-rethink text-sm leading-relaxed max-w-85 lg:text-right text-[#7a849a] pt-0 sm:pt-6 lg:pt-12">
               Choose a service from the list below to get an instant quote or
               make a reservation immediately!
             </p>
@@ -61,12 +61,12 @@ export default function OurServices() {
           {visible.map((s) => (
             <div
               key={s.title}
-              className="relative rounded-2xl overflow-hidden cursor-pointer group min-h-[280px] sm:min-h-[320px]"
+              className="relative rounded-2xl overflow-hidden cursor-pointer group min-h-70 sm:min-h-80"
             >
               <img
                 src={s.img}
                 alt={s.title}
-                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105 min-h-[280px] sm:min-h-[320px]"
+                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105 min-h-70 sm:min-h-80"
               />
 
               {/* Gradient overlay */}

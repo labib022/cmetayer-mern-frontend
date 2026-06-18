@@ -115,7 +115,7 @@ export default function ContactInfo() {
         <div className="w-full rounded-[20px] overflow-hidden shadow-lg border border-gray-100">
           <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2487.5674!2d-0.6571302!3d51.4785147!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x487671f3dc804c49%3A0x56432cb6586c9661!2sMarvell%20Glass!5e0!3m2!1sen!2sbd!4v1776047146030!5m2!1sen!2sbd"
-            className="w-full h-[300px] sm:h-[400px] md:h-[500px]"
+            className="w-full h-75 sm:h-100 md:h-125"
             style={{ border: 0 }}
             allowFullScreen
             loading="lazy"

@@ -303,7 +303,7 @@ export default function Navbar() {
                 <span className="font-rethink text-[#08203C] text-sm font-semibold leading-[140%]">
                   Contact Us
                 </span>
-                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-[#08203C] text-white text-base shrink-0 ml-2 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1">
+                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-[#08203C] text-white text-base  ml-2 ">
                   →
                 </span>
               </Link>
