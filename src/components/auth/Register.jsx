@@ -15,13 +15,13 @@ export default function Register() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // ✅ সব hooks আগে
+
   const [signUp, { isLoading }] = useSignUpMutation();
   const [googleAuth] = useGoogleAuthMutation();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [agreed, setAgreed] = useState(false);
-  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false); 
   const [form, setForm] = useState({
     fullName: "",
     email: "",
@@ -89,13 +89,13 @@ export default function Register() {
       navigate("/");
     } catch (err) {
       if (err?.code === "auth/popup-closed-by-user") return;
-      toast.error(err?.data?.message || err.message || "Google login failed. Try again.");
+      toast.error(err?.data?.message || err.message || "Google login failed. Try again.");      
     } finally {
       setIsGoogleLoading(false);
     }
   };
 
-  // ✅ সব hooks এর পরে early return
+ 
   if (isGoogleLoading) return <RegisterSkeleton />;
 
   return (
@@ -250,7 +250,7 @@ export default function Register() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full flex items-center justify-center gap-2 py-4 px-[18px] rounded-[40px] bg-[#08203C] text-white text-base font-semibold leading-[140%] border-none cursor-pointer hover:opacity-90 transition-opacity duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
+            className="w-full flex items-center justify-center gap-2 py-4 px-4 rounded-[40px] bg-[#08203C] text-white text-base font-semibold leading-[140%] border-none cursor-pointer hover:opacity-90 transition-opacity duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
             style={{ fontFamily: '"Rethink Sans", sans-serif' }}
           >
             {isLoading ? "Signing up..." : "Sign Up"}
@@ -276,7 +276,7 @@ export default function Register() {
             type="button"
             onClick={handleGoogleLogin}
             disabled={isGoogleLoading}
-            className="w-full flex items-center justify-center gap-3 py-4 px-[18px] rounded-[40px] bg-[#1F1F1F] text-white text-base font-semibold leading-[140%] border-none cursor-pointer hover:opacity-90 transition-opacity duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
+            className="w-full flex items-center justify-center gap-3 py-4 px-4 rounded-[40px] bg-[#1F1F1F] text-white text-base font-semibold leading-[140%] border-none cursor-pointer hover:opacity-90 transition-opacity duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
             style={{ fontFamily: '"Rethink Sans", sans-serif' }}
           >
             <img
