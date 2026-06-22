@@ -29,7 +29,7 @@ export function LoginSkeleton() {
           {/* Email */}
           <div className="flex flex-col gap-2">
             <SkeletonBlock className="h-4 w-32" />
-            <SkeletonBlock className="h-12 w-full rounded-xl" />
+            <SkeletonBlock className="h-12 w-full rounded-xl" /> 
           </div>
 
           {/* Password */}

@@ -58,13 +58,13 @@ export default function LaundryAboutUs() {
 
           {/* RIGHT — Image + Price Card */}
           <div
-            className="flex flex-col justify-end items-center gap-5 shrink-0 w-full lg:w-[551px] min-h-75 sm:min-h-100 lg:h-[517px] p-3 rounded-3xl border border-[#E3E8EF]"
+            className="flex flex-col justify-end items-center gap-5 shrink-0 w-full lg:w-138 min-h-75 sm:min-h-100 lg:h-130 p-3 rounded-3xl border border-[#E3E8EF]"
             style={{
               background: `url(${movingImg}) lightgray 50% / cover no-repeat`,
             }}
           >
             {/* Price Card */}
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 sm:gap-5 w-full p-4 sm:p-[18px] rounded-3xl border border-[#E3E8EF] bg-white">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 sm:gap-5 w-full p-4 sm:p-5 rounded-3xl border border-[#E3E8EF] bg-white">
 
               {/* Price Info */}
               <div className="flex flex-col gap-1">

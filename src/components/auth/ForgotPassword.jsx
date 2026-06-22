@@ -21,7 +21,7 @@ export default function ForgotPassword() {
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-[#F0F0F0] px-4 py-10">
-      <div className="w-full max-w-120 flex flex-col items-center gap-[35px] p-8 rounded-4xl bg-[#FAFAFA]">
+      <div className="w-full max-w-120 flex flex-col items-center gap-9 p-8 rounded-4xl bg-[#FAFAFA]">
 
         {/* Header */}
         <div className="flex flex-col items-center gap-2 text-center">
@@ -66,7 +66,7 @@ export default function ForgotPassword() {
           <button
             type="submit"
             disabled={isLoading}
-            className="font-rethink w-full flex items-center justify-center gap-2 py-4 px-[18px] rounded-[40px] bg-[#08203C] text-white text-base font-semibold leading-[140%] border-none cursor-pointer hover:opacity-90 transition-opacity duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
+            className="font-rethink w-full flex items-center justify-center gap-2 py-4 px-5 rounded-[40px] bg-[#08203C] text-white text-base font-semibold leading-[140%] border-none cursor-pointer hover:opacity-90 transition-opacity duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {isLoading ? "Sending..." : "Send a Code"}
           </button>

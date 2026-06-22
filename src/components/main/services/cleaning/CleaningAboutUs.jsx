@@ -64,7 +64,7 @@ export default function MovingDescription() {
             }}
           >
             {/* Price Card */}
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 sm:gap-5 w-full p-4 sm:p-[18px] rounded-3xl border border-[#E3E8EF] bg-white">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 sm:gap-5 w-full p-4 sm:p-5 rounded-3xl border border-[#E3E8EF] bg-white">
 
               {/* Price Info */}
               <div className="flex flex-col gap-1">

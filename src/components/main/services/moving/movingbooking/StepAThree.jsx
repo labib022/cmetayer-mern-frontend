@@ -13,7 +13,7 @@ export default function StepThree({ data, setData }) {
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-[#F0F0F0] px-4 py-10">
       <div
-        className="w-full max-w-[540px] flex flex-col gap-[35px] relative"
+        className="w-full max-w-135 flex flex-col gap-9 relative"
         style={{
           padding: "83px 32px 32px 32px",
           borderRadius: "32px",

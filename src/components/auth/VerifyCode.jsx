@@ -83,8 +83,8 @@ export default function VerifyCode() {
         email,
         otp: fullCode,
         purpose,
-      }).unwrap(); // ← change
-      console.log("VERIFY RESULT:", result); // ← add
+      }).unwrap(); 
+      console.log("VERIFY RESULT:", result); 
       toast.success("Email verified successfully!");
 
       if (flow === "forgot-password") {
@@ -113,7 +113,7 @@ export default function VerifyCode() {
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-[#F0F0F0] px-4 py-10">
-      <div className="w-full max-w-120 flex flex-col items-center gap-[35px] p-8 rounded-4xl bg-[#FAFAFA]">
+      <div className="w-full max-w-120 flex flex-col items-center gap-9 p-8 rounded-4xl bg-[#FAFAFA]">
         {/* Header */}
         <div className="flex flex-col items-center gap-2 text-center">
           <h1 className="font-rethink text-[#1F1F1F] text-2xl font-medium leading-[140%] tracking-[-0.936px] m-0">
@@ -141,7 +141,7 @@ export default function VerifyCode() {
                 onChange={(e) => handleChange(i, e.target.value)}
                 onKeyDown={(e) => handleKeyDown(i, e)}
                 onPaste={handlePaste}
-                className="font-rethink text-center text-xl font-semibold text-[#08203C] outline-none transition-all duration-200 bg-[#F5F5F5] rounded-[4px] border border-[#08203C] focus:bg-white focus:shadow-md"
+                className="font-rethink text-center text-xl font-semibold text-[#08203C] outline-none transition-all duration-200 bg-[#F5F5F5] rounded-sm border border-[#08203C] focus:bg-white focus:shadow-md"
                 style={{ width: "65.667px", height: "75px" }}
               />
             ))}
@@ -171,7 +171,7 @@ export default function VerifyCode() {
           <button
             type="submit"
             disabled={isVerifying}
-            className="font-rethink w-full flex items-center justify-center gap-2 py-4 px-[18px] rounded-[40px] bg-[#08203C] text-white text-base font-semibold leading-[140%] text-center border-none cursor-pointer hover:opacity-90 transition-opacity duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
+            className="font-rethink w-full flex items-center justify-center gap-2 py-4 px-5 rounded-[40px] bg-[#08203C] text-white text-base font-semibold leading-[140%] text-center border-none cursor-pointer hover:opacity-90 transition-opacity duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {isVerifying ? "Verifying..." : "Confirm"}
           </button>
