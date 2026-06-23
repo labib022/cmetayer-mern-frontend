@@ -4,18 +4,24 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const cmsApi = createApi({
   reducerPath: "cmsApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: import.meta.env.VITE_API_BASE_URL,
+    baseUrl: import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, ""),
+    prepareHeaders: (headers, { getState }) => {
+      const token = getState().auth.accessToken;
+      if (token) {
+        headers.set("Authorization", `Bearer ${token}`);
+      }
+      return headers;
+    },
   }),
   endpoints: (builder) => ({
 
-    // ✅ CMS Section — page_name + section_name দিয়ে সব section আনা
-    // Usage: getCmsSection({ page_name: "home", section_name: "hero" })
-    getCmsSection: builder.query({
-      query: ({ page_name, section_name }) =>
-        `/cms/?page_name=${page_name}&section_name=${section_name}`,
+    // ✅ Home page — সব sections একসাথে
+    // Response: data.data.home.hero[], data.data.home["Our Values"][], etc.
+    getHomePage: builder.query({
+      query: () => `/cms/?page_name=home`,
     }),
 
-    // ✅ FAQs
+    // ✅ FAQs (backend public করলে কাজ করবে)
     getFaqs: builder.query({
       query: () => "/faqs/",
     }),
@@ -25,13 +31,13 @@ export const cmsApi = createApi({
       query: () => "/about-system/",
     }),
 
-    // ✅ Contact Us (POST)
+    // ✅ Contact Us
     contactUs: builder.mutation({
       query: (data) => {
         const fd = new FormData();
         fd.append("name", data.name);
         fd.append("email", data.email);
-        fd.append("purpose", data.purpose); // general_inquiry | support | feedback | refund_request | others
+        fd.append("purpose", data.purpose);
         fd.append("message", data.message);
         return { url: "/contact-us/", method: "POST", body: fd };
       },
@@ -41,7 +47,7 @@ export const cmsApi = createApi({
 });
 
 export const {
-  useGetCmsSectionQuery,
+  useGetHomePageQuery,
   useGetFaqsQuery,
   useGetAboutSystemQuery,
   useContactUsMutation,

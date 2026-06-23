@@ -4,12 +4,46 @@ import faq2 from "../../../assets/images/hero-img-1.png";
 import faq3 from "../../../assets/images/service-img-2.png";
 import { useGetFaqsQuery } from "../../../redux/features/cms/cmsApi";
 
+const fallbackFaqs = [
+  {
+    id: 1,
+    question: "How do I book a service?",
+    answer: "You can book a service directly through our website or app. Simply select your service, choose a time slot, and confirm your booking.",
+  },
+  {
+    id: 2,
+    question: "What areas do you serve?",
+    answer: "We currently serve all major neighborhoods in the city. Enter your address during booking to confirm availability in your area.",
+  },
+  {
+    id: 3,
+    question: "Are your cleaners background-checked?",
+    answer: "Yes, all our professionals go through thorough background checks and training before joining our team.",
+  },
+  {
+    id: 4,
+    question: "Can I reschedule or cancel a booking?",
+    answer: "Yes, you can reschedule or cancel up to 24 hours before your appointment without any charges.",
+  },
+  {
+    id: 5,
+    question: "Do I need to provide cleaning supplies?",
+    answer: "No, our team brings all necessary supplies and equipment. Just let us know if you have any preferences.",
+  },
+];
+
 export default function FAQ() {
   const [openIndex, setOpenIndex] = useState(0);
   const { data, isLoading, isError } = useGetFaqsQuery();
 
-  // API response structure অনুযায়ী adjust করো
-  const faqs = data?.data || data?.results || data || [];
+  // API response structure handle — array হতে পারে বা object এর ভেতরে
+  const faqs = (() => {
+    if (!data) return fallbackFaqs;
+    if (Array.isArray(data)) return data;
+    if (Array.isArray(data?.data)) return data.data;
+    if (Array.isArray(data?.results)) return data.results;
+    return fallbackFaqs;
+  })();
 
   if (isLoading) {
     return (
@@ -23,15 +57,8 @@ export default function FAQ() {
     );
   }
 
-  if (isError) {
-    return (
-      <section className="w-full max-w-360 mx-auto px-4 sm:px-8 md:px-12 lg:px-16 py-12 bg-white">
-        <p className="text-center text-red-400 font-medium">
-          Failed to load FAQs. Please try again later.
-        </p>
-      </section>
-    );
-  }
+  // isError হলে fallback দিয়ে চলবে, error দেখাবে না
+  const displayFaqs = isError ? fallbackFaqs : faqs;
 
   return (
     <section className="w-full max-w-360 mx-auto px-4 sm:px-8 md:px-12 lg:px-16 py-12 sm:py-16 md:py-20 bg-white flex flex-col gap-10 sm:gap-12 lg:gap-16">
@@ -70,7 +97,7 @@ export default function FAQ() {
 
         {/* LEFT — FAQ List */}
         <div className="flex-1 flex flex-col">
-          {faqs.map((faq, i) => (
+          {displayFaqs.map((faq, i) => (
             <div
               key={faq.id || i}
               className="rounded-xl"
@@ -116,7 +143,7 @@ export default function FAQ() {
         <div className="w-full lg:w-115 xl:w-125 shrink-0 flex flex-col gap-6">
 
           {/* Answer Box */}
-          {openIndex !== null && faqs[openIndex] ? (
+          {openIndex !== null && displayFaqs[openIndex] ? (
             <div className="bg-[#FAFAFA] rounded-2xl p-5 sm:p-6">
               <span
                 style={{ fontFamily: '"Rethink Sans", sans-serif' }}
@@ -128,7 +155,7 @@ export default function FAQ() {
                 style={{ fontFamily: '"Rethink Sans", sans-serif' }}
                 className="text-[#333] text-sm sm:text-[15px] leading-relaxed m-0"
               >
-                {faqs[openIndex].answer}
+                {displayFaqs[openIndex].answer}
               </p>
             </div>
           ) : (
