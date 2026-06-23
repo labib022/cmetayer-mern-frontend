@@ -1,7 +1,8 @@
+import { useGetCmsSectionQuery } from "../../../redux/features/cms/cmsApi";
 import clientImg1 from "../../../assets/images/client-img-1.png";
 import clientImg2 from "../../../assets/images/client-img-2.png";
 
-const CARDS = [
+const fallbackCards = [
   { type: "person", img: clientImg1 },
   {
     type: "stat-dark",
@@ -22,7 +23,7 @@ const CARDS = [
   },
 ];
 
-const LOOPED_CARDS = [...CARDS, ...CARDS];
+const fallbackImgs = [clientImg1, clientImg2];
 
 const hoverOn = (e) => {
   e.currentTarget.style.transform = "rotate(6deg) translateY(-10px)";
@@ -68,60 +69,21 @@ const StatDarkCard = ({ card }) => (
     onMouseLeave={hoverOff}
   >
     <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-      <span
-        style={{
-          color: "#fff",
-          fontFamily: '"Rethink Sans", sans-serif',
-          fontSize: "clamp(18px, 2vw, 24px)",
-          fontWeight: 700,
-        }}
-      >
+      <span style={{ color: "#fff", fontFamily: '"Rethink Sans", sans-serif', fontSize: "clamp(18px, 2vw, 24px)", fontWeight: 700 }}>
         {card.logo}
       </span>
-      <span
-        style={{
-          color: "rgba(255,255,255,0.75)",
-          fontFamily: '"Rethink Sans", sans-serif',
-          fontSize: "clamp(12px, 1.2vw, 14px)",
-          fontWeight: 500,
-        }}
-      >
+      <span style={{ color: "rgba(255,255,255,0.75)", fontFamily: '"Rethink Sans", sans-serif', fontSize: "clamp(12px, 1.2vw, 14px)", fontWeight: 500 }}>
         {card.company}
       </span>
     </div>
     <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-      <p
-        style={{
-          color: "#fff",
-          fontFamily: '"Rethink Sans", sans-serif',
-          fontSize: "clamp(32px, 4vw, 48px)",
-          fontWeight: 800,
-          lineHeight: "1",
-          margin: 0,
-        }}
-      >
+      <p style={{ color: "#fff", fontFamily: '"Rethink Sans", sans-serif', fontSize: "clamp(32px, 4vw, 48px)", fontWeight: 800, lineHeight: "1", margin: 0 }}>
         {card.stat}
       </p>
-      <p
-        style={{
-          color: "#fff",
-          fontFamily: '"Rethink Sans", sans-serif',
-          fontSize: "clamp(13px, 1.4vw, 16px)",
-          fontWeight: 700,
-          margin: 0,
-        }}
-      >
+      <p style={{ color: "#fff", fontFamily: '"Rethink Sans", sans-serif', fontSize: "clamp(13px, 1.4vw, 16px)", fontWeight: 700, margin: 0 }}>
         {card.label}
       </p>
-      <p
-        style={{
-          color: "rgba(255,255,255,0.7)",
-          fontFamily: '"Rethink Sans", sans-serif',
-          fontSize: "clamp(11px, 1.2vw, 14px)",
-          margin: 0,
-          lineHeight: "1.5",
-        }}
-      >
+      <p style={{ color: "rgba(255,255,255,0.7)", fontFamily: '"Rethink Sans", sans-serif', fontSize: "clamp(11px, 1.2vw, 14px)", margin: 0, lineHeight: "1.5" }}>
         {card.desc}
       </p>
     </div>
@@ -147,60 +109,21 @@ const StatLightCard = ({ card }) => (
     onMouseLeave={hoverOff}
   >
     <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-      <span
-        style={{
-          color: "#08203C",
-          fontFamily: '"Rethink Sans", sans-serif',
-          fontSize: "clamp(18px, 2vw, 24px)",
-          fontWeight: 700,
-        }}
-      >
+      <span style={{ color: "#08203C", fontFamily: '"Rethink Sans", sans-serif', fontSize: "clamp(18px, 2vw, 24px)", fontWeight: 700 }}>
         {card.logo}
       </span>
-      <span
-        style={{
-          color: "#08203C",
-          fontFamily: '"Rethink Sans", sans-serif',
-          fontSize: "clamp(12px, 1.2vw, 14px)",
-          fontWeight: 500,
-        }}
-      >
+      <span style={{ color: "#08203C", fontFamily: '"Rethink Sans", sans-serif', fontSize: "clamp(12px, 1.2vw, 14px)", fontWeight: 500 }}>
         {card.company}
       </span>
     </div>
     <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-      <p
-        style={{
-          color: "#08203C",
-          fontFamily: '"Rethink Sans", sans-serif',
-          fontSize: "clamp(32px, 4vw, 48px)",
-          fontWeight: 800,
-          lineHeight: "1",
-          margin: 0,
-        }}
-      >
+      <p style={{ color: "#08203C", fontFamily: '"Rethink Sans", sans-serif', fontSize: "clamp(32px, 4vw, 48px)", fontWeight: 800, lineHeight: "1", margin: 0 }}>
         {card.stat}
       </p>
-      <p
-        style={{
-          color: "#08203C",
-          fontFamily: '"Rethink Sans", sans-serif',
-          fontSize: "clamp(13px, 1.4vw, 16px)",
-          fontWeight: 700,
-          margin: 0,
-        }}
-      >
+      <p style={{ color: "#08203C", fontFamily: '"Rethink Sans", sans-serif', fontSize: "clamp(13px, 1.4vw, 16px)", fontWeight: 700, margin: 0 }}>
         {card.label}
       </p>
-      <p
-        style={{
-          color: "#656565",
-          fontFamily: '"Rethink Sans", sans-serif',
-          fontSize: "clamp(11px, 1.2vw, 14px)",
-          margin: 0,
-          lineHeight: "1.5",
-        }}
-      >
+      <p style={{ color: "#656565", fontFamily: '"Rethink Sans", sans-serif', fontSize: "clamp(11px, 1.2vw, 14px)", margin: 0, lineHeight: "1.5" }}>
         {card.desc}
       </p>
     </div>
@@ -208,6 +131,42 @@ const StatLightCard = ({ card }) => (
 );
 
 export default function Clients() {
+  const { data, isLoading, isError } = useGetCmsSectionQuery({
+    page_name: "home",
+    section_name: "clients",
+  });
+
+  const sectionTitle = data?.data?.title || "Trusted by Home and\nProperty Owners";
+  const sectionDesc =
+    data?.data?.subtitle ||
+    "From family homes to rentals, clients choose for reliable, professional cleaning.";
+
+  // API থেকে cards build করা
+  const cards = (() => {
+    if (isLoading || isError || !data?.data?.clients) return fallbackCards;
+
+    const apiCards = [];
+    data.data.clients.forEach((client, i) => {
+      // person card
+      apiCards.push({
+        type: "person",
+        img: client.image || fallbackImgs[i % fallbackImgs.length],
+      });
+      // stat card — alternate dark/light
+      apiCards.push({
+        type: i % 2 === 0 ? "stat-dark" : "stat-light",
+        logo: client.logo || "△",
+        company: client.company,
+        stat: client.stat,
+        label: client.label,
+        desc: client.description,
+      });
+    });
+    return apiCards;
+  })();
+
+  const loopedCards = [...cards, ...cards];
+
   return (
     <section className="w-full bg-white overflow-hidden py-16">
       <style>{`
@@ -233,54 +192,29 @@ export default function Clients() {
           {/* Left */}
           <div className="flex flex-col gap-3">
             <div className="flex items-center gap-2">
-              <span
-                className="w-1.5 h-1.5 rounded-full inline-block"
-                style={{ backgroundColor: "#08203C" }}
-              />
-              <span
-                style={{
-                  color: "#08203C",
-                  fontFamily: '"Rethink Sans", sans-serif',
-                  fontSize: "13px",
-                  fontWeight: 500,
-                }}
-              >
+              <span className="w-1.5 h-1.5 rounded-full inline-block" style={{ backgroundColor: "#08203C" }} />
+              <span style={{ color: "#08203C", fontFamily: '"Rethink Sans", sans-serif', fontSize: "13px", fontWeight: 500 }}>
                 Clients
               </span>
             </div>
             <h2
-              style={{
-                color: "#08203C",
-                fontFamily: '"Rethink Sans", sans-serif',
-                fontSize: "clamp(24px, 3vw, 36px)",
-                fontWeight: 800,
-                lineHeight: "1.2",
-                margin: 0,
-              }}
+              style={{ color: "#08203C", fontFamily: '"Rethink Sans", sans-serif', fontSize: "clamp(24px, 3vw, 36px)", fontWeight: 800, lineHeight: "1.2", margin: 0 }}
             >
-              Trusted by Home and
-              <br />
-              Property Owners
+              {sectionTitle.includes("\n")
+                ? sectionTitle.split("\n").map((line, i) => (
+                    <span key={i}>{line}{i === 0 && <br />}</span>
+                  ))
+                : sectionTitle}
             </h2>
           </div>
 
-          {/* Right — ✅ mobile-এ left align, lg-এ right align */}
+          {/* Right */}
           <div className="flex flex-col items-start lg:items-end gap-4">
             <p
-              style={{
-                color: "#7a849a",
-                fontFamily: '"Rethink Sans", sans-serif',
-                fontSize: "14px",
-                lineHeight: "1.6",
-                maxWidth: "340px",
-                margin: 0,
-                paddingTop: "0px",   
-                textAlign: "left",    
-              }}
+              style={{ color: "#7a849a", fontFamily: '"Rethink Sans", sans-serif', fontSize: "14px", lineHeight: "1.6", maxWidth: "340px", margin: 0, textAlign: "left" }}
               className="lg:text-right lg:pt-12"
             >
-              From family homes to rentals, clients choose for reliable,
-              professional cleaning.
+              {sectionDesc}
             </p>
           </div>
 
@@ -289,17 +223,27 @@ export default function Clients() {
 
       {/* FULL WIDTH CAROUSEL */}
       <div className="w-full overflow-hidden">
-        <div className="clients-track py-8 px-5">
-          {LOOPED_CARDS.map((card, i) => {
-            if (card.type === "person")
-              return <PersonCard key={i} card={card} />;
-            if (card.type === "stat-dark")
-              return <StatDarkCard key={i} card={card} />;
-            if (card.type === "stat-light")
-              return <StatLightCard key={i} card={card} />;
-            return null;
-          })}
-        </div>
+        {isLoading ? (
+          // Loading skeleton
+          <div className="flex gap-10 px-5 py-8">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div
+                key={i}
+                className="shrink-0 rounded-2xl animate-pulse bg-gray-200"
+                style={{ width: "clamp(220px, 28vw, 300px)", height: "clamp(260px, 32vw, 350px)" }}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="clients-track py-8 px-5">
+            {loopedCards.map((card, i) => {
+              if (card.type === "person") return <PersonCard key={i} card={card} />;
+              if (card.type === "stat-dark") return <StatDarkCard key={i} card={card} />;
+              if (card.type === "stat-light") return <StatLightCard key={i} card={card} />;
+              return null;
+            })}
+          </div>
+        )}
       </div>
     </section>
   );

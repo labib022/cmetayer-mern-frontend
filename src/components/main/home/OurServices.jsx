@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
+import { useGetCmsSectionQuery } from "../../../redux/features/cms/cmsApi";
+
 import img1 from "../../../assets/images/service-img-1.png";
 import img2 from "../../../assets/images/service-img-2.png";
 import img3 from "../../../assets/images/service-img-3.png";
 import img4 from "../../../assets/images/service-img-4.png";
 
-const SERVICES = [
+const fallbackServices = [
   {
     title: "Moving & Packing",
     desc: "Stress-free local and long-distance moving with professional packing.",
@@ -27,6 +29,7 @@ const SERVICES = [
   },
 ];
 
+const fallbackImgs = [img1, img2, img3, img4];
 
 function getVisibleCount() {
   if (typeof window === "undefined") return 3;
@@ -39,18 +42,42 @@ export default function OurServices() {
   const [start, setStart] = useState(0);
   const [visibleCount, setVisibleCount] = useState(getVisibleCount);
 
+  const { data, isLoading, isError } = useGetCmsSectionQuery({
+    page_name: "home",
+    section_name: "services",
+  });
+
+  const services = (() => {
+    if (isLoading || isError || !data?.data?.services) return fallbackServices;
+    return data.data.services.map((item, i) => ({
+      title: item.title,
+      desc: item.description,
+      img: item.image || fallbackImgs[i % fallbackImgs.length],
+    }));
+  })();
+
+  const sectionTitle = data?.data?.title || "Comprehensive Home Services\nYou Can Count On";
+  const sectionDesc =
+    data?.data?.subtitle ||
+    "Choose a service from the list below to get an instant quote or make a reservation immediately!";
 
   useEffect(() => {
     const handleResize = () => {
       setVisibleCount(getVisibleCount());
-      setStart(0); 
+      setStart(0);
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const visible = SERVICES.slice(start, start + visibleCount);
-  const maxStart = SERVICES.length - visibleCount;
+  // services length বদলালে start reset
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setStart(0);
+  }, [services.length]);
+
+  const visible = services.slice(start, start + visibleCount);
+  const maxStart = services.length - visibleCount;
 
   return (
     <section className="w-full bg-white py-16 px-4 sm:px-6 lg:px-16">
@@ -77,9 +104,11 @@ export default function OurServices() {
               className="font-rethink font-extrabold text-2xl sm:text-3xl lg:text-4xl leading-tight"
               style={{ color: "#08203C" }}
             >
-              Comprehensive Home Services
-              <br />
-              You Can Count On
+              {sectionTitle.includes("\n")
+                ? sectionTitle.split("\n").map((line, i) => (
+                    <span key={i}>{line}{i === 0 && <br />}</span>
+                  ))
+                : sectionTitle}
             </h2>
           </div>
 
@@ -89,8 +118,7 @@ export default function OurServices() {
               className="font-rethink text-sm leading-relaxed max-w-85 lg:text-right"
               style={{ color: "#7a849a" }}
             >
-              Choose a service from the list below to get an instant quote or
-              make a reservation immediately!
+              {sectionDesc}
             </p>
 
             {/* Arrows */}
@@ -117,58 +145,67 @@ export default function OurServices() {
 
         {/* Service Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {visible.map((s) => (
-            <div
-              key={s.title}
-              className="relative w-full rounded-2xl overflow-hidden cursor-pointer group"
-              style={{ minHeight: "280px" }}
-            >
-              <img
-                src={s.img}
-                alt={s.title}
-                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                style={{ minHeight: "280px" }}
-              />
-
-              {/* Gradient overlay */}
-              <div
-                className="absolute inset-0 rounded-2xl"
-                style={{
-                  background: "linear-gradient(0deg, rgba(13,31,60,0.92) 0%, transparent 55%)",
-                }}
-              />
-
-              {/* Glassmorphism Text Card */}
-              <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4">
+          {isLoading
+            ? Array.from({ length: visibleCount }).map((_, i) => (
                 <div
-                  style={{
-                    display: "flex",
-                    padding: "12px",
-                    flexDirection: "column",
-                    alignItems: "flex-start",
-                    gap: "6px",
-                    borderRadius: "8px",
-                    background: "rgba(8, 32, 60, 0.40)",
-                    backdropFilter: "blur(50.75px)",
-                    WebkitBackdropFilter: "blur(50.75px)",
-                  }}
+                  key={i}
+                  className="w-full rounded-2xl overflow-hidden animate-pulse bg-gray-200"
+                  style={{ minHeight: "280px" }}
+                />
+              ))
+            : visible.map((s) => (
+                <div
+                  key={s.title}
+                  className="relative w-full rounded-2xl overflow-hidden cursor-pointer group"
+                  style={{ minHeight: "280px" }}
                 >
-                  <h3
-                    className="font-rethink font-medium leading-[140%] tracking-[-0.936px] m-0 text-base sm:text-lg lg:text-[24px]"
-                    style={{ color: "#FFF" }}
-                  >
-                    {s.title}
-                  </h3>
-                  <p
-                    className="font-rethink font-normal leading-[140%] m-0 text-[11px] sm:text-[12px]"
-                    style={{ color: "#ECEEF0" }}
-                  >
-                    {s.desc}
-                  </p>
+                  <img
+                    src={s.img}
+                    alt={s.title}
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    style={{ minHeight: "280px" }}
+                  />
+
+                  {/* Gradient overlay */}
+                  <div
+                    className="absolute inset-0 rounded-2xl"
+                    style={{
+                      background:
+                        "linear-gradient(0deg, rgba(13,31,60,0.92) 0%, transparent 55%)",
+                    }}
+                  />
+
+                  {/* Glassmorphism Text Card */}
+                  <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4">
+                    <div
+                      style={{
+                        display: "flex",
+                        padding: "12px",
+                        flexDirection: "column",
+                        alignItems: "flex-start",
+                        gap: "6px",
+                        borderRadius: "8px",
+                        background: "rgba(8, 32, 60, 0.40)",
+                        backdropFilter: "blur(50.75px)",
+                        WebkitBackdropFilter: "blur(50.75px)",
+                      }}
+                    >
+                      <h3
+                        className="font-rethink font-medium leading-[140%] tracking-[-0.936px] m-0 text-base sm:text-lg lg:text-[24px]"
+                        style={{ color: "#FFF" }}
+                      >
+                        {s.title}
+                      </h3>
+                      <p
+                        className="font-rethink font-normal leading-[140%] m-0 text-[11px] sm:text-[12px]"
+                        style={{ color: "#ECEEF0" }}
+                      >
+                        {s.desc}
+                      </p>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          ))}
+              ))}
         </div>
 
       </div>

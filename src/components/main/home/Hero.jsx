@@ -1,117 +1,118 @@
 import { useEffect, useRef, useState } from "react";
+import { useGetCmsSectionQuery } from "../../../redux/features/cms/cmsApi";
+
+// Fallback local assets (API না আসলে দেখাবে)
 import heroImg1 from "../../../assets/images/hero-img-1.png";
 import heroImg2 from "../../../assets/images/hero-img-2.png";
 import heroImg3 from "../../../assets/images/hero-img-3.png";
 import heroImg4 from "../../../assets/images/hero-img-4.png";
+import movingIcon from "../../../assets/icons/moving.svg";
+import cleaningIcon from "../../../assets/icons/cleaning.svg";
+import laundryIcon from "../../../assets/icons/laundry.svg";
+import repairIcon from "../../../assets/icons/repair.svg";
+
+// ── Fallback data (API না আসা পর্যন্ত দেখাবে) ──
+const fallbackServices = [
+  {
+    title: "Moving",
+    img: heroImg1,
+    desc: "Full-service moving, packing, and heavy lifting for homes and offices",
+    iconBg: "#f0f4ff",
+    icon: movingIcon,
+  },
+  {
+    title: "Cleaning",
+    img: heroImg4,
+    desc: "Professional cleaning with quality materials to keep your space spotless",
+    iconBg: "#edfaf3",
+    icon: cleaningIcon,
+  },
+  {
+    title: "Laundry",
+    img: heroImg3,
+    desc: "Secure and convenient laundry solutions picked up from your door",
+    iconBg: "#f5f0ff",
+    icon: laundryIcon,
+  },
+  {
+    title: "Repair",
+    img: heroImg2,
+    desc: "Hassle-free home repairs with skilled professionals at your service",
+    iconBg: "#fff7ed",
+    icon: repairIcon,
+  },
+];
+
+// Local icon map — API থেকে title আসলে match করে icon দেখাবে
+const iconMap = {
+  moving: movingIcon,
+  cleaning: cleaningIcon,
+  laundry: laundryIcon,
+  repair: repairIcon,
+};
+
+const iconBgMap = {
+  moving: "#f0f4ff",
+  cleaning: "#edfaf3",
+  laundry: "#f5f0ff",
+  repair: "#fff7ed",
+};
+
+const FADE_DURATION = 400;
 
 export default function Hero() {
-  const services = [
-    {
-      title: "Moving",
-      img: heroImg1,
-      desc: "Full-service moving, packing, and heavy lifting for homes and offices",
-      iconBg: "#f0f4ff",
-      icon: (
-        <svg
-          width="20"
-          height="20"
-          fill="none"
-          stroke="#08203C"
-          strokeWidth="1.8"
-          viewBox="0 0 24 24"
-        >
-          <rect x="1" y="3" width="15" height="13" rx="2" />
-          <path d="M16 8h4l3 5v4h-7V8z" />
-          <circle cx="5.5" cy="18.5" r="2.5" />
-          <circle cx="18.5" cy="18.5" r="2.5" />
-        </svg>
-      ),
-    },
-    {
-      title: "Packing",
-      img: heroImg2,
-      desc: "Professional packing with quality materials to keep your items safe",
-      iconBg: "#edfaf3",
-      icon: (
-        <svg
-          width="20"
-          height="20"
-          fill="none"
-          stroke="#0a6640"
-          strokeWidth="1.8"
-          viewBox="0 0 24 24"
-        >
-          <rect x="2" y="7" width="20" height="14" rx="2" />
-          <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
-          <line x1="12" y1="12" x2="12" y2="17" />
-          <line x1="9.5" y1="14.5" x2="14.5" y2="14.5" />
-        </svg>
-      ),
-    },
-    {
-      title: "Storage",
-      img: heroImg3,
-      desc: "Secure short and long-term storage solutions for any size load",
-      iconBg: "#f5f0ff",
-      icon: (
-        <svg
-          width="20"
-          height="20"
-          fill="none"
-          stroke="#7c3aed"
-          strokeWidth="1.8"
-          viewBox="0 0 24 24"
-        >
-          <rect x="2" y="4" width="20" height="5" rx="1" />
-          <rect x="2" y="12" width="20" height="5" rx="1" />
-          <line x1="6" y1="6.5" x2="6.01" y2="6.5" />
-          <line x1="6" y1="14.5" x2="6.01" y2="14.5" />
-        </svg>
-      ),
-    },
-    {
-      title: "Office Relocation",
-      img: heroImg4,
-      desc: "Hassle-free office moves with minimal downtime for your business",
-      iconBg: "#fff7ed",
-      icon: (
-        <svg
-          width="20"
-          height="20"
-          fill="none"
-          stroke="#b45309"
-          strokeWidth="1.8"
-          viewBox="0 0 24 24"
-        >
-          <rect x="2" y="3" width="20" height="14" rx="2" />
-          <path d="M8 21h8M12 17v4" />
-        </svg>
-      ),
-    },
-  ];
-  const FADE_DURATION = 400;
   const [current, setCurrent] = useState(0);
-  const [displayed, setDisplayed] = useState(0); 
+  const [displayed, setDisplayed] = useState(0);
   const [isFading, setIsFading] = useState(false);
   const timerRef = useRef(null);
 
+  // ── CMS API Call ──
+  const { data: heroData, isLoading, isError } = useGetCmsSectionQuery({
+    page_name: "home",
+    section_name: "hero",
+  });
+
+  // API থেকে services আসলে সেটা use করব, না হলে fallback
+  const services = (() => {
+    if (isLoading || isError || !heroData?.data?.services) {
+      return fallbackServices;
+    }
+    return heroData.data.services.map((item) => {
+      const key = item.title?.toLowerCase();
+      return {
+        title: item.title,
+        img: item.image || fallbackServices[0].img,
+        desc: item.description,
+        iconBg: iconBgMap[key] || "#f0f4ff",
+        icon: iconMap[key] || movingIcon,
+      };
+    });
+  })();
+
+  // Heading & subtext
+  const heading = heroData?.data?.title || "One Call. One Company.";
+  const subtext =
+    heroData?.data?.subtitle ||
+    "Book trusted moving, cleaning, repair, and laundry services instantly. We manage your home so you don't have to.";
+
+  // Stats
+  const stats = heroData?.data?.stats || [
+    { value: "100M", label: "Happy customers" },
+    { value: "99%", label: "Client happiness" },
+    { value: "100+", label: "Team members" },
+  ];
+
+  // ── Carousel Logic ──
   const goTo = (next) => {
     if (isFading || next === current) return;
-
-    // Step 1: fade out শুরু
     setIsFading(true);
-
     setTimeout(() => {
-      // Step 2: content swap 
       setDisplayed(next);
       setCurrent(next);
-
-      // Step 3: fade in
       setIsFading(false);
     }, FADE_DURATION);
   };
 
-  // Auto cycle
   useEffect(() => {
     timerRef.current = setInterval(() => {
       setCurrent((prev) => {
@@ -121,59 +122,62 @@ export default function Hero() {
       });
     }, 3500);
     return () => clearInterval(timerRef.current);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isFading]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isFading, services.length]);
 
-  const active = services[displayed];
+  const active = services[displayed] || services[0];
 
   return (
     <section
-      className="mxw lg:px-16 pt-10 pb-16"
+      className="w-full px-4 sm:px-8 lg:px-16 pt-12 pb-16"
       style={{ backgroundColor: "#08203C" }}
     >
-      {/* 2 column layout */}
-      <div className="flex flex-col lg:flex-row w-full gap-10 lg:gap-0">
-        {/* LEFT — Text */}
-        <div className="flex flex-col justify-center gap-6 w-full lg:w-1/2 pr-0 lg:pr-12">
+      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
+
+        {/* ── LEFT — Text ── */}
+        <div className="flex flex-col justify-center gap-6 w-full lg:w-1/2">
           <h1
             className="text-white font-extrabold leading-[1.1] text-5xl sm:text-6xl lg:text-[64px]"
             style={{ fontFamily: '"Rethink Sans", sans-serif' }}
           >
-            One Call.One <br /> Company.
+            {heading.includes(".")
+              ? heading.split(".").map((part, i, arr) => (
+                  <span key={i}>
+                    {part.trim()}{i < arr.length - 1 ? "." : ""}
+                    {i < arr.length - 1 && <br />}
+                  </span>
+                ))
+              : heading}
           </h1>
+
           <p
-            className="text-[#8899b8] text-base leading-relaxed max-w-105"
+            className="text-[#8899b8] text-base leading-relaxed max-w-md"
             style={{ fontFamily: '"Rethink Sans", sans-serif' }}
           >
-            Book trusted moving, cleaning, repair, and laundry services
-            instantly. We manage your home so you don't have to.
+            {subtext}
           </p>
 
           {/* Stats */}
-          <div className="flex items-center gap-10 mt-38">
-            {[
-              ["100M", "Happy customers"],
-              ["99%", "Client happiness"],
-              ["100+", "Team members"],
-            ].map(([num, label], i) => (
-              <div key={label} className="flex items-center gap-10">
+          <div className="flex items-center gap-8 mt-8">
+            {stats.map((stat, i) => (
+              <div key={stat.label} className="flex items-center gap-8">
                 <div>
                   <p
-                    className="text-white font-extrabold text-4xl sm:text-5xl leading-tight"
+                    className="text-white font-extrabold text-3xl sm:text-4xl leading-tight"
                     style={{ fontFamily: '"Rethink Sans", sans-serif' }}
                   >
-                    {num}
+                    {stat.value}
                   </p>
                   <p
                     className="text-[#8899b8] text-sm mt-1"
                     style={{ fontFamily: '"Rethink Sans", sans-serif' }}
                   >
-                    {label}
+                    {stat.label}
                   </p>
                 </div>
-                {i < 2 && (
+                {i < stats.length - 1 && (
                   <div
-                    className="h-12 w-px hidden sm:block"
+                    className="h-10 w-px hidden sm:block"
                     style={{ backgroundColor: "#1e3a5f" }}
                   />
                 )}
@@ -182,65 +186,89 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* RIGHT — Image full height */}
-        <div className="relative w-3/4 lg:w-1/2 min-h-100 lg:min-h-full">
-          {/* Image fade */}
-          <img
-            src={active.img}
-            alt="Moving team"
-            className="w-full h-full object-cover rounded-2xl"
-            style={{
-              minHeight: "400px",
-              opacity: isFading ? 0 : 1,
-              transition: `opacity ${FADE_DURATION}ms ease`,
-            }}
-          />
+        {/* ── RIGHT — Image ── */}
+        <div
+          className="relative w-full lg:w-1/2 rounded-2xl overflow-hidden"
+          style={{ minHeight: "420px" }}
+        >
+          {/* Loading skeleton */}
+          {isLoading && (
+            <div
+              className="w-full rounded-2xl animate-pulse bg-[#1e3a5f]"
+              style={{ minHeight: "420px" }}
+            />
+          )}
+
+          {/* Hero Image */}
+          {!isLoading && (
+            <img
+              key={displayed}
+              src={active.img}
+              alt={active.title}
+              className="w-full h-full object-cover rounded-2xl"
+              style={{
+                minHeight: "420px",
+                maxHeight: "520px",
+                opacity: isFading ? 0 : 1,
+                transition: `opacity ${FADE_DURATION}ms ease`,
+              }}
+            />
+          )}
 
           {/* Dot indicators */}
-          <div className="absolute bottom-4 left-4 flex gap-1.5 items-center">
-            {services.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => goTo(i)}
-                className="h-1.5 rounded-full transition-all duration-300 cursor-pointer"
-                style={{
-                  width: i === current ? "30px" : "10px",
-                  background:
-                    i === current ? "white" : "rgba(255,255,255,0.45)",
-                }}
-              />
-            ))}
-          </div>
+          {!isLoading && (
+            <div className="absolute bottom-4 left-4 flex gap-1.5 items-center z-10">
+              {services.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => goTo(i)}
+                  className="h-1.5 rounded-full transition-all duration-300 cursor-pointer"
+                  style={{
+                    width: i === current ? "28px" : "8px",
+                    background:
+                      i === current ? "white" : "rgba(255,255,255,0.45)",
+                  }}
+                />
+              ))}
+            </div>
+          )}
 
           {/* Floating Badge */}
-          <div
-            className="absolute bottom-4 right-4 bg-white rounded-2xl flex items-center gap-3 p-3 shadow-xl"
-            style={{ maxWidth: "220px" }}
-          >
+          {!isLoading && (
             <div
-              className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
-              style={{
-                backgroundColor: active.iconBg,
-                transition: `background ${FADE_DURATION}ms ease`,
-              }}
+              className="absolute bottom-4 right-4 bg-white rounded-2xl flex items-center gap-3 p-3 shadow-xl z-10"
+              style={{ maxWidth: "210px" }}
             >
-              {active.icon}
-            </div>
+              <div
+                className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+                style={{
+                  backgroundColor: active.iconBg,
+                  transition: `background ${FADE_DURATION}ms ease`,
+                }}
+              >
+                <img
+                  src={active.icon}
+                  alt={active.title}
+                  className="w-5 h-5 object-contain"
+                />
+              </div>
 
-            <div
-              style={{
-                opacity: isFading ? 0 : 1,
-                transform: isFading ? "translateY(4px)" : "translateY(0px)",
-                transition: `opacity ${FADE_DURATION}ms ease, transform ${FADE_DURATION}ms ease`,
-              }}
-            >
-              <p className="font-bold text-sm text-[#08203C]">{active.title}</p>
-              <p className="text-[11px] text-[#7a849a] leading-snug">
-                {active.desc}
-              </p>
+              <div
+                style={{
+                  opacity: isFading ? 0 : 1,
+                  transform: isFading ? "translateY(4px)" : "translateY(0px)",
+                  transition: `opacity ${FADE_DURATION}ms ease, transform ${FADE_DURATION}ms ease`,
+                }}
+              >
+                <p className="font-bold text-sm text-[#08203C]">{active.title}</p>
+                <p className="text-[11px] text-[#7a849a] leading-snug">
+                  {active.desc}
+                </p>
+              </div>
             </div>
-          </div>
+          )}
         </div>
+
       </div>
     </section>
   );

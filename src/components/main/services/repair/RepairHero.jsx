@@ -11,7 +11,6 @@ export default function RepairHero() {
           <h1
             className="font-rethink text-white text-center font-bold leading-[120%] tracking-[-1.872px] m-0 text-4xl sm:text-5xl lg:text-[48px]"
           >
-            <span className="block">Tall Boss Construction</span>
             Home Repair Services
           </h1>
 

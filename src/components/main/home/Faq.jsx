@@ -2,32 +2,36 @@ import { useState } from "react";
 import faq1 from "../../../assets/images/faq-image-1.png";
 import faq2 from "../../../assets/images/hero-img-1.png";
 import faq3 from "../../../assets/images/service-img-2.png";
-
-const FAQS = [
-  {
-    question: "What makes Easy Lift & Clean different from other service companies?",
-    answer: 'We operate on a "One Call. One Company." philosophy. Instead of juggling multiple contractors for different needs, we provide a centralized platform where you can book moving, cleaning, laundry, and home repair services all under one trusted roof.',
-  },
-  {
-    question: "Are your service professionals vetted and insured?",
-    answer: "Yes, all our professionals go through a thorough background check and are fully insured. We only work with trusted, experienced service providers.",
-  },
-  {
-    question: "Are there any hidden fees?",
-    answer: "No hidden fees. The price you see when booking is the price you pay. We believe in full transparency with our customers.",
-  },
-  {
-    question: "Can I set up a recurring schedule for cleaning or laundry?",
-    answer: "Absolutely! You can set up weekly, bi-weekly, or monthly recurring schedules for cleaning and laundry services through your account dashboard.",
-  },
-  {
-    question: "What kind of home repairs do you handle?",
-    answer: "We handle a wide range of home repairs including plumbing, electrical, carpentry, painting, appliance installation, and general maintenance tasks.",
-  },
-];
+import { useGetFaqsQuery } from "../../../redux/features/cms/cmsApi";
 
 export default function FAQ() {
   const [openIndex, setOpenIndex] = useState(0);
+  const { data, isLoading, isError } = useGetFaqsQuery();
+
+  // API response structure অনুযায়ী adjust করো
+  const faqs = data?.data || data?.results || data || [];
+
+  if (isLoading) {
+    return (
+      <section className="w-full max-w-360 mx-auto px-4 sm:px-8 md:px-12 lg:px-16 py-12 sm:py-16 md:py-20 bg-white flex flex-col gap-10 sm:gap-12 lg:gap-16">
+        <div className="animate-pulse flex flex-col gap-4">
+          {[...Array(5)].map((_, i) => (
+            <div key={i} className="h-14 bg-gray-100 rounded-xl" />
+          ))}
+        </div>
+      </section>
+    );
+  }
+
+  if (isError) {
+    return (
+      <section className="w-full max-w-360 mx-auto px-4 sm:px-8 md:px-12 lg:px-16 py-12 bg-white">
+        <p className="text-center text-red-400 font-medium">
+          Failed to load FAQs. Please try again later.
+        </p>
+      </section>
+    );
+  }
 
   return (
     <section className="w-full max-w-360 mx-auto px-4 sm:px-8 md:px-12 lg:px-16 py-12 sm:py-16 md:py-20 bg-white flex flex-col gap-10 sm:gap-12 lg:gap-16">
@@ -66,9 +70,9 @@ export default function FAQ() {
 
         {/* LEFT — FAQ List */}
         <div className="flex-1 flex flex-col">
-          {FAQS.map((faq, i) => (
+          {faqs.map((faq, i) => (
             <div
-              key={i}
+              key={faq.id || i}
               className="rounded-xl"
               style={{
                 backgroundColor: openIndex === i ? "rgba(8, 32, 60, 0.04)" : "transparent",
@@ -112,7 +116,7 @@ export default function FAQ() {
         <div className="w-full lg:w-115 xl:w-125 shrink-0 flex flex-col gap-6">
 
           {/* Answer Box */}
-          {openIndex !== null ? (
+          {openIndex !== null && faqs[openIndex] ? (
             <div className="bg-[#FAFAFA] rounded-2xl p-5 sm:p-6">
               <span
                 style={{ fontFamily: '"Rethink Sans", sans-serif' }}
@@ -124,7 +128,7 @@ export default function FAQ() {
                 style={{ fontFamily: '"Rethink Sans", sans-serif' }}
                 className="text-[#333] text-sm sm:text-[15px] leading-relaxed m-0"
               >
-                {FAQS[openIndex].answer}
+                {faqs[openIndex].answer}
               </p>
             </div>
           ) : (
