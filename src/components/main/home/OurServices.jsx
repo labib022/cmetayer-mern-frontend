@@ -6,10 +6,10 @@ import img3 from "../../../assets/images/service-img-3.png";
 import img4 from "../../../assets/images/service-img-4.png";
 
 const fallbackServices = [
-  { title: "Moving & Packing",   desc: "Stress-free local and long-distance moving with professional packing.", img: img1 },
-  { title: "Home Cleaning",      desc: "Deep cleans, move-in/out, and recurring with professional maid services.", img: img2 },
-  { title: "Handyman & Repair",  desc: "Plumbing, electrical, assembly, and general professional home repairs.", img: img3 },
-  { title: "Laundry Service",    desc: "Wash, dry, and fold with professional services delivered to your door.", img: img4 },
+  { header: "Moving & Packing",  sub_header: "Stress-free local and long-distance moving with professional packing.", image: img1 },
+  { header: "Home Cleaning",     sub_header: "Deep cleans, move-in/out, and recurring with professional maid services.", image: img2 },
+  { header: "Handyman & Repair", sub_header: "Plumbing, electrical, assembly, and general professional home repairs.", image: img3 },
+  { header: "Laundry Service",   sub_header: "Wash, dry, and fold with professional services delivered to your door.", image: img4 },
 ];
 const fallbackImgs = [img1, img2, img3, img4];
 
@@ -23,20 +23,20 @@ function getVisibleCount() {
 export default function OurServices() {
   const [start, setStart] = useState(0);
   const [visibleCount, setVisibleCount] = useState(getVisibleCount);
-
   const { data, isLoading } = useGetHomePageQuery();
 
-  // data.data.home["Our Services"][]
-  const apiServices = data?.data?.home?.["Our Services"];
+  const serviceSection = data?.data?.home?.["Our Services"]?.[0];
 
-  const services = (() => {
-    if (!apiServices?.length) return fallbackServices;
-    return apiServices.map((item, i) => ({
-      title: item.title,
-      desc:  item.description,
-      img:   item.image || fallbackImgs[i % fallbackImgs.length],
-    }));
-  })();
+  // service_items[] → { image, header, sub_header }
+  const services = serviceSection?.service_items?.length
+    ? serviceSection.service_items.map((item, i) => ({
+        header:     item.header,
+        sub_header: item.sub_header,
+        image:      item.image || fallbackImgs[i % fallbackImgs.length],
+      }))
+    : fallbackServices;
+
+  const heading = serviceSection?.heading || "Comprehensive Home Services\nYou Can Count On";
 
   useEffect(() => {
     const handleResize = () => { setVisibleCount(getVisibleCount()); setStart(0); };
@@ -61,7 +61,9 @@ export default function OurServices() {
               <span className="font-rethink text-sm font-medium" style={{ color: "#08203C" }}>Our Services</span>
             </div>
             <h2 className="font-rethink font-extrabold text-2xl sm:text-3xl lg:text-4xl leading-tight" style={{ color: "#08203C" }}>
-              Comprehensive Home Services<br />You Can Count On
+              {heading.includes("\n")
+                ? heading.split("\n").map((line, i) => <span key={i}>{line}{i === 0 && <br />}</span>)
+                : heading}
             </h2>
           </div>
 
@@ -86,13 +88,13 @@ export default function OurServices() {
                 <div key={i} className="w-full rounded-2xl animate-pulse bg-gray-200" style={{ minHeight: "280px" }} />
               ))
             : visible.map((s) => (
-                <div key={s.title} className="relative w-full rounded-2xl overflow-hidden cursor-pointer group" style={{ minHeight: "280px" }}>
-                  <img src={s.img} alt={s.title} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" style={{ minHeight: "280px" }} />
+                <div key={s.header} className="relative w-full rounded-2xl overflow-hidden cursor-pointer group" style={{ minHeight: "280px" }}>
+                  <img src={s.image} alt={s.header} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" style={{ minHeight: "280px" }} />
                   <div className="absolute inset-0 rounded-2xl" style={{ background: "linear-gradient(0deg, rgba(13,31,60,0.92) 0%, transparent 55%)" }} />
                   <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4">
-                    <div style={{ display: "flex", padding: "12px", flexDirection: "column", alignItems: "flex-start", gap: "6px", borderRadius: "8px", background: "rgba(8, 32, 60, 0.40)", backdropFilter: "blur(50.75px)", WebkitBackdropFilter: "blur(50.75px)" }}>
-                      <h3 className="font-rethink font-medium leading-[140%] tracking-[-0.936px] m-0 text-base sm:text-lg lg:text-[24px]" style={{ color: "#FFF" }}>{s.title}</h3>
-                      <p className="font-rethink font-normal leading-[140%] m-0 text-[11px] sm:text-[12px]" style={{ color: "#ECEEF0" }}>{s.desc}</p>
+                    <div style={{ display: "flex", padding: "12px", flexDirection: "column", gap: "6px", borderRadius: "8px", background: "rgba(8, 32, 60, 0.40)", backdropFilter: "blur(50.75px)", WebkitBackdropFilter: "blur(50.75px)" }}>
+                      <h3 className="font-rethink font-medium leading-[140%] tracking-[-0.936px] m-0 text-base sm:text-lg lg:text-[24px]" style={{ color: "#FFF" }}>{s.header}</h3>
+                      <p className="font-rethink font-normal leading-[140%] m-0 text-[11px] sm:text-[12px]" style={{ color: "#ECEEF0" }}>{s.sub_header}</p>
                     </div>
                   </div>
                 </div>
