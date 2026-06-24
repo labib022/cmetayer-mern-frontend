@@ -56,7 +56,7 @@ export default function GetAQuote() {
         <div className="flex flex-col items-start gap-6 flex-1">
           <div className="flex items-center gap-1">
             <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#08203C]" />
-            <span style={{ fontFamily: '"Rethink Sans", sans-serif' }} className="text-[#08203C] text-sm font-medium">
+            <span style={{ fontFamily: '"Rethink Sans", sans-serif' }} className="text-[#08203C] text-sm font-medium"> 
               Get a Quote
             </span>
           </div>
