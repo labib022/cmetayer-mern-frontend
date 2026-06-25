@@ -36,8 +36,6 @@ export default function OurServices() {
       }))
     : fallbackServices;
 
-  const heading = serviceSection?.heading || "Comprehensive Home Services\nYou Can Count On";
-
   useEffect(() => {
     const handleResize = () => { setVisibleCount(getVisibleCount()); setStart(0); };
     window.addEventListener("resize", handleResize);
@@ -61,9 +59,7 @@ export default function OurServices() {
               <span className="font-rethink text-sm font-medium" style={{ color: "#08203C" }}>Our Services</span>
             </div>
             <h2 className="font-rethink font-extrabold text-2xl sm:text-3xl lg:text-4xl leading-tight" style={{ color: "#08203C" }}>
-              {heading.includes("\n")
-                ? heading.split("\n").map((line, i) => <span key={i}>{line}{i === 0 && <br />}</span>)
-                : heading}
+              Comprehensive Home Services <br /> You Can Count On
             </h2>
           </div>
 
