@@ -59,7 +59,7 @@ export default function RepairDescription() {
 
           {/* RIGHT — Image + Price Card */}
           <div
-            className="flex flex-col justify-end items-center gap-5 shrink-0 w-full lg:w-[551px] min-h-75 sm:min-h-100 lg:h-[517px] p-3 rounded-3xl border border-[#E3E8EF]"
+            className="flex flex-col justify-end items-center gap-5 shrink-0 w-full lg:w-138 min-h-75 sm:min-h-100 lg:h-129 p-3 rounded-3xl border border-[#E3E8EF]"
             style={{
               background: `url(${movingImg}) lightgray 50% / cover no-repeat`,
             }}

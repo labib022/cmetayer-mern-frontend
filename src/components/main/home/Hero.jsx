@@ -28,17 +28,16 @@ export default function Hero() {
   const [current,   setCurrent]   = useState(0);
   const [displayed, setDisplayed] = useState(0);
   const [isFading,  setIsFading]  = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
   const timerRef = useRef(null);
 
   const { data, isLoading } = useGetHomePageQuery();
 
-  // ── Real API structure: data.data.home.hero[0] ──
   const heroData = data?.data?.home?.hero?.[0];
 
   const heading  = heroData?.title       || "One Call. One Company.";
   const subtext  = heroData?.description || "Book trusted moving, cleaning, repair, and laundry services instantly. We manage your home so you don't have to.";
 
-  // stats → hero_features[]  { item, title }
   const stats = heroData?.hero_features?.length
     ? heroData.hero_features.map((f) => ({ value: f.item, label: f.title }))
     : [
@@ -47,7 +46,6 @@ export default function Hero() {
         { value: "100+", label: "Team members" },
       ];
 
-  // images → hero_images[]  { image } (URL string)
   const services = (() => {
     if (!heroData?.hero_images?.length) return fallbackServices;
     return heroData.hero_images.map((item, i) => {
@@ -63,7 +61,6 @@ export default function Hero() {
     });
   })();
 
-  // ── Carousel ──
   const goTo = (next) => {
     if (isFading || next === current) return;
     setIsFading(true);
@@ -123,16 +120,30 @@ export default function Hero() {
         </div>
 
         {/* RIGHT */}
-        <div className="relative w-full lg:w-1/2 rounded-2xl overflow-hidden" style={{ minHeight: "420px" }}>
+        <div
+          className="relative w-full lg:w-1/2 rounded-2xl overflow-hidden"
+          style={{ minHeight: "420px" }}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+        >
 
           {isLoading && (
             <div className="w-full rounded-2xl animate-pulse bg-[#1e3a5f]" style={{ minHeight: "420px" }} />
           )}
 
           {!isLoading && (
-            <img key={displayed} src={active.img} alt={active.title}
-              className="w-full h-full object-cover rounded-2xl"
-              style={{ minHeight: "420px", maxHeight: "520px", opacity: isFading ? 0 : 1, transition: `opacity ${FADE_DURATION}ms ease` }}
+            <img
+              key={displayed}
+              src={active.img}
+              alt={active.title}
+              className="w-full h-full object-cover object-center rounded-2xl"
+              style={{
+                minHeight: "420px",
+                maxHeight: "520px",
+                opacity: isFading ? 0 : 1,
+                transition: `opacity ${FADE_DURATION}ms ease, transform 700ms ease-in-out`,
+                transform: isHovered ? "scale(1.02)" : "scale(1)",
+              }}
             />
           )}
 

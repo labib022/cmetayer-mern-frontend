@@ -1,3 +1,4 @@
+import { useState } from "react";
 import aboutImg from "../../../assets/images/about-foundation.png";
 
 const INFO_CARDS = [
@@ -18,6 +19,8 @@ const RIGHT_CARDS = [
 ];
 
 export default function OurFoundation() {
+  const [isHovered, setIsHovered] = useState(false);
+
   return (
     <section className="mxw px-4 sm:px-10 lg:px-20 py-16 sm:py-20 lg:py-30  rounded-2xl flex flex-col justify-center items-center gap-15">
 
@@ -84,11 +87,19 @@ export default function OurFoundation() {
         </div>
 
         {/* ── COL 2 — Image ── */}
-        <div className="rounded-2xl overflow-hidden min-h-80 md:min-h-0">
+        <div
+          className="rounded-2xl overflow-hidden min-h-80 md:min-h-0"
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+        >
           <img
             src={aboutImg}
             alt="Our Foundation"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover object-center"
+            style={{
+              transition: "transform 700ms ease-in-out",
+              transform: isHovered ? "scale(1.02)" : "scale(1)",
+            }}
           />
         </div>
 
