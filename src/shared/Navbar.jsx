@@ -168,12 +168,20 @@ export default function Navbar() {
         <div className="mxw mx-2">
           <nav className="relative flex h-14 items-center px-4 md:px-6 bg-[#08203C]">
             {/* LEFT — Logo */}
+
             <div className="flex items-center shrink-0">
-              <a href="/" className="outline-none">
+              <a href="/" className="outline-none group">
                 <img
                   src={logo}
                   alt="Logo"
-                  className="h-12 md:h-24 w-auto object-contain"
+                  className="h-12 md:h-24 w-auto object-contain transition-all duration-300"
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.filter =
+                      "brightness(0) saturate(100%) invert(73%) sepia(55%) saturate(500%) hue-rotate(5deg) brightness(95%) contrast(90%)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.filter = "brightness(1)";
+                  }}
                 />
               </a>
             </div>

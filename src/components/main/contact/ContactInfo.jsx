@@ -1,37 +1,61 @@
 import { MdPhone, MdEmail, MdLocationOn, MdAccessTime } from "react-icons/md";
-
-const CONTACT_ITEMS = [
-  {
-    icon: <MdPhone size={24} color="#fff" />,
-    label: "Phone Number",
-    value: "+ (1290) 8983 143 99988",
-  },
-  {
-    icon: <MdEmail size={24} color="#fff" />,
-    label: "Email",
-    value: "info.realora@gmail.com",
-  },
-  {
-    icon: <MdLocationOn size={24} color="#fff" />,
-    label: "Address",
-    value: "4140 Parker Rd. New Mexico 31134",
-  },
-  {
-    icon: <MdAccessTime size={24} color="#fff" />,
-    label: "Opening hours",
-    value: "Monday – Friday: 8am – 8pm",
-  },
-];
+import { useGetAboutSystemQuery } from "../../../redux/features/cms/cmsApi";
 
 export default function ContactInfo() {
+  const { data, isLoading, isError } = useGetAboutSystemQuery();
+
+  const about = data?.data?.about_system;
+
+  const CONTACT_ITEMS = [
+    {
+      icon: <MdPhone size={24} color="#fff" />,
+      label: "Phone Number",
+      value: about?.phone || "Loading...",
+    },
+    {
+      icon: <MdEmail size={24} color="#fff" />,
+      label: "Email",
+      value: about?.email || "Loading...",
+    },
+    {
+      icon: <MdLocationOn size={24} color="#fff" />,
+      label: "Address",
+      value: about?.location || "Loading...",
+    },
+    {
+      icon: <MdAccessTime size={24} color="#fff" />,
+      label: "Opening hours",
+      value: "Monday – Friday: 8am – 8pm",
+    },
+  ];
+
+  if (isLoading) {
+    return (
+      <section className="w-full bg-white py-20 px-4 sm:px-6 lg:px-16">
+        <div className="max-w-300 mx-auto">
+          <p className="text-center text-[#656565]">Loading...</p>
+        </div>
+      </section>
+    );
+  }
+
+  if (isError) {
+    return (
+      <section className="w-full bg-white py-20 px-4 sm:px-6 lg:px-16">
+        <div className="max-w-300 mx-auto">
+          <p className="text-center text-red-500">
+            Failed to load contact info.
+          </p>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="w-full bg-white py-20 px-4 sm:px-6 lg:px-16">
       <div className="max-w-300 mx-auto flex flex-col gap-12">
-
         {/* HEADER ROW */}
         <div className="flex flex-col lg:flex-row justify-between items-start gap-8">
-
-          {/* Left */}
           <div className="flex flex-col gap-4">
             <div className="flex items-center gap-2">
               <span
@@ -53,15 +77,13 @@ export default function ContactInfo() {
               <span style={{ color: "#111" }}>with Our Team</span>
             </h2>
           </div>
-
-          {/* Right */}
           <div className="flex flex-col items-start lg:items-end">
             <p
               className="font-rethink font-normal leading-[140%] m-0"
               style={{ color: "#656565", fontSize: "18px", maxWidth: "551px" }}
             >
-              Reach out to Cleanzy through our official contact details for
-              quick assistance.
+              Reach out to {about?.name || "us"} through our official contact
+              details for quick assistance.
             </p>
           </div>
         </div>
@@ -71,17 +93,17 @@ export default function ContactInfo() {
           {CONTACT_ITEMS.map((item) => (
             <div
               key={item.label}
-              className="flex flex-col justify-center items-start gap-4"
+              className="flex flex-col items-start gap-4"
               style={{
-                padding: "24px 32px",
+                padding: "24px",
                 borderRadius: "20px",
                 background: "#FAFAFA",
-                flex: "1 0 0",
+                minHeight: "180px",
               }}
             >
               {/* Icon */}
               <div
-                className="flex items-center justify-center"
+                className="flex items-center justify-center shrink-0"
                 style={{
                   width: "48px",
                   height: "48px",
@@ -94,7 +116,7 @@ export default function ContactInfo() {
 
               {/* Label */}
               <p
-                className="font-rethink font-semibold leading-[140%] m-0 text-base"
+                className="font-rethink font-semibold text-base m-0"
                 style={{ color: "#0B1714" }}
               >
                 {item.label}
@@ -102,8 +124,8 @@ export default function ContactInfo() {
 
               {/* Value */}
               <p
-                className="font-rethink font-normal leading-[140%] m-0"
-                style={{ color: "#656565", fontSize: "16px" }}
+                className="font-rethink font-normal text-sm m-0 leading-relaxed"
+                style={{ color: "#656565" }}
               >
                 {item.value}
               </p>
@@ -122,7 +144,6 @@ export default function ContactInfo() {
             title="Google Map"
           />
         </div>
-
       </div>
     </section>
   );
