@@ -1,4 +1,3 @@
-// src/redux/features/cms/cmsApi.js
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const cmsApi = createApi({
@@ -15,31 +14,52 @@ export const cmsApi = createApi({
   }),
   endpoints: (builder) => ({
 
-    // ✅ Home page — সব sections একসাথে
-    // Response: data.data.home.hero[], data.data.home["Our Values"][], etc.
+    // ✅ Home page
     getHomePage: builder.query({
       query: () => `/cms/?page_name=home`,
     }),
 
-    // ✅ FAQs (backend public করলে কাজ করবে)
+    // ✅ About Us page — page_name=about_us
+    getAboutUsPage: builder.query({
+      query: () => `/cms/?page_name=about_us`,
+    }),
+
+    // ✅ FAQs (standalone)
     getFaqs: builder.query({
       query: () => "/faqs/",
     }),
 
-    // ✅ About System
+    // ✅ About System — footer, contact info
     getAboutSystem: builder.query({
       query: () => "/about-system/",
     }),
 
-    // ✅ Contact Us
+    // ✅ Contact Us (POST)
     contactUs: builder.mutation({
       query: (data) => {
         const fd = new FormData();
         fd.append("name", data.name);
         fd.append("email", data.email);
-        fd.append("purpose", data.purpose);
+        fd.append("purpose", data.purpose || "general_inquiry");
         fd.append("message", data.message);
         return { url: "/contact-us/", method: "POST", body: fd };
+      },
+    }),
+
+    // ✅ Quote Submission (POST)
+    submitQuote: builder.mutation({
+      query: (data) => {
+        const fd = new FormData();
+        fd.append("name", data.name);
+        fd.append("email", data.email);
+        fd.append("phone", data.phone || "");
+        fd.append("service", data.service || "");
+        fd.append("message", data.message);
+        return {
+          url: "/cms/?page_name=home&section_name=quote_submission",
+          method: "POST",
+          body: fd,
+        };
       },
     }),
 
@@ -48,7 +68,9 @@ export const cmsApi = createApi({
 
 export const {
   useGetHomePageQuery,
+  useGetAboutUsPageQuery,
   useGetFaqsQuery,
   useGetAboutSystemQuery,
   useContactUsMutation,
+  useSubmitQuoteMutation,
 } = cmsApi;

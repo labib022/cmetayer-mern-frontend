@@ -1,7 +1,12 @@
 import { useState } from "react";
-import { useGetHomePageQuery, useContactUsMutation } from "../../../redux/features/cms/cmsApi";
+import { useGetHomePageQuery, useSubmitQuoteMutation } from "../../../redux/features/cms/cmsApi";
 
-const SERVICES_LIST = ["Moving & Packing", "Home Cleaning", "Handyman & Repair", "Laundry Service"];
+const SERVICES_LIST = [
+  { label: "Moving & Packing",   value: "moving_packing" },
+  { label: "Home Cleaning",      value: "home_cleaning" },
+  { label: "Handyman & Repair",  value: "home_repair" },
+  { label: "Laundry Service",    value: "laundry" },
+];
 const initialForm = { name: "", email: "", phone: "", service: "", message: "" };
 
 export default function GetAQuote() {
@@ -10,27 +15,35 @@ export default function GetAQuote() {
   const [error, setError]         = useState("");
 
   const { data } = useGetHomePageQuery();
-  const [contactUs, { isLoading }] = useContactUsMutation();
+  const [submitQuote, { isLoading }] = useSubmitQuoteMutation();
 
-  // Quote[] → { contact_header, description, title }
   const quoteSection = data?.data?.home?.["Quote"]?.[0];
   const heading      = quoteSection?.contact_header || "Looking for Professional Home Management Services?";
   const description  = quoteSection?.description    || "Request a free quote today and let our team create a cleaning plan tailored to your home or property needs.";
 
-  const handleChange = (e) => { setForm((prev) => ({ ...prev, [e.target.name]: e.target.value })); setError(""); };
+  const handleChange = (e) => {
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    setError("");
+  };
 
   const handleSubmit = async () => {
-    if (!form.name || !form.email || !form.message) { setError("Name, Email and Message are required."); return; }
+    if (!form.name || !form.email || !form.message) {
+      setError("Name, Email and Message are required.");
+      return;
+    }
     try {
-      await contactUs({
+      await submitQuote({
         name:    form.name,
         email:   form.email,
-        purpose: "general_inquiry",
-        message: `Service: ${form.service || "Not specified"} | Phone: ${form.phone || "Not provided"} | ${form.message}`,
+        phone:   form.phone,
+        service: form.service,
+        message: form.message,
       }).unwrap();
       setSubmitted(true);
       setForm(initialForm);
-    } catch { setError("Something went wrong. Please try again."); }
+    } catch {
+      setError("Something went wrong. Please try again.");
+    }
   };
 
   return (
@@ -97,7 +110,7 @@ export default function GetAQuote() {
                     <select name="service" value={form.service} onChange={handleChange}
                       className="bg-transparent border-none outline-none text-sm text-[#999] leading-[140%] h-6 cursor-pointer w-full" style={{ fontFamily: '"Rethink Sans", sans-serif' }}>
                       <option value="" disabled>Select a Service</option>
-                      {SERVICES_LIST.map((s) => <option key={s} value={s}>{s}</option>)}
+                      {SERVICES_LIST.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
                     </select>
                   </div>
                 </div>

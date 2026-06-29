@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useContactUsMutation } from "../../../redux/features/cms/cmsApi";
 
 const SERVICES_OPTIONS = [
   "Moving & Packing",
@@ -16,15 +17,36 @@ export default function ContactForm() {
     message: "",
   });
 
+  const [successMsg, setSuccessMsg] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
+
+  const [contactUs, { isLoading }] = useContactUsMutation();
+
   const handleChange = (field) => (e) =>
     setForm({ ...form, [field]: e.target.value });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form submitted:", form);
+    setSuccessMsg("");
+    setErrorMsg("");
+
+    try {
+      const res = await contactUs({
+        name: form.name,
+        email: form.email,
+        message: form.message,
+        purpose: "general_inquiry",
+      }).unwrap();
+
+      setSuccessMsg(res.message || "Message sent successfully!");
+      setForm({ name: "", email: "", phone: "", service: "", message: "" });
+    } catch (err) {
+      setErrorMsg(err?.data?.message || "Something went wrong. Try again.");
+    }
   };
 
-  const inputClass = "w-full font-rethink text-sm text-[#0B1714] bg-[#F5F5F5] rounded-xl border border-transparent outline-none transition-all duration-200 px-4 py-3 placeholder:text-[#aab0be] focus:border-[#08203C] focus:bg-white";
+  const inputClass =
+    "w-full font-rethink text-sm text-[#0B1714] bg-[#F5F5F5] rounded-xl border border-transparent outline-none transition-all duration-200 px-4 py-3 placeholder:text-[#aab0be] focus:border-[#08203C] focus:bg-white";
 
   return (
     <section className="w-full bg-white py-20 px-4 sm:px-6 lg:px-16">
@@ -32,8 +54,6 @@ export default function ContactForm() {
 
         {/* HEADER ROW */}
         <div className="flex flex-col lg:flex-row justify-between items-start gap-8">
-
-          {/* Left */}
           <div className="flex flex-col gap-4">
             <div className="flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full inline-block" style={{ backgroundColor: "#08203C" }} />
@@ -48,8 +68,6 @@ export default function ContactForm() {
               Let's Discuss Your Home Management Needs
             </h2>
           </div>
-
-          {/* Right */}
           <div className="flex flex-col items-start lg:items-end">
             <p
               className="font-rethink font-normal leading-[140%] m-0"
@@ -61,7 +79,7 @@ export default function ContactForm() {
           </div>
         </div>
 
-        {/* FORM CARD — centered */}
+        {/* FORM CARD */}
         <div className="flex justify-center w-full">
           <div
             className="w-full flex flex-col gap-6"
@@ -73,11 +91,23 @@ export default function ContactForm() {
               boxShadow: "0 8px 24px 0 rgba(3, 62, 72, 0.08)",
             }}
           >
-            {/* Subtitle */}
             <p className="font-rethink text-[#656565] text-sm leading-relaxed m-0">
-              Tell us a bit about your home, and we'll guide you to the right
-              cleaning solution.
+              Tell us a bit about your home, and we'll guide you to the right cleaning solution.
             </p>
+
+            {/* Success Message */}
+            {successMsg && (
+              <div className="bg-green-50 border border-green-200 text-green-700 text-sm rounded-xl px-4 py-3">
+                ✅ {successMsg}
+              </div>
+            )}
+
+            {/* Error Message */}
+            {errorMsg && (
+              <div className="bg-red-50 border border-red-200 text-red-600 text-sm rounded-xl px-4 py-3">
+                ❌ {errorMsg}
+              </div>
+            )}
 
             <form onSubmit={handleSubmit} className="flex flex-col gap-6 w-full">
 
@@ -91,8 +121,7 @@ export default function ContactForm() {
                     value={form.name}
                     onChange={handleChange("name")}
                     className={inputClass}
-                    onFocus={(e) => { e.target.style.borderColor = "#08203C"; e.target.style.background = "#fff"; }}
-                    onBlur={(e) => { e.target.style.borderColor = "transparent"; e.target.style.background = "#F5F5F5"; }}
+                    required
                   />
                 </div>
                 <div className="flex flex-col gap-1.5">
@@ -103,8 +132,7 @@ export default function ContactForm() {
                     value={form.email}
                     onChange={handleChange("email")}
                     className={inputClass}
-                    onFocus={(e) => { e.target.style.borderColor = "#08203C"; e.target.style.background = "#fff"; }}
-                    onBlur={(e) => { e.target.style.borderColor = "transparent"; e.target.style.background = "#F5F5F5"; }}
+                    required
                   />
                 </div>
               </div>
@@ -119,8 +147,6 @@ export default function ContactForm() {
                     value={form.phone}
                     onChange={handleChange("phone")}
                     className={inputClass}
-                    onFocus={(e) => { e.target.style.borderColor = "#08203C"; e.target.style.background = "#fff"; }}
-                    onBlur={(e) => { e.target.style.borderColor = "transparent"; e.target.style.background = "#F5F5F5"; }}
                   />
                 </div>
                 <div className="flex flex-col gap-1.5">
@@ -130,8 +156,6 @@ export default function ContactForm() {
                     onChange={handleChange("service")}
                     className={inputClass}
                     style={{ appearance: "none" }}
-                    onFocus={(e) => { e.target.style.borderColor = "#08203C"; e.target.style.background = "#fff"; }}
-                    onBlur={(e) => { e.target.style.borderColor = "transparent"; e.target.style.background = "#F5F5F5"; }}
                   >
                     <option value="">Select a Service</option>
                     {SERVICES_OPTIONS.map((s) => (
@@ -151,15 +175,15 @@ export default function ContactForm() {
                   onChange={handleChange("message")}
                   className={inputClass}
                   style={{ resize: "vertical" }}
-                  onFocus={(e) => { e.target.style.borderColor = "#08203C"; e.target.style.background = "#fff"; }}
-                  onBlur={(e) => { e.target.style.borderColor = "transparent"; e.target.style.background = "#F5F5F5"; }}
+                  required
                 />
               </div>
 
               {/* Submit Button */}
               <button
                 type="submit"
-                className="font-rethink inline-flex items-center justify-between gap-3 border-none cursor-pointer hover:opacity-90 transition-opacity duration-200"
+                disabled={isLoading}
+                className="font-rethink inline-flex items-center justify-between gap-3 border-none cursor-pointer hover:opacity-90 transition-opacity duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
                 style={{
                   padding: "12px 12px 12px 24px",
                   borderRadius: "40px",
@@ -171,7 +195,7 @@ export default function ContactForm() {
                   width: "fit-content",
                 }}
               >
-                Get a Free Quote
+                {isLoading ? "Sending..." : "Get a Free Quote"}
                 <span
                   className="flex items-center justify-center w-9 h-9 rounded-full text-base shrink-0"
                   style={{ backgroundColor: "rgba(255,255,255,0.15)" }}

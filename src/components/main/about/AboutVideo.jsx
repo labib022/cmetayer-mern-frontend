@@ -1,8 +1,8 @@
 import { useState } from "react";
-import ReactPlayer from "react-player";
 import { FaFacebookF, FaInstagram, FaLinkedinIn } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import videoThumb from "../../../assets/images/about-video-img.png";
+import { useGetAboutUsPageQuery } from "../../../redux/features/cms/cmsApi";
 
 const SOCIAL_LINKS = [
   { icon: <FaFacebookF size={16} />, href: "https://facebook.com" },
@@ -13,7 +13,16 @@ const SOCIAL_LINKS = [
 
 export default function AboutVideo() {
   const [playing, setPlaying] = useState(false);
-  const VIDEO_URL = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+  const { data, isLoading } = useGetAboutUsPageQuery();
+
+  const settings = data?.data?.about_us?.settings?.[0] || {};
+
+  const title = settings.foundation_title || "Trust, quality, and an awesome home!";
+  const description =
+    settings.foundation_description ||
+    "We are a dedicated home services company delivering quality solutions for your home, from plumbing to deep cleaning.";
+  const videoUrl = settings.videos || "";
+  const thumbnail = settings.image || videoThumb;
 
   return (
     <section className="w-full bg-white py-16 px-4 sm:px-6 lg:px-16">
@@ -21,30 +30,39 @@ export default function AboutVideo() {
 
         {/* HEADER ROW */}
         <div className="flex flex-col lg:flex-row justify-between items-start gap-8">
-          <h2 className="font-rethink text-[#0B1714] font-medium leading-[120%] tracking-[-1.56px] m-0 text-3xl sm:text-4xl lg:text-[40px] w-full max-w-100">
-            Trust, quality, and an awesome home!
-          </h2>
-          <p className="font-rethink text-[#656565] text-base font-normal leading-[140%] m-0 w-full pt-6 max-w-116">
-            We are a dedicated home services company delivering quality
-            solutions for your home, from plumbing to deep cleaning.
-          </p>
+          {isLoading ? (
+            <>
+              <div className="h-10 w-80 bg-gray-200 rounded animate-pulse" />
+              <div className="h-20 w-96 bg-gray-100 rounded animate-pulse" />
+            </>
+          ) : (
+            <>
+              <h2 className="font-rethink text-[#0B1714] font-medium leading-[120%] tracking-[-1.56px] m-0 text-3xl sm:text-4xl lg:text-[40px] w-full max-w-100">
+                {title}
+              </h2>
+              <p className="font-rethink text-[#656565] text-base font-normal leading-[140%] m-0 w-full pt-6 max-w-116">
+                {description}
+              </p>
+            </>
+          )}
         </div>
 
         {/* VIDEO + SOCIAL ROW */}
         <div className="flex items-stretch gap-4">
 
-          {/* Video */}
+          {/* Video Container */}
           <div
             className="relative flex-1 overflow-hidden"
-            style={{ borderRadius: "20px", height: "641px" }}
+            style={{ borderRadius: "20px", height: "641px", backgroundColor: "#000" }}
           >
             {!playing ? (
+              /* Thumbnail + Play Button */
               <div
-                className="w-full h-full relative cursor-pointer"
+                className="absolute inset-0 z-10 cursor-pointer"
                 onClick={() => setPlaying(true)}
                 style={{
                   borderRadius: "20px",
-                  background: `linear-gradient(0deg, rgba(65,65,65,0.31) 0%, rgba(65,65,65,0.31) 100%), url(${videoThumb}) lightgray 50% / cover no-repeat`,
+                  background: `linear-gradient(0deg, rgba(65,65,65,0.31) 0%, rgba(65,65,65,0.31) 100%), url(${thumbnail}) lightgray 50% / cover no-repeat`,
                 }}
               >
                 <div className="absolute inset-0 flex items-center justify-center">
@@ -56,22 +74,23 @@ export default function AboutVideo() {
                 </div>
               </div>
             ) : (
-              <div className="w-full h-full" style={{ borderRadius: "20px", overflow: "hidden" }}>
-                <ReactPlayer
-                  url={VIDEO_URL}
-                  playing={true}
-                  controls={true}
-                  width="100%"
-                  height="100%"
-                />
-              </div>
+              /* Native video tag — mp4 এর জন্য সবচেয়ে reliable */
+              <video
+                src={videoUrl}
+                autoPlay
+                controls
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  borderRadius: "20px",
+                  objectFit: "cover",
+                }}
+              />
             )}
           </div>
 
           {/* RIGHT — Follow Us + Social Icons */}
           <div className="hidden lg:flex flex-col items-center justify-center gap-8 pl-4">
-
-            {/* Follow Us — rotated vertical */}
             <p
               className="font-rethink text-[#ECEEF0] font-medium tracking-[-0.936px] m-0 whitespace-nowrap select-none"
               style={{
@@ -83,10 +102,6 @@ export default function AboutVideo() {
             >
               Follow Us
             </p>
-
-           
-
-            {/* Social Icons */}
             <div className="flex flex-col items-center gap-3">
               {SOCIAL_LINKS.map((s, i) => (
                 <a
@@ -95,7 +110,12 @@ export default function AboutVideo() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center rounded-full border bg-[#E9E9E9] border-[#D1D5DB] text-[#0B1714] hover:bg-[#08203C] hover:text-white hover:border-[#08203C] transition-all duration-200"
-                  style={{ width: "36.923px", height: "36.923px",  writingMode: "vertical-rl", transform: "rotate(90deg)",  }}
+                  style={{
+                    width: "36.923px",
+                    height: "36.923px",
+                    writingMode: "vertical-rl",
+                    transform: "rotate(90deg)",
+                  }}
                 >
                   {s.icon}
                 </a>
