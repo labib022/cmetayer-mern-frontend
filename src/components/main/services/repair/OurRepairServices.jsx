@@ -1,29 +1,42 @@
-import { useState } from "react";
+import { useGetServicePageQuery } from "../../../../redux/features/cms/cmsApi";
 import img1 from "../../../../assets/images/service-img-1.png";
 import img2 from "../../../../assets/images/service-img-2.png";
 import img4 from "../../../../assets/images/service-img-4.png";
 
-const SERVICES = [
+const fallbackImgs = [img1, img2, img4];
+
+const fallbackServices = [
   {
-    title: "Moving & Packing",
-    desc: "Stress-free local and long-distance moving with professional packing.",
-    img: img1,
+    header: "Moving & Packing",
+    sub_header: "Stress-free local and long-distance moving with professional packing.",
+    image: img1,
   },
   {
-    title: "Home Cleaning",
-    desc: "Deep cleans, move-in/out, and recurring with professional maid services.",
-    img: img2,
+    header: "Home Cleaning",
+    sub_header: "Deep cleans, move-in/out, and recurring with professional maid services.",
+    image: img2,
   },
   {
-    title: "Laundry Service",
-    desc: "Wash, dry, and fold with professional services delivered to your door.",
-    img: img4,
+    header: "Laundry Service",
+    sub_header: "Wash, dry, and fold with professional services delivered to your door.",
+    image: img4,
   },
 ];
 
 export default function OurServices() {
-  const [start] = useState(0);
-  const visible = SERVICES.slice(start, start + 3);
+  const { data, isLoading } = useGetServicePageQuery("home_repair");
+
+  const serviceSection = data?.data?.home_repair?.["Our Services"]?.[0];
+  const services = serviceSection?.service_items?.length
+    ? serviceSection.service_items.map((item, i) => ({
+        header: item.header,
+        sub_header: item.sub_header,
+        image: item.image || fallbackImgs[i % fallbackImgs.length],
+      }))
+    : fallbackServices;
+
+  const heading = serviceSection?.heading || "Comprehensive Home Services\nYou Can Count On";
+  const visible = services.slice(0, 3);
 
   return (
     <section className="w-full bg-white py-16 px-6 lg:px-16">
@@ -48,7 +61,11 @@ export default function OurServices() {
               className="font-rethink font-extrabold text-3xl sm:text-4xl leading-tight"
               style={{ color: "#08203C" }}
             >
-              You May Also Like
+              {heading.includes("\n")
+                ? heading.split("\n").map((line, i) => (
+                    <span key={i}>{line}{i === 0 && <br />}</span>
+                  ))
+                : heading}
             </h2>
           </div>
 
@@ -69,62 +86,70 @@ export default function OurServices() {
 
         {/* Service Cards */}
         <div className="flex flex-wrap lg:flex-nowrap gap-5">
-          {visible.map((s) => (
-            <div
-              key={s.title}
-              className="relative flex-1 min-w-70 sm:min-w-0 rounded-2xl overflow-hidden cursor-pointer group"
-              style={{ minHeight: "320px" }}
-            >
-              <img
-                src={s.img}
-                alt={s.title}
-                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                style={{ minHeight: "320px" }}
-              />
-
-              {/* Gradient overlay */}
-              <div
-                className="absolute inset-0 rounded-2xl"
-                style={{
-                  background:
-                    "linear-gradient(0deg, rgba(13,31,60,0.92) 0%, transparent 55%)",
-                }}
-              />
-
-              {/* Glassmorphism Text Card */}
-              <div className="absolute bottom-0 left-0 right-0 p-4">
+          {isLoading
+            ? Array.from({ length: 3 }).map((_, i) => (
                 <div
-                  style={{
-                    display: "flex",
-                    padding: "16px",
-                    flexDirection: "column",
-                    alignItems: "flex-start",
-                    gap: "8px",
-                    borderRadius: "8px",
-                    background: "rgba(8, 32, 60, 0.40)",
-                    backdropFilter: "blur(50.75px)",
-                    WebkitBackdropFilter: "blur(50.75px)",
-                  }}
+                  key={i}
+                  className="relative flex-1 min-w-70 sm:min-w-0 rounded-2xl animate-pulse bg-gray-200"
+                  style={{ minHeight: "320px" }}
+                />
+              ))
+            : visible.map((s) => (
+                <div
+                  key={s.header}
+                  className="relative flex-1 min-w-70 sm:min-w-0 rounded-2xl overflow-hidden cursor-pointer group"
+                  style={{ minHeight: "320px" }}
                 >
-                  {/* Title */}
-                  <h3
-                    className="font-rethink font-medium leading-[140%] tracking-[-0.936px] m-0"
-                    style={{ color: "#FFF", fontSize: "24px" }}
-                  >
-                    {s.title}
-                  </h3>
+                  <img
+                    src={s.image}
+                    alt={s.header}
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    style={{ minHeight: "320px" }}
+                  />
 
-                  {/* Description */}
-                  <p
-                    className="font-rethink font-normal leading-[140%] m-0"
-                    style={{ color: "#ECEEF0", fontSize: "12px" }}
-                  >
-                    {s.desc}
-                  </p>
+                  {/* Gradient overlay */}
+                  <div
+                    className="absolute inset-0 rounded-2xl"
+                    style={{
+                      background:
+                        "linear-gradient(0deg, rgba(13,31,60,0.92) 0%, transparent 55%)",
+                    }}
+                  />
+
+                  {/* Glassmorphism Text Card */}
+                  <div className="absolute bottom-0 left-0 right-0 p-4">
+                    <div
+                      style={{
+                        display: "flex",
+                        padding: "16px",
+                        flexDirection: "column",
+                        alignItems: "flex-start",
+                        gap: "8px",
+                        borderRadius: "8px",
+                        background: "rgba(8, 32, 60, 0.40)",
+                        backdropFilter: "blur(50.75px)",
+                        WebkitBackdropFilter: "blur(50.75px)",
+                      }}
+                    >
+                      {/* Title */}
+                      <h3
+                        className="font-rethink font-medium leading-[140%] tracking-[-0.936px] m-0"
+                        style={{ color: "#FFF", fontSize: "24px" }}
+                      >
+                        {s.header}
+                      </h3>
+
+                      {/* Description */}
+                      <p
+                        className="font-rethink font-normal leading-[140%] m-0"
+                        style={{ color: "#ECEEF0", fontSize: "12px" }}
+                      >
+                        {s.sub_header}
+                      </p>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          ))}
+              ))}
         </div>
       </div>
     </section>

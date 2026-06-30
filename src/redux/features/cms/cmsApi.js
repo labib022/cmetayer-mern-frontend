@@ -19,9 +19,15 @@ export const cmsApi = createApi({
       query: () => `/cms/?page_name=home`,
     }),
 
-    // ✅ About Us page — page_name=about_us
+    // ✅ About Us page
     getAboutUsPage: builder.query({
       query: () => `/cms/?page_name=about_us`,
+    }),
+
+    // ✅ Service pages — moving, cleaning, laundry, repair
+    // Usage: useGetServicePageQuery("moving")
+    getServicePage: builder.query({
+      query: (pageName) => `/cms/?page_name=${pageName}`,
     }),
 
     // ✅ FAQs (standalone)
@@ -69,6 +75,7 @@ export const cmsApi = createApi({
 export const {
   useGetHomePageQuery,
   useGetAboutUsPageQuery,
+  useGetServicePageQuery,
   useGetFaqsQuery,
   useGetAboutSystemQuery,
   useContactUsMutation,
