@@ -27,7 +27,7 @@ const fallbackServices = [
 export default function OurServices() {
   const { data, isLoading } = useGetServicePageQuery("moving");
 
-  const serviceSection = data?.data?.moving?.["Our Services"]?.[0];
+  const serviceSection = data?.data?.moving?.["Our Services"]?.[0]; 
   const services = serviceSection?.service_items?.length
     ? serviceSection.service_items.map((item, i) => ({
         header: item.header,
@@ -36,7 +36,7 @@ export default function OurServices() {
       }))
     : fallbackServices;
 
-  const heading = serviceSection?.heading || "You May Also Like\nYou Can Count On";
+  const heading = serviceSection?.heading || "You May Also Like";
   const visible = services.slice(0, 3);
 
   return (

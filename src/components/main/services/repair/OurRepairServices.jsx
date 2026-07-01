@@ -35,7 +35,7 @@ export default function OurServices() {
       }))
     : fallbackServices;
 
-  const heading = serviceSection?.heading || "Comprehensive Home Services\nYou Can Count On";
+  const heading = serviceSection?.heading || "You May Also Like";
   const visible = services.slice(0, 3);
 
   return (

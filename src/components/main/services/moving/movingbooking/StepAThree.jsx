@@ -1,24 +1,65 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useSubmitQuoteMutation } from "../../../../../redux/features/cms/cmsApi";
 
-const inputClass = "w-full font-rethink text-sm text-[#656565] bg-white rounded-xl border border-[#E3E8EF] outline-none transition-all duration-200 px-4 py-3 placeholder:text-[#aab0be] focus:border-[#08203C]";
+const inputClass =
+  "w-full font-rethink text-sm text-[#656565] bg-white rounded-xl border outline-none transition-all duration-200 px-4 py-3 placeholder:text-[#aab0be]";
 
 export default function StepThree({ data, setData }) {
   const navigate = useNavigate();
+  const [submitQuote, { isLoading }] = useSubmitQuoteMutation();
+  const [errors, setErrors] = useState({});
 
-  const handleChange = (field) => (e) =>
+  const handleChange = (field) => (e) => {
     setData({ ...data, [field]: e.target.value });
+    if (errors[field]) setErrors({ ...errors, [field]: "" });
+  };
 
   const handleClose = () => navigate("/services/moving");
+  const handleBack = () => navigate("/services/moving/book/step-2");
+
+  const handleSubmit = async () => {
+    const newErrors = {};
+    if (!data.fullName) newErrors.fullName = "Full name is required";
+    if (!data.email) newErrors.email = "Email is required";
+    if (!data.phone) newErrors.phone = "Phone number is required";
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    try {
+      await submitQuote({
+        name: data.fullName,
+        email: data.email,
+        phone: data.phone,
+        service: "home_cleaning",
+        message: "Moving service request",
+        moving_services: [
+          {
+            pickup_address: data.pickup,
+            dropoff_address: data.dropoff,
+            moving_date: data.moveDate,
+            home_size: data.homeSize,
+            additional_services: data.heavyItems || [],
+            packing_services: data.needPacking,
+          },
+        ],
+      }).unwrap();
+
+      navigate("/services/moving/book/success");
+    } catch (err) {
+      console.error("Submission failed:", err);
+      alert(err?.data?.message || "Something went wrong. Please try again.");
+    }
+  };
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-[#F0F0F0] px-4 py-10">
       <div
         className="w-full max-w-135 flex flex-col gap-9 relative"
-        style={{
-          padding: "83px 32px 32px 32px",
-          borderRadius: "32px",
-          background: "#FAFAFA",
-        }}
+        style={{ padding: "83px 32px 32px 32px", borderRadius: "32px", background: "#FAFAFA" }}
       >
         {/* Close Button */}
         <button
@@ -42,28 +83,18 @@ export default function StepThree({ data, setData }) {
               className="font-rethink font-normal leading-[140%] shrink-0 pt-1"
               style={{ color: "#656565", fontSize: "14px" }}
             >
-              Step 2 of 3
+              Step 3 of 3
             </span>
           </div>
-
-          {/* Progress Bar — full */}
           <div className="w-full h-1.5 rounded-full bg-[#E3E8EF] overflow-hidden">
-            <div
-              className="h-full rounded-full transition-all duration-300"
-              style={{ width: "100%", backgroundColor: "#08203C" }}
-            />
+            <div className="h-full rounded-full transition-all duration-300" style={{ width: "100%", backgroundColor: "#08203C" }} />
           </div>
         </div>
 
         {/* Form Card */}
         <div
           className="flex flex-col gap-5 w-full"
-          style={{
-            padding: "20px",
-            borderRadius: "16px",
-            background: "#fff",
-            border: "1px solid #E3E8EF",
-          }}
+          style={{ padding: "20px", borderRadius: "16px", background: "#fff", border: "1px solid #E3E8EF" }}
         >
           <h2
             className="font-rethink font-bold leading-[140%] tracking-[-0.936px] m-0"
@@ -73,12 +104,9 @@ export default function StepThree({ data, setData }) {
           </h2>
 
           {/* Full Name */}
-          <div className="flex flex-col gap-2">
-            <label
-              className="font-rethink font-semibold leading-[140%]"
-              style={{ color: "#0B1714", fontSize: "16px" }}
-            >
-              Full Name
+          <div className="flex flex-col gap-1">
+            <label className="font-rethink font-semibold leading-[140%]" style={{ color: "#0B1714", fontSize: "16px" }}>
+              Full Name <span style={{ color: "#EF4444" }}>*</span>
             </label>
             <input
               type="text"
@@ -86,18 +114,17 @@ export default function StepThree({ data, setData }) {
               value={data.fullName || ""}
               onChange={handleChange("fullName")}
               className={inputClass}
-              onFocus={(e) => (e.target.style.borderColor = "#08203C")}
-              onBlur={(e) => (e.target.style.borderColor = "#E3E8EF")}
+              style={{ borderColor: errors.fullName ? "#EF4444" : "#E3E8EF" }}
             />
+            {errors.fullName && (
+              <p className="font-rethink text-xs m-0" style={{ color: "#EF4444" }}>{errors.fullName}</p>
+            )}
           </div>
 
-          {/* Email Address */}
-          <div className="flex flex-col gap-2">
-            <label
-              className="font-rethink font-semibold leading-[140%]"
-              style={{ color: "#0B1714", fontSize: "16px" }}
-            >
-              Email Address
+          {/* Email */}
+          <div className="flex flex-col gap-1">
+            <label className="font-rethink font-semibold leading-[140%]" style={{ color: "#0B1714", fontSize: "16px" }}>
+              Email Address <span style={{ color: "#EF4444" }}>*</span>
             </label>
             <input
               type="email"
@@ -105,18 +132,17 @@ export default function StepThree({ data, setData }) {
               value={data.email || ""}
               onChange={handleChange("email")}
               className={inputClass}
-              onFocus={(e) => (e.target.style.borderColor = "#08203C")}
-              onBlur={(e) => (e.target.style.borderColor = "#E3E8EF")}
+              style={{ borderColor: errors.email ? "#EF4444" : "#E3E8EF" }}
             />
+            {errors.email && (
+              <p className="font-rethink text-xs m-0" style={{ color: "#EF4444" }}>{errors.email}</p>
+            )}
           </div>
 
-          {/* Phone Number */}
-          <div className="flex flex-col gap-2">
-            <label
-              className="font-rethink font-semibold leading-[140%]"
-              style={{ color: "#0B1714", fontSize: "16px" }}
-            >
-              Phone Number
+          {/* Phone */}
+          <div className="flex flex-col gap-1">
+            <label className="font-rethink font-semibold leading-[140%]" style={{ color: "#0B1714", fontSize: "16px" }}>
+              Phone Number <span style={{ color: "#EF4444" }}>*</span>
             </label>
             <input
               type="tel"
@@ -124,43 +150,32 @@ export default function StepThree({ data, setData }) {
               value={data.phone || ""}
               onChange={handleChange("phone")}
               className={inputClass}
-              onFocus={(e) => (e.target.style.borderColor = "#08203C")}
-              onBlur={(e) => (e.target.style.borderColor = "#E3E8EF")}
+              style={{ borderColor: errors.phone ? "#EF4444" : "#E3E8EF" }}
             />
+            {errors.phone && (
+              <p className="font-rethink text-xs m-0" style={{ color: "#EF4444" }}>{errors.phone}</p>
+            )}
           </div>
         </div>
 
         {/* Buttons Row */}
         <div className="flex items-center gap-4 w-full">
-
-          {/* Back Button */}
-          <Link
-            to="/services/moving/book/step-2"
-            className="font-rethink font-semibold text-sm text-[#0B1714] cursor-pointer hover:bg-[#e0e2e6] transition-colors duration-200 no-underline flex items-center justify-center"
-            style={{
-              width: "173px",
-              height: "48px",
-              padding: "10px 55px",
-              borderRadius: "24px",
-              background: "#ECEEF0",
-            }}
+          <button
+            onClick={handleBack}
+            className="font-rethink font-semibold text-sm text-[#0B1714] cursor-pointer hover:bg-[#e0e2e6] transition-colors duration-200 border-none flex items-center justify-center"
+            style={{ width: "173px", height: "48px", borderRadius: "24px", background: "#ECEEF0" }}
           >
             Back
-          </Link>
+          </button>
 
-          {/* Next Step Button */}
-          <Link
-            to="/services/moving/book/success"
-            className="flex items-center justify-between cursor-pointer hover:opacity-90 transition-opacity duration-200 no-underline"
-            style={{
-              padding: "8px 8px 8px 24px",
-              borderRadius: "24px",
-              background: "#08203C",
-              flex: "1 0 0",
-            }}
+          <button
+            onClick={handleSubmit}
+            disabled={isLoading}
+            className="flex items-center justify-between cursor-pointer hover:opacity-90 transition-opacity duration-200 border-none disabled:opacity-60 disabled:cursor-not-allowed"
+            style={{ padding: "8px 8px 8px 24px", borderRadius: "24px", background: "#08203C", flex: "1 0 0" }}
           >
             <span className="w-full text-center font-rethink text-white font-semibold text-base leading-[140%]">
-              Next Step
+              {isLoading ? "Submitting..." : "Submit"}
             </span>
             <span
               className="flex items-center justify-center w-10 h-10 rounded-full text-white text-base shrink-0"
@@ -168,9 +183,8 @@ export default function StepThree({ data, setData }) {
             >
               →
             </span>
-          </Link>
+          </button>
         </div>
-
       </div>
     </div>
   );
