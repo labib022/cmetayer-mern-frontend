@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
 
 const HOME_SIZES = ["1 Bedroom", "2 Bedrooms", "3 Bedrooms", "4 Bedrooms"];
 const HEAVY_ITEMS_OPTIONS = [
@@ -14,15 +13,17 @@ const HEAVY_ITEMS_OPTIONS = [
 
 export default function StepTwo({ data, setData }) {
   const navigate = useNavigate();
-  const [setHeavyInput] = useState("");
+  const [errors, setErrors] = useState({});
 
-  const handleHomeSize = (size) => setData({ ...data, homeSize: size });
+  const handleHomeSize = (size) => {
+    setData({ ...data, homeSize: size });
+    if (errors.homeSize) setErrors({});
+  };
 
   const addHeavyItem = (item) => {
     if (!data.heavyItems.includes(item)) {
       setData({ ...data, heavyItems: [...data.heavyItems, item] });
     }
-    setHeavyInput("");
   };
 
   const removeHeavyItem = (item) => {
@@ -31,8 +32,15 @@ export default function StepTwo({ data, setData }) {
 
   const handlePacking = (val) => setData({ ...data, needPacking: val });
 
-  // eslint-disable-next-line no-unused-vars
-  const handleNext = () => navigate("/services/moving/book/step-3");
+  const handleNext = () => {
+    if (!data.homeSize) {
+      setErrors({ homeSize: "Please select a home size" });
+      return;
+    }
+    setErrors({});
+    navigate("/services/moving/book/step-3");
+  };
+
   const handleBack = () => navigate("/services/moving/book/step-1");
   const handleClose = () => navigate("/services/moving");
 
@@ -40,11 +48,7 @@ export default function StepTwo({ data, setData }) {
     <div className="min-h-screen w-full flex items-center justify-center bg-[#F0F0F0] px-4 py-10">
       <div
         className="w-full max-w-135 flex flex-col gap-8 relative"
-        style={{
-          padding: "83px 32px 32px 32px",
-          borderRadius: "32px",
-          background: "#FAFAFA",
-        }}
+        style={{ padding: "83px 32px 32px 32px", borderRadius: "32px", background: "#FAFAFA" }}
       >
         {/* Close Button */}
         <button
@@ -71,8 +75,6 @@ export default function StepTwo({ data, setData }) {
               Step 2 of 3
             </span>
           </div>
-
-          {/* Progress Bar */}
           <div className="w-full h-1.5 rounded-full bg-[#E3E8EF] overflow-hidden">
             <div
               className="h-full rounded-full transition-all duration-300"
@@ -84,12 +86,7 @@ export default function StepTwo({ data, setData }) {
         {/* Form Card */}
         <div
           className="flex flex-col gap-5 w-full"
-          style={{
-            padding: "20px",
-            borderRadius: "16px",
-            background: "#fff",
-            border: "1px solid #E3E8EF",
-          }}
+          style={{ padding: "20px", borderRadius: "16px", background: "#fff", border: "1px solid #E3E8EF" }}
         >
           <h2
             className="font-rethink font-bold leading-[140%] tracking-[-0.936px] m-0"
@@ -98,43 +95,37 @@ export default function StepTwo({ data, setData }) {
             Scope of Move
           </h2>
 
-          {/* Home Size */}
-          <div className="flex flex-col gap-2">
-            <label
-              className="font-rethink font-semibold leading-[140%]"
-              style={{ color: "#0B1714", fontSize: "16px" }}
-            >
-              Home Size
+          {/* Home Size — mandatory */}
+          <div className="flex flex-col gap-1">
+            <label className="font-rethink font-semibold leading-[140%]" style={{ color: "#0B1714", fontSize: "16px" }}>
+              Home Size <span style={{ color: "#EF4444" }}>*</span>
             </label>
             <div className="relative w-full">
               <select
                 value={data.homeSize || ""}
                 onChange={(e) => handleHomeSize(e.target.value)}
-                className="w-full font-rethink text-sm text-[#656565] bg-white rounded-xl border border-[#E3E8EF] outline-none transition-all duration-200 px-4 py-3 focus:border-[#08203C] appearance-none cursor-pointer"
+                className="w-full font-rethink text-sm text-[#656565] bg-white rounded-xl border outline-none transition-all duration-200 px-4 py-3 focus:border-[#08203C] appearance-none cursor-pointer"
+                style={{ borderColor: errors.homeSize ? "#EF4444" : "#E3E8EF" }}
               >
                 <option value="">Select bedroom size</option>
                 {HOME_SIZES.map((s) => (
-                  <option key={s} value={s}>
-                    {s}
-                  </option>
+                  <option key={s} value={s}>{s}</option>
                 ))}
               </select>
-              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[#aab0be] pointer-events-none">
-                ▾
-              </span>
+              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[#aab0be] pointer-events-none">▾</span>
             </div>
+            {errors.homeSize && (
+              <p className="font-rethink text-xs m-0" style={{ color: "#EF4444" }}>
+                {errors.homeSize}
+              </p>
+            )}
           </div>
 
-          {/* Any extra heavy items */}
+          {/* Heavy Items — optional */}
           <div className="flex flex-col gap-2">
-            <label
-              className="font-rethink font-semibold leading-[140%]"
-              style={{ color: "#0B1714", fontSize: "16px" }}
-            >
-              Any extra heavy items?
+            <label className="font-rethink font-semibold leading-[140%]" style={{ color: "#0B1714", fontSize: "16px" }}>
+              Any extra heavy items? <span className="font-normal text-sm" style={{ color: "#aab0be" }}>(Optional)</span>
             </label>
-
-            {/* Selected Tags */}
             <div className="flex flex-wrap gap-2 min-h-10">
               {data.heavyItems?.map((item) => (
                 <span
@@ -153,12 +144,8 @@ export default function StepTwo({ data, setData }) {
                 </span>
               ))}
             </div>
-
-            {/* Options */}
             <div className="flex flex-wrap gap-2">
-              {HEAVY_ITEMS_OPTIONS.filter(
-                (o) => !data.heavyItems?.includes(o),
-              ).map((item) => (
+              {HEAVY_ITEMS_OPTIONS.filter((o) => !data.heavyItems?.includes(o)).map((item) => (
                 <button
                   key={item}
                   type="button"
@@ -171,59 +158,32 @@ export default function StepTwo({ data, setData }) {
             </div>
           </div>
 
-          {/* Do you need packing services? */}
+          {/* Packing Services — optional */}
           <div className="flex flex-col gap-2">
-            <label
-              className="font-rethink font-semibold leading-[140%]"
-              style={{ color: "#0B1714", fontSize: "16px" }}
-            >
-              Do you need packing services?
+            <label className="font-rethink font-semibold leading-[140%]" style={{ color: "#0B1714", fontSize: "16px" }}>
+              Do you need packing services? <span className="font-normal text-sm" style={{ color: "#aab0be" }}>(Optional)</span>
             </label>
             <div className="flex items-center gap-6">
               <label className="flex items-center gap-2 cursor-pointer">
                 <div
                   className="w-4 h-4 rounded-full border-2 flex items-center justify-center"
-                  style={{
-                    borderColor: data.needPacking ? "#079455" : "#E3E8EF",
-                    backgroundColor: data.needPacking
-                      ? "#079455"
-                      : "transparent",
-                  }}
+                  style={{ borderColor: data.needPacking ? "#079455" : "#E3E8EF", backgroundColor: data.needPacking ? "#079455" : "transparent" }}
                   onClick={() => handlePacking(true)}
                 >
-                  {data.needPacking && (
-                    <div className="w-1.5 h-1.5 rounded-full bg-white" />
-                  )}
+                  {data.needPacking && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
                 </div>
-                <span
-                  className="font-rethink text-sm"
-                  style={{ color: data.needPacking ? "#079455" : "#656565" }}
-                >
-                  Yes
-                </span>
+                <span className="font-rethink text-sm" style={{ color: data.needPacking ? "#079455" : "#656565" }}>Yes</span>
               </label>
 
               <label className="flex items-center gap-2 cursor-pointer">
                 <div
                   className="w-4 h-4 rounded-full border-2 flex items-center justify-center"
-                  style={{
-                    borderColor: !data.needPacking ? "#08203C" : "#E3E8EF",
-                    backgroundColor: !data.needPacking
-                      ? "#08203C"
-                      : "transparent",
-                  }}
+                  style={{ borderColor: !data.needPacking ? "#08203C" : "#E3E8EF", backgroundColor: !data.needPacking ? "#08203C" : "transparent" }}
                   onClick={() => handlePacking(false)}
                 >
-                  {!data.needPacking && (
-                    <div className="w-1.5 h-1.5 rounded-full bg-white" />
-                  )}
+                  {!data.needPacking && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
                 </div>
-                <span
-                  className="font-rethink text-sm"
-                  style={{ color: !data.needPacking ? "#08203C" : "#656565" }}
-                >
-                  No
-                </span>
+                <span className="font-rethink text-sm" style={{ color: !data.needPacking ? "#08203C" : "#656565" }}>No</span>
               </label>
             </div>
           </div>
@@ -231,31 +191,19 @@ export default function StepTwo({ data, setData }) {
 
         {/* Buttons Row */}
         <div className="flex items-center gap-4 w-full">
-          {/* Back Button */}
           <button
             onClick={handleBack}
             className="font-rethink font-semibold text-sm text-[#0B1714] cursor-pointer hover:bg-[#e0e2e6] transition-colors duration-200 border-none"
-            style={{
-              width: "173px",
-              height: "48px",
-              padding: "10px 55px",
-              borderRadius: "24px",
-              background: "#ECEEF0",
-            }}
+            style={{ width: "173px", height: "48px", borderRadius: "24px", background: "#ECEEF0" }}
           >
             Back
           </button>
 
-          {/* Next Step Button */}
-          <Link
-            to="/services/moving/book/step-3"
-            className="flex items-center justify-between cursor-pointer hover:opacity-90 transition-opacity duration-200 no-underline"
-            style={{
-              padding: "8px 8px 8px 24px",
-              borderRadius: "24px",
-              background: "#08203C",
-              flex: "1 0 0",
-            }}
+          <button
+            type="button"
+            onClick={handleNext}
+            className="flex items-center justify-between cursor-pointer hover:opacity-90 transition-opacity duration-200 border-none"
+            style={{ padding: "8px 8px 8px 24px", borderRadius: "24px", background: "#08203C", flex: "1 0 0" }}
           >
             <span className="w-full text-center font-rethink text-white font-semibold text-base leading-[140%]">
               Next Step
@@ -266,7 +214,7 @@ export default function StepTwo({ data, setData }) {
             >
               →
             </span>
-          </Link>
+          </button>
         </div>
       </div>
     </div>

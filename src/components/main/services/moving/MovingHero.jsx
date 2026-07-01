@@ -1,4 +1,14 @@
+import { useGetServicePageQuery } from "../../../../redux/features/cms/cmsApi";
+
 export default function MovingHero() {
+  const { data } = useGetServicePageQuery("moving");
+
+  const heroSection = data?.data?.moving?.hero?.[0];
+  const title = heroSection?.title || "Moving & Packing Services";
+  const subtitle =
+    heroSection?.description ||
+    "Easygoing moving, whether it's around the block or across the country, with expert packing to help you out.";
+
   return (
     <section className="relative px-2 sm:px-6 lg:px-16 py-4 bg-[#08203C] mx-2 mb-2 rounded-b-3xl overflow-hidden">
 
@@ -22,14 +32,13 @@ export default function MovingHero() {
       <div className="relative z-10 mxw flex flex-col justify-center items-center gap-16 sm:gap-20 px-6 sm:px-10 md:px-16 lg:px-20 pt-10 pb-16 sm:pb-20 rounded-3xl">
         <div className="flex flex-col items-center gap-6 text-center w-full max-w-225">
           <h1 className="font-rethink text-white text-center font-bold leading-[120%] tracking-[-1.872px] m-0 text-4xl sm:text-5xl lg:text-[48px]">
-            Moving &amp; Packing Services
+            {title}
           </h1>
           <p
             className="font-rethink text-white text-center font-normal leading-[140%] m-0 text-base sm:text-lg"
             style={{ opacity: 0.8, fontSize: "18px" }}
           >
-            Easygoing moving, whether it's around the block or across the
-            country, with expert packing to help you out.
+            {subtitle}
           </p>
         </div>
       </div>

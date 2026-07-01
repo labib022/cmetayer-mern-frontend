@@ -48,6 +48,19 @@ export default function GetAQuote() {
 
   return (
     <section className="w-full max-w-360 mx-auto px-4 sm:px-8 md:px-12 lg:px-16 py-12 sm:py-16 md:py-20 bg-white">
+
+      {/* ✅ Fix browser autofill blue background */}
+      <style>{`
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover,
+        input:-webkit-autofill:focus,
+        textarea:-webkit-autofill {
+          -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
+          -webkit-text-fill-color: #999 !important;
+          transition: background-color 5000s ease-in-out 0s;
+        }
+      `}</style>
+
       <div className="flex flex-col lg:flex-row items-start gap-10 lg:gap-16 xl:gap-24">
 
         {/* LEFT */}
@@ -89,12 +102,12 @@ export default function GetAQuote() {
                 <div className="flex flex-col sm:flex-row gap-4">
                   <div className="flex flex-col gap-2 w-full sm:flex-1 p-4 rounded-lg" style={{ background: "rgba(17,17,17,0.02)" }}>
                     <label style={{ fontFamily: '"Rethink Sans", sans-serif' }} className="text-[#444] text-base font-semibold leading-[140%]">Name</label>
-                    <input type="text" name="name" value={form.name} onChange={handleChange} placeholder="Full Name"
+                    <input type="text" name="name" value={form.name} onChange={handleChange} placeholder="Full Name" autoComplete="off"
                       className="bg-transparent border-none outline-none text-sm text-[#999] leading-[140%] h-6 w-full" style={{ fontFamily: '"Rethink Sans", sans-serif' }} />
                   </div>
                   <div className="flex flex-col gap-2 w-full sm:flex-1 p-4 rounded-lg" style={{ background: "rgba(17,17,17,0.02)" }}>
                     <label style={{ fontFamily: '"Rethink Sans", sans-serif' }} className="text-[#444] text-base font-semibold leading-[140%]">Email</label>
-                    <input type="email" name="email" value={form.email} onChange={handleChange} placeholder="Email Address"
+                    <input type="email" name="email" value={form.email} onChange={handleChange} placeholder="Email Address" autoComplete="off"
                       className="bg-transparent border-none outline-none text-sm text-[#999] leading-[140%] h-6 w-full" style={{ fontFamily: '"Rethink Sans", sans-serif' }} />
                   </div>
                 </div>
@@ -102,7 +115,7 @@ export default function GetAQuote() {
                 <div className="flex flex-col sm:flex-row gap-4">
                   <div className="flex flex-col gap-2 w-full sm:flex-1 p-4 rounded-lg" style={{ background: "rgba(17,17,17,0.02)" }}>
                     <label style={{ fontFamily: '"Rethink Sans", sans-serif' }} className="text-[#444] text-base font-semibold leading-[140%]">Phone</label>
-                    <input type="tel" name="phone" value={form.phone} onChange={handleChange} placeholder="Phone Number"
+                    <input type="tel" name="phone" value={form.phone} onChange={handleChange} placeholder="Phone Number" autoComplete="off"
                       className="bg-transparent border-none outline-none text-sm text-[#999] leading-[140%] h-6 w-full" style={{ fontFamily: '"Rethink Sans", sans-serif' }} />
                   </div>
                   <div className="flex flex-col gap-2 w-full sm:flex-1 p-4 rounded-lg" style={{ background: "rgba(17,17,17,0.02)" }}>
@@ -118,7 +131,7 @@ export default function GetAQuote() {
                 <div className="flex flex-col gap-2 w-full p-4 rounded-lg" style={{ background: "rgba(17,17,17,0.02)" }}>
                   <label style={{ fontFamily: '"Rethink Sans", sans-serif' }} className="text-[#444] text-base font-semibold leading-[140%]">Message</label>
                   <textarea name="message" value={form.message} onChange={handleChange}
-                    placeholder="Tell Us about Your Specific Requests" rows={4}
+                    placeholder="Tell Us about Your Specific Requests" rows={4} autoComplete="off"
                     className="bg-transparent border-none outline-none text-sm text-[#999] leading-[140%] resize-none w-full" style={{ fontFamily: '"Rethink Sans", sans-serif' }} />
                 </div>
               </div>

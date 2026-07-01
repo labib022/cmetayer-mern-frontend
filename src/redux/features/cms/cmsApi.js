@@ -13,15 +13,20 @@ export const cmsApi = createApi({
     },
   }),
   endpoints: (builder) => ({
-
     // ✅ Home page
     getHomePage: builder.query({
       query: () => `/cms/?page_name=home`,
     }),
 
-    // ✅ About Us page — page_name=about_us
+    // ✅ About Us page
     getAboutUsPage: builder.query({
       query: () => `/cms/?page_name=about_us`,
+    }),
+
+    // ✅ Service pages — moving, cleaning, laundry, repair
+    // Usage: useGetServicePageQuery("moving")
+    getServicePage: builder.query({
+      query: (pageName) => `/cms/?page_name=${pageName}`,
     }),
 
     // ✅ FAQs (standalone)
@@ -53,8 +58,12 @@ export const cmsApi = createApi({
         fd.append("name", data.name);
         fd.append("email", data.email);
         fd.append("phone", data.phone || "");
-        fd.append("service", data.service || "");
+        fd.append("service", data.service || "home_cleaning");
         fd.append("message", data.message);
+        fd.append(
+          "moving_services",
+          JSON.stringify(data.moving_services || []),
+        );
         return {
           url: "/cms/?page_name=home&section_name=quote_submission",
           method: "POST",
@@ -63,14 +72,33 @@ export const cmsApi = createApi({
       },
     }),
 
+    submitRepairQuote: builder.mutation({
+      query: (data) => {
+        const fd = new FormData();
+        fd.append("name", data.name);
+        fd.append("email", data.email);
+        fd.append("phone", data.phone);
+        fd.append("service", "handyman_&_repair");
+        fd.append("service_category", data.serviceCategory);
+        fd.append("message", data.message);
+        if (data.image) fd.append("image", data.image);
+        return {
+          url: "/cms/?page_name=home&section_name=quote_submission",
+          method: "POST",
+          body: fd,
+        };
+      },
+    }),
   }),
 });
 
 export const {
   useGetHomePageQuery,
   useGetAboutUsPageQuery,
+  useGetServicePageQuery,
   useGetFaqsQuery,
   useGetAboutSystemQuery,
   useContactUsMutation,
   useSubmitQuoteMutation,
+  useSubmitRepairQuoteMutation,
 } = cmsApi;

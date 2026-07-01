@@ -1,7 +1,7 @@
 import { useState } from "react";
 import logo from "/navImg.svg";
 import { Link } from "react-router-dom";
-import { useGetAboutSystemQuery } from "../redux/features/cms/cmsApi";
+import { useGetAboutSystemQuery, useContactUsMutation } from "../redux/features/cms/cmsApi";
 
 const QUICK_LINKS = [
   { label: "About", to: "/about" },
@@ -14,8 +14,12 @@ const LEGAL_LINKS = [
 ];
 
 export default function Footer() {
-  const [email, setEmail] = useState("");
+  const [email, setEmail]       = useState("");
+  const [emailSent, setEmailSent] = useState(false);
+  const [emailError, setEmailError] = useState("");
   const { data } = useGetAboutSystemQuery();
+  // eslint-disable-next-line no-unused-vars
+  const [contactUs, { isLoading: emailLoading }] = useContactUsMutation();
 
   const system  = data?.data?.about_system;
   const socials = data?.data?.social_media || [];
@@ -58,17 +62,33 @@ export default function Footer() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter Your Email"
+                  autoComplete="off"
                   className="bg-transparent border-none outline-none text-white text-sm placeholder-white/50 flex-1"
-                  style={{ fontFamily: '"Rethink Sans", sans-serif' }}
+                  style={{
+                    fontFamily: '"Rethink Sans", sans-serif',
+                    WebkitBoxShadow: "0 0 0px 1000px transparent inset",
+                    WebkitTextFillColor: "white",
+                    caretColor: "white",
+                  }}
                 />
                 <button
-                  onClick={() => { if (email) { setEmail(""); } }}
+                  onClick={async () => {
+                    if (!email) return;
+                    if (!/\S+@\S+\.\S+/.test(email)) { setEmailError("Valid email required."); return; }
+                    try {
+                      await contactUs({ name: "Newsletter", email, purpose: "general_inquiry", message: "Newsletter subscription request." }).unwrap();
+                      setEmailSent(true); setEmail(""); setEmailError("");
+                      setTimeout(() => setEmailSent(false), 4000);
+                    } catch { setEmailError("Failed. Try again."); }
+                  }}
                   className="flex items-center justify-center w-11 h-11 rounded-3xl bg-white shrink-0 hover:scale-105 transition-all duration-300 border-none cursor-pointer">
                   <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
                     <path d="M3 9H15M15 9L9 3M15 9L9 15" stroke="#08203C" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </button>
               </div>
+              {emailSent  && <p className="text-green-400 text-xs mt-1" style={{ fontFamily: '"Rethink Sans", sans-serif' }}>✅ Subscribed successfully!</p>}
+              {emailError && <p className="text-red-400 text-xs mt-1" style={{ fontFamily: '"Rethink Sans", sans-serif' }}>{emailError}</p>}
             </div>
 
             {/* RIGHT — Links */}

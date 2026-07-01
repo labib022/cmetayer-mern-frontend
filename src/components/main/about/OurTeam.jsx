@@ -18,7 +18,7 @@ const TeamCard = ({ member }) => {
   return (
     <div
       className="shrink-0 flex flex-col items-center gap-4 cursor-pointer transition-all duration-300"
-      style={{ width: "280px", borderRadius: "24px", padding: "16px", backgroundColor: hovered ? "#08203C" : "transparent" }}
+      style={{ width: "280px", borderRadius: "24px", padding: "16px", backgroundColor: hovered ?"#08203C" : "#FAFAFA"}}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
