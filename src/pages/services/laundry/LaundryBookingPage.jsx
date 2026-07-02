@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import LaundryBookingStep1 from "../../../components/main/services/laundry/laundrybooking/LaundryBookingStep1";
+import LaundryContactInfo from "../../../components/main/services/laundry/laundrybooking/LaundryContactInfo";
 import LaundrySuccess from "../../../components/main/services/laundry/laundrybooking/LaundrySuccess";
 
 
@@ -24,7 +25,8 @@ export default function LaundryBookingPage() {
           <LaundryBookingStep1 data={bookingData} setData={setBookingData} />
         }
       />
-
+       
+      <Route path="laundry-contact-info" element={<LaundryContactInfo data={bookingData} setData={setBookingData} />} /> 
       <Route path="success" element={<LaundrySuccess data={bookingData} />} />
     </Routes>
   );

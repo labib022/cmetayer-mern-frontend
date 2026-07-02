@@ -236,7 +236,7 @@ export default function LaundryBookingStep1({ data, setData }) {
           </Link>
 
           <Link
-            to="/services/laundry/laundry-booking/success"
+            to="/services/laundry/laundry-booking/laundry-contact-info"
             className="flex items-center justify-between cursor-pointer hover:opacity-90 transition-opacity duration-200 no-underline"
             style={{
               padding: "8px 8px 8px 24px",

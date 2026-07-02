@@ -309,7 +309,7 @@ export default function CleaningBookingStep1({ data, setData }) {
           </Link>
 
           <Link
-            to="/services/cleaning/book/success"
+            to="/services/cleaning/book/cleaning-contact-info"
             className="flex items-center justify-between cursor-pointer hover:opacity-90 transition-opacity duration-200 no-underline"
             style={{
               padding: "8px 8px 8px 24px",
