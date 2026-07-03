@@ -126,7 +126,7 @@ export default function StepTwo({ data, setData }) {
             <label className="font-rethink font-semibold leading-[140%]" style={{ color: "#0B1714", fontSize: "16px" }}>
               Any extra heavy items? <span className="font-normal text-sm" style={{ color: "#aab0be" }}>(Optional)</span>
             </label>
-            <div className="flex flex-wrap gap-2 min-h-10">
+            <div className="flex flex-wrap gap-2">
               {data.heavyItems?.map((item) => (
                 <span
                   key={item}

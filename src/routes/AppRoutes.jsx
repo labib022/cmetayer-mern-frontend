@@ -15,6 +15,7 @@ import RepairBookingPage from "../pages/services/repair/RepairBookingPage";
 import PrivacyPolicyPage from "../shared/PrivacyPolicy";
 import TermsAndConditionsPage from "../shared/TermsandCondition";
 import Profile from "../shared/Profile"; 
+import Password from "../shared/Password";
 
 export default function AppRoutes() {
   return (
@@ -44,6 +45,7 @@ export default function AppRoutes() {
 
           {/* ✅ Profile Route — Navbar + Footer সহ */}
           <Route path="/profile" element={<Profile />} />
+          <Route path="/change-password" element={<Password />} />
         </Route>
 
         {/* ── Moving Booking — Navbar/Footer ছাড়া ── */}
