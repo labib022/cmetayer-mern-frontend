@@ -145,7 +145,7 @@ export default function GetAQuote() {
                   {isLoading ? "Sending..." : "Get a Free Quote"}
                 </span>
                 <span className="flex items-center justify-center w-9 h-9 rounded-full bg-white shrink-0">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" >
                     <path d="M3 8H13M13 8L8 3M13 8L8 13" stroke="#08203C" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </span>

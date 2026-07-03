@@ -52,7 +52,7 @@ export default function OurServices() {
     <section className="w-full bg-white py-16 px-4 sm:px-6 lg:px-16">
       <div className="max-w-300 mx-auto">
 
-        <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-6 mb-10">
+        <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-6 mb-2">
           <div className="flex flex-col gap-3">
             <div className="flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full inline-block" style={{ backgroundColor: "#08203C" }} />

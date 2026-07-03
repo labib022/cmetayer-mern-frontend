@@ -27,7 +27,7 @@ export default function CleaningContactInfo({ data, setData }) {
       return;
     }
 
-    navigate("/services/laundry/book/success");
+    navigate("/services/cleaning/book/success");
   };
 
   return (
