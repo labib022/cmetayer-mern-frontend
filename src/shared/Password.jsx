@@ -24,6 +24,7 @@ export default function ChangePassword() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("Form submitted:", form);
     if (form.new_password !== form.confirm_password) {
       toast.error("Passwords do not match!");
       return;
