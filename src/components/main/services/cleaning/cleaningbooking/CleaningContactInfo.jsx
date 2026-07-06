@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSubmitCleaningBookingMutation } from "../../../../../redux/features/cms/cmsApi";
 
 const inputClass =
   "w-full font-rethink text-sm text-[#656565] bg-white rounded-xl border outline-none transition-all duration-200 px-4 py-3 placeholder:text-[#aab0be]";
@@ -7,6 +8,7 @@ const inputClass =
 export default function CleaningContactInfo({ data, setData }) {
   const navigate = useNavigate();
   const [errors, setErrors] = useState({});
+  const [submitCleaningBooking, { isLoading }] = useSubmitCleaningBookingMutation();
 
   const handleChange = (field) => (e) => {
     setData({ ...data, [field]: e.target.value });
@@ -16,7 +18,7 @@ export default function CleaningContactInfo({ data, setData }) {
   const handleClose = () => navigate("/services/cleaning");
   const handleBack = () => navigate("/services/cleaning/book/step-1");
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const newErrors = {};
     if (!data.fullName) newErrors.fullName = "Full name is required";
     if (!data.email) newErrors.email = "Email is required";
@@ -27,7 +29,23 @@ export default function CleaningContactInfo({ data, setData }) {
       return;
     }
 
-    navigate("/services/cleaning/book/success");
+    try {
+      await submitCleaningBooking({
+        name: data.fullName,
+        email: data.email,
+        phone: data.phone,
+        bedrooms: data.bedrooms || 1,
+        bathrooms: data.bathrooms || 1,
+        services_category: data.serviceCategory || "standard_clean",
+        frequency: data.frequency || "one_time",
+        cleaning_date: data.serviceDate || "",
+      }).unwrap();
+
+      navigate("/services/cleaning/book/success");
+    } catch (err) {
+      console.error("Booking failed:", err);
+      alert(err?.data?.message || "Something went wrong. Please try again.");
+    }
   };
 
   return (
@@ -36,7 +54,6 @@ export default function CleaningContactInfo({ data, setData }) {
         className="w-full max-w-135 flex flex-col gap-9 relative"
         style={{ padding: "83px 32px 32px 32px", borderRadius: "32px", background: "#FAFAFA" }}
       >
-        {/* Close Button */}
         <button
           onClick={handleClose}
           className="absolute top-6 right-6 w-9 h-9 flex items-center justify-center rounded-full bg-white border border-[#E3E8EF] text-[#0B1714] cursor-pointer hover:bg-gray-100 transition-colors duration-200"
@@ -45,19 +62,12 @@ export default function CleaningContactInfo({ data, setData }) {
           ✕
         </button>
 
-        {/* Header */}
         <div className="flex flex-col gap-4">
           <div className="flex items-start justify-between gap-4">
-            <h1
-              className="font-rethink font-bold leading-[130%] tracking-[-1.248px] m-0"
-              style={{ color: "#0F172B", fontSize: "32px" }}
-            >
+            <h1 className="font-rethink font-bold leading-[130%] tracking-[-1.248px] m-0" style={{ color: "#0F172B", fontSize: "32px" }}>
               Book a Cleaning
             </h1>
-            <span
-              className="font-rethink font-normal leading-[140%] shrink-0 pt-1"
-              style={{ color: "#656565", fontSize: "14px" }}
-            >
+            <span className="font-rethink font-normal leading-[140%] shrink-0 pt-1" style={{ color: "#656565", fontSize: "14px" }}>
               Step 2 of 2
             </span>
           </div>
@@ -66,74 +76,36 @@ export default function CleaningContactInfo({ data, setData }) {
           </div>
         </div>
 
-        {/* Form Card */}
-        <div
-          className="flex flex-col gap-5 w-full"
-          style={{ padding: "20px", borderRadius: "16px", background: "#fff", border: "1px solid #E3E8EF" }}
-        >
-          <h2
-            className="font-rethink font-bold leading-[140%] tracking-[-0.936px] m-0"
-            style={{ color: "#0F172B", fontSize: "24px" }}
-          >
+        <div className="flex flex-col gap-5 w-full" style={{ padding: "20px", borderRadius: "16px", background: "#fff", border: "1px solid #E3E8EF" }}>
+          <h2 className="font-rethink font-bold leading-[140%] tracking-[-0.936px] m-0" style={{ color: "#0F172B", fontSize: "24px" }}>
             Contact Info
           </h2>
 
-          {/* Full Name */}
           <div className="flex flex-col gap-1">
             <label className="font-rethink font-semibold leading-[140%]" style={{ color: "#0B1714", fontSize: "16px" }}>
               Full Name <span style={{ color: "#EF4444" }}>*</span>
             </label>
-            <input
-              type="text"
-              placeholder="Enter your full name"
-              value={data.fullName || ""}
-              onChange={handleChange("fullName")}
-              className={inputClass}
-              style={{ borderColor: errors.fullName ? "#EF4444" : "#E3E8EF" }}
-            />
-            {errors.fullName && (
-              <p className="font-rethink text-xs m-0" style={{ color: "#EF4444" }}>{errors.fullName}</p>
-            )}
+            <input type="text" placeholder="Enter your full name" value={data.fullName || ""} onChange={handleChange("fullName")} className={inputClass} style={{ borderColor: errors.fullName ? "#EF4444" : "#E3E8EF" }} />
+            {errors.fullName && <p className="font-rethink text-xs m-0" style={{ color: "#EF4444" }}>{errors.fullName}</p>}
           </div>
 
-          {/* Email */}
           <div className="flex flex-col gap-1">
             <label className="font-rethink font-semibold leading-[140%]" style={{ color: "#0B1714", fontSize: "16px" }}>
               Email Address <span style={{ color: "#EF4444" }}>*</span>
             </label>
-            <input
-              type="email"
-              placeholder="Enter your email address"
-              value={data.email || ""}
-              onChange={handleChange("email")}
-              className={inputClass}
-              style={{ borderColor: errors.email ? "#EF4444" : "#E3E8EF" }}
-            />
-            {errors.email && (
-              <p className="font-rethink text-xs m-0" style={{ color: "#EF4444" }}>{errors.email}</p>
-            )}
+            <input type="email" placeholder="Enter your email address" value={data.email || ""} onChange={handleChange("email")} className={inputClass} style={{ borderColor: errors.email ? "#EF4444" : "#E3E8EF" }} />
+            {errors.email && <p className="font-rethink text-xs m-0" style={{ color: "#EF4444" }}>{errors.email}</p>}
           </div>
 
-          {/* Phone */}
           <div className="flex flex-col gap-1">
             <label className="font-rethink font-semibold leading-[140%]" style={{ color: "#0B1714", fontSize: "16px" }}>
               Phone Number <span style={{ color: "#EF4444" }}>*</span>
             </label>
-            <input
-              type="tel"
-              placeholder="(555) 123-4567"
-              value={data.phone || ""}
-              onChange={handleChange("phone")}
-              className={inputClass}
-              style={{ borderColor: errors.phone ? "#EF4444" : "#E3E8EF" }}
-            />
-            {errors.phone && (
-              <p className="font-rethink text-xs m-0" style={{ color: "#EF4444" }}>{errors.phone}</p>
-            )}
+            <input type="tel" placeholder="(555) 123-4567" value={data.phone || ""} onChange={handleChange("phone")} className={inputClass} style={{ borderColor: errors.phone ? "#EF4444" : "#E3E8EF" }} />
+            {errors.phone && <p className="font-rethink text-xs m-0" style={{ color: "#EF4444" }}>{errors.phone}</p>}
           </div>
         </div>
 
-        {/* Buttons Row */}
         <div className="flex items-center gap-4 w-full">
           <button
             onClick={handleBack}
@@ -145,18 +117,14 @@ export default function CleaningContactInfo({ data, setData }) {
 
           <button
             onClick={handleSubmit}
-            className="flex items-center justify-between cursor-pointer hover:opacity-90 transition-opacity duration-200 border-none"
+            disabled={isLoading}
+            className="flex items-center justify-between cursor-pointer hover:opacity-90 transition-opacity duration-200 border-none disabled:opacity-60 disabled:cursor-not-allowed"
             style={{ padding: "8px 8px 8px 24px", borderRadius: "24px", background: "#08203C", flex: "1 0 0" }}
           >
             <span className="w-full text-center font-rethink text-white font-semibold text-base leading-[140%]">
-              Submit
+              {isLoading ? "Submitting..." : "Submit"}
             </span>
-            <span
-              className="flex items-center justify-center w-10 h-10 rounded-full text-white text-base shrink-0"
-              style={{ backgroundColor: "rgba(255,255,255,0.15)" }}
-            >
-              →
-            </span>
+            <span className="flex items-center justify-center w-10 h-10 rounded-full text-white text-base shrink-0" style={{ backgroundColor: "rgba(255,255,255,0.15)" }}>→</span>
           </button>
         </div>
       </div>

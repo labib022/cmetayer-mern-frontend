@@ -1,45 +1,56 @@
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { MdCalendarToday, MdShoppingCart } from "react-icons/md";
+import { useGetCleaningPriceMutation } from "../../../../../redux/features/cms/cmsApi";
 
 const SERVICE_CATEGORIES = [
-  "Standard Clean",
-  "Deep Clean",
-  "Move-In / Move-Out Clean",
-  "Post-Construction Clean",
-  "Airbnb Turnover Clean",
+  { label: "Standard Clean", value: "standard_clean" },
+  { label: "Deep Clean", value: "deep_clean" },
+  { label: "Move-In / Move-Out Clean", value: "move_in_out" },
+  { label: "Post-Construction Clean", value: "post_construction" },
+  { label: "Airbnb Turnover Clean", value: "aribnb_turnover" },
 ];
 
 const FREQUENCY_OPTIONS = [
-  { label: "One-time (0%)", discount: 0 },
-  { label: "Weekly (-15%)", discount: 0.15 },
-  { label: "Bi-weekly (-10%)", discount: 0.1 },
-  { label: "Monthly (-5%)", discount: 0.05 },
+  { label: "One-time", value: "one_time" },
+  { label: "Weekly", value: "weekly" },
+  { label: "Bi-weekly", value: "bi_weekly" },
+  { label: "Monthly", value: "monthly" },
 ];
-
-const BASE_PRICE = 45; // per bed+bath combo
-const VAT_RATE = 0.08; // 8%
 
 export default function CleaningBookingStep1({ data, setData }) {
   const navigate = useNavigate();
+  const [getCleaningPrice, { isLoading: isPriceLoading }] = useGetCleaningPriceMutation();
+  const [priceData, setPriceData] = useState(null);
 
   const handleClose = () => navigate("/services/cleaning");
 
   const inc = (field) => setData({ ...data, [field]: (data[field] || 1) + 1 });
-  const dec = (field) =>
-    setData({ ...data, [field]: Math.max(1, (data[field] || 1) - 1) });
+  const dec = (field) => setData({ ...data, [field]: Math.max(1, (data[field] || 1) - 1) });
 
   const bedrooms = data.bedrooms || 1;
   const bathrooms = data.bathrooms || 1;
-  const category = data.serviceCategory || SERVICE_CATEGORIES[0];
-  const frequency = data.frequency || FREQUENCY_OPTIONS[0].label;
-  const freqObj =
-    FREQUENCY_OPTIONS.find((f) => f.label === frequency) ||
-    FREQUENCY_OPTIONS[0];
+  const category = data.serviceCategory || SERVICE_CATEGORIES[0].value;
+  const frequency = data.frequency || FREQUENCY_OPTIONS[0].value;
 
-  const baseTotal = BASE_PRICE * bedrooms * bathrooms;
-  const discounted = baseTotal * (1 - freqObj.discount);
-  const tax = discounted * VAT_RATE;
-  const total = discounted + tax;
+  // API থেকে price fetch করো
+  useEffect(() => {
+    const fetchPrice = async () => {
+      try {
+        const result = await getCleaningPrice({
+          bedrooms,
+          bathrooms,
+          services_category: category,
+          frequency,
+        }).unwrap();
+        setPriceData(result);
+      } catch (err) {
+        console.error("Price fetch failed:", err);
+      }
+    };
+    fetchPrice();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [bedrooms, bathrooms, category, frequency]);
 
   const inputClass =
     "w-full font-rethink text-sm text-[#656565] bg-white rounded-xl border border-[#E3E8EF] outline-none transition-all duration-200 px-4 py-3 focus:border-[#08203C]";
@@ -48,11 +59,7 @@ export default function CleaningBookingStep1({ data, setData }) {
     <div className="min-h-screen w-full flex items-center justify-center bg-[#F0F0F0] px-4 py-10">
       <div
         className="w-full max-w-190 flex flex-col gap-8 relative"
-        style={{
-          padding: "80px 32px 32px 32px",
-          borderRadius: "32px",
-          background: "#FAFAFA",
-        }}
+        style={{ padding: "80px 32px 32px 32px", borderRadius: "32px", background: "#FAFAFA" }}
       >
         {/* Close */}
         <button
@@ -72,17 +79,12 @@ export default function CleaningBookingStep1({ data, setData }) {
 
         {/* Main Grid */}
         <div className="flex flex-col lg:flex-row gap-6 w-full">
+
           {/* LEFT — Form */}
           <div
             className="flex flex-col gap-5 flex-1"
-            style={{
-              padding: "20px",
-              borderRadius: "16px",
-              background: "#fff",
-              border: "1px solid #E3E8EF",
-            }}
+            style={{ padding: "20px", borderRadius: "16px", background: "#fff", border: "1px solid #E3E8EF" }}
           >
-            {/* Home Size */}
             <h2
               className="font-rethink font-medium leading-[140%] tracking-[-0.936px] m-0"
               style={{ color: "#0F172B", fontSize: "24px" }}
@@ -92,123 +94,69 @@ export default function CleaningBookingStep1({ data, setData }) {
 
             {/* Bedrooms */}
             <div className="flex items-center justify-between py-3 border-b border-[#E3E8EF]">
-              <span className="font-rethink font-medium text-[#0B1714] text-base">
-                Bedrooms
-              </span>
+              <span className="font-rethink font-medium text-[#0B1714] text-base">Bedrooms</span>
               <div className="flex items-center gap-4">
-                <button
-                  onClick={() => dec("bedrooms")}
-                  className="w-8 h-8 rounded-full border border-[#E3E8EF] bg-white flex items-center justify-center cursor-pointer hover:border-[#08203C] transition-colors duration-200 text-[#0B1714] font-bold"
-                >
-                  −
-                </button>
-                <span className="font-rethink font-medium text-[#0B1714] w-4 text-center">
-                  {bedrooms}
-                </span>
-                <button
-                  onClick={() => inc("bedrooms")}
-                  className="w-8 h-8 rounded-full border border-[#E3E8EF] bg-white flex items-center justify-center cursor-pointer hover:border-[#08203C] transition-colors duration-200 text-[#0B1714] font-bold"
-                >
-                  +
-                </button>
+                <button onClick={() => dec("bedrooms")} className="w-8 h-8 rounded-full border border-[#E3E8EF] bg-white flex items-center justify-center cursor-pointer hover:border-[#08203C] transition-colors duration-200 text-[#0B1714] font-bold">−</button>
+                <span className="font-rethink font-medium text-[#0B1714] w-4 text-center">{bedrooms}</span>
+                <button onClick={() => inc("bedrooms")} className="w-8 h-8 rounded-full border border-[#E3E8EF] bg-white flex items-center justify-center cursor-pointer hover:border-[#08203C] transition-colors duration-200 text-[#0B1714] font-bold">+</button>
               </div>
             </div>
 
             {/* Bathrooms */}
             <div className="flex items-center justify-between py-3 border-b border-[#E3E8EF]">
-              <span className="font-rethink font-medium text-[#0B1714] text-base">
-                Bathrooms
-              </span>
+              <span className="font-rethink font-medium text-[#0B1714] text-base">Bathrooms</span>
               <div className="flex items-center gap-4">
-                <button
-                  onClick={() => dec("bathrooms")}
-                  className="w-8 h-8 rounded-full border border-[#E3E8EF] bg-white flex items-center justify-center cursor-pointer hover:border-[#08203C] transition-colors duration-200 text-[#0B1714] font-bold"
-                >
-                  −
-                </button>
-                <span className="font-rethink font-medium text-[#0B1714] w-4 text-center">
-                  {bathrooms}
-                </span>
-                <button
-                  onClick={() => inc("bathrooms")}
-                  className="w-8 h-8 rounded-full border border-[#E3E8EF] bg-white flex items-center justify-center cursor-pointer hover:border-[#08203C] transition-colors duration-200 text-[#0B1714] font-bold"
-                >
-                  +
-                </button>
+                <button onClick={() => dec("bathrooms")} className="w-8 h-8 rounded-full border border-[#E3E8EF] bg-white flex items-center justify-center cursor-pointer hover:border-[#08203C] transition-colors duration-200 text-[#0B1714] font-bold">−</button>
+                <span className="font-rethink font-medium text-[#0B1714] w-4 text-center">{bathrooms}</span>
+                <button onClick={() => inc("bathrooms")} className="w-8 h-8 rounded-full border border-[#E3E8EF] bg-white flex items-center justify-center cursor-pointer hover:border-[#08203C] transition-colors duration-200 text-[#0B1714] font-bold">+</button>
               </div>
             </div>
 
             {/* Service Category */}
             <div className="flex flex-col gap-2">
-              <label className="font-rethink font-semibold text-[#0B1714] text-base leading-[140%]">
-                Service Category
-              </label>
+              <label className="font-rethink font-semibold text-[#0B1714] text-base leading-[140%]">Service Category</label>
               <div className="relative">
                 <select
                   value={category}
-                  onChange={(e) =>
-                    setData({ ...data, serviceCategory: e.target.value })
-                  }
+                  onChange={(e) => setData({ ...data, serviceCategory: e.target.value })}
                   className={`${inputClass} appearance-none cursor-pointer`}
                 >
                   {SERVICE_CATEGORIES.map((s) => (
-                    <option key={s} value={s}>
-                      {s}
-                    </option>
+                    <option key={s.value} value={s.value}>{s.label}</option>
                   ))}
                 </select>
-                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[#aab0be] pointer-events-none">
-                  ▾
-                </span>
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[#aab0be] pointer-events-none">▾</span>
               </div>
             </div>
 
             {/* Service Date & Time */}
             <div className="flex flex-col gap-2">
-              <label className="font-rethink font-semibold text-[#0B1714] text-base leading-[140%]">
-                Service Date &amp; Time
-              </label>
+              <label className="font-rethink font-semibold text-[#0B1714] text-base leading-[140%]">Service Date &amp; Time</label>
               <div className="relative">
                 <input
                   type="datetime-local"
                   value={data.serviceDate || ""}
-                  onChange={(e) =>
-                    setData({ ...data, serviceDate: e.target.value })
-                  }
+                  onChange={(e) => setData({ ...data, serviceDate: e.target.value })}
                   className={`${inputClass} pr-10`}
-                  onFocus={(e) => (e.target.style.borderColor = "#08203C")}
-                  onBlur={(e) => (e.target.style.borderColor = "#E3E8EF")}
                 />
-                <MdCalendarToday
-                  size={16}
-                  color="#aab0be"
-                  className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none"
-                />
+                <MdCalendarToday size={16} color="#aab0be" className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
               </div>
             </div>
 
             {/* Frequency */}
             <div className="flex flex-col gap-2">
-              <label className="font-rethink font-semibold text-[#0B1714] text-base leading-[140%]">
-                Frequency
-              </label>
+              <label className="font-rethink font-semibold text-[#0B1714] text-base leading-[140%]">Frequency</label>
               <div className="relative">
                 <select
                   value={frequency}
-                  onChange={(e) =>
-                    setData({ ...data, frequency: e.target.value })
-                  }
+                  onChange={(e) => setData({ ...data, frequency: e.target.value })}
                   className={`${inputClass} appearance-none cursor-pointer`}
                 >
                   {FREQUENCY_OPTIONS.map((f) => (
-                    <option key={f.label} value={f.label}>
-                      {f.label}
-                    </option>
+                    <option key={f.value} value={f.value}>{f.label}</option>
                   ))}
                 </select>
-                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[#aab0be] pointer-events-none">
-                  ▾
-                </span>
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[#aab0be] pointer-events-none">▾</span>
               </div>
             </div>
           </div>
@@ -216,78 +164,48 @@ export default function CleaningBookingStep1({ data, setData }) {
           {/* RIGHT — Order Summary */}
           <div
             className="flex flex-col gap-4 w-full lg:w-55 shrink-0"
-            style={{
-              padding: "20px",
-              borderRadius: "16px",
-              background: "#fff",
-              border: "1px solid #E3E8EF",
-            }}
+            style={{ padding: "20px", borderRadius: "16px", background: "#fff", border: "1px solid #E3E8EF" }}
           >
-            {/* Header */}
             <div className="flex items-center gap-2">
               <MdShoppingCart size={18} color="#0B1714" />
-              <h3 className="font-rethink font-semibold text-[#0B1714] text-base m-0">
-                Order Summary
-              </h3>
+              <h3 className="font-rethink font-semibold text-[#0B1714] text-base m-0">Order Summary</h3>
             </div>
 
-            <div className="flex flex-col gap-3">
-              {/* Bed + Bath */}
-              <div className="flex items-center justify-between">
-                <span className="font-rethink text-sm text-[#656565]">
-                  {bedrooms} Bed, {bathrooms} Bath
-                </span>
-                <span className="font-rethink text-sm font-medium text-[#0B1714]">
-                  ${BASE_PRICE * bedrooms * bathrooms}
-                </span>
+            {isPriceLoading ? (
+              <div className="flex flex-col gap-3 animate-pulse">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="h-4 bg-gray-200 rounded" />
+                ))}
               </div>
-
-              {/* Service */}
-              <div className="flex items-center justify-between">
-                <span className="font-rethink text-sm text-[#656565]">
-                  {category}
-                </span>
-                <span className="font-rethink text-sm font-medium text-[#0B1714]">
-                  x1
-                </span>
-              </div>
-
-              {/* Discount if any */}
-              {freqObj.discount > 0 && (
+            ) : (
+              <div className="flex flex-col gap-3">
                 <div className="flex items-center justify-between">
-                  <span className="font-rethink text-sm text-[#079455]">
-                    Discount
-                  </span>
-                  <span className="font-rethink text-sm font-medium text-[#079455]">
-                    -{(freqObj.discount * 100).toFixed(0)}%
-                  </span>
+                  <span className="font-rethink text-sm text-[#656565]">{bedrooms} Bed, {bathrooms} Bath</span>
+                  <span className="font-rethink text-sm font-medium text-[#0B1714]">£{priceData?.price ?? "-"}</span>
                 </div>
-              )}
-
-              {/* Taxes */}
-              <div className="flex items-center justify-between">
-                <span className="font-rethink text-sm text-[#656565]">
-                  Taxes (8%)
-                </span>
-                <span className="font-rethink text-sm font-medium text-[#0B1714]">
-                  ${tax.toFixed(2)}
-                </span>
+                <div className="flex items-center justify-between">
+                  <span className="font-rethink text-sm text-[#656565]">Service Category</span>
+                  <span className="font-rethink text-sm font-medium text-[#0B1714]">£{priceData?.service_category_price ?? "-"}</span>
+                </div>
+                {priceData?.discount > 0 && (
+                  <div className="flex items-center justify-between">
+                    <span className="font-rethink text-sm text-[#079455]">Discount</span>
+                    <span className="font-rethink text-sm font-medium text-[#079455]">-£{priceData.discount}</span>
+                  </div>
+                )}
+                <div className="flex items-center justify-between">
+                  <span className="font-rethink text-sm text-[#656565]">Tax</span>
+                  <span className="font-rethink text-sm font-medium text-[#0B1714]">£{priceData?.tax ?? "-"}</span>
+                </div>
               </div>
-            </div>
+            )}
 
-            {/* Divider */}
             <div className="w-full h-px bg-[#E3E8EF]" />
 
-            {/* Total */}
             <div className="flex items-center justify-between">
-              <span className="font-rethink font-medium text-[#0B1714] text-base">
-                Total
-              </span>
-              <span
-                className="font-rethink font-bold tracking-[-1.248px]"
-                style={{ color: "#08203C", fontSize: "28px" }}
-              >
-                ${total.toFixed(2)}
+              <span className="font-rethink font-medium text-[#0B1714] text-base">Total</span>
+              <span className="font-rethink font-bold tracking-[-1.248px]" style={{ color: "#08203C", fontSize: "28px" }}>
+                £{priceData?.total?.toFixed(2) ?? "-"}
               </span>
             </div>
           </div>
@@ -298,12 +216,7 @@ export default function CleaningBookingStep1({ data, setData }) {
           <Link
             to="/services/cleaning"
             className="font-rethink font-semibold text-sm text-[#0B1714] cursor-pointer hover:bg-[#e0e2e6] transition-colors duration-200 no-underline flex items-center justify-center"
-            style={{
-              width: "173px",
-              height: "48px",
-              borderRadius: "24px",
-              background: "#ECEEF0",
-            }}
+            style={{ width: "173px", height: "48px", borderRadius: "24px", background: "#ECEEF0" }}
           >
             Back
           </Link>
@@ -311,23 +224,10 @@ export default function CleaningBookingStep1({ data, setData }) {
           <Link
             to="/services/cleaning/book/cleaning-contact-info"
             className="flex items-center justify-between cursor-pointer hover:opacity-90 transition-opacity duration-200 no-underline"
-            style={{
-              padding: "8px 8px 8px 24px",
-              borderRadius: "24px",
-              background: "#08203C",
-              flex: "1 0 0",
-              height: "48px",
-            }}
+            style={{ padding: "8px 8px 8px 24px", borderRadius: "24px", background: "#08203C", flex: "1 0 0", height: "48px" }}
           >
-            <span className="font-rethink text-white font-semibold text-base leading-[140%] w-full text-center">
-              Next Step
-            </span>
-            <span
-              className="flex items-center justify-center w-10 h-10 rounded-full text-white text-base shrink-0"
-              style={{ backgroundColor: "rgba(255,255,255,0.15)" }}
-            >
-              →
-            </span>
+            <span className="font-rethink text-white font-semibold text-base leading-[140%] w-full text-center">Next Step</span>
+            <span className="flex items-center justify-center w-10 h-10 rounded-full text-white text-base shrink-0" style={{ backgroundColor: "rgba(255,255,255,0.15)" }}>→</span>
           </Link>
         </div>
       </div>

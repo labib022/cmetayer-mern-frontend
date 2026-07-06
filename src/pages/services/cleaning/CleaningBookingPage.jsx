@@ -5,16 +5,16 @@ import CleaningContactInfo from "../../../components/main/services/cleaning/clea
 import CleaningSuccess from "../../../components/main/services/cleaning/cleaningbooking/CleaningSuccess";
 
 export default function CleaningBookingPage() {
-  const [bookingData, setBookingData] = useState({
-    bedrooms: 1,
-    bathrooms: 1,
-    serviceCategory: "Standard Clean",
-    serviceDate: "",
-    frequency: "One-time (0%)",
-    fullName: "",
-    email: "",
-    phone: "",
-  });
+const [bookingData, setBookingData] = useState({
+  bedrooms: 1,
+  bathrooms: 1,
+  serviceCategory: "standard_clean", 
+  serviceDate: "",
+  frequency: "one_time", // 
+  fullName: "",
+  email: "",
+  phone: "",
+});
 
   return (
     <Routes>
