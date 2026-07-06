@@ -13,6 +13,7 @@ export const cmsApi = createApi({
     },
   }),
   endpoints: (builder) => ({
+
     // ✅ Home page
     getHomePage: builder.query({
       query: () => `/cms/?page_name=home`,
@@ -24,19 +25,24 @@ export const cmsApi = createApi({
     }),
 
     // ✅ Service pages — moving, cleaning, laundry, repair
-    // Usage: useGetServicePageQuery("moving")
     getServicePage: builder.query({
       query: (pageName) => `/cms/?page_name=${pageName}`,
     }),
 
-    // ✅ FAQs (standalone)
+    // ✅ FAQs
     getFaqs: builder.query({
       query: () => "/faqs/",
     }),
 
-    // ✅ About System — footer, contact info
+    // ✅ About System
     getAboutSystem: builder.query({
       query: () => "/about-system/",
+    }),
+
+    // ✅ Legal pages — Privacy Policy & Terms
+    // Usage: useGetLegalQuery("privacy") or useGetLegalQuery("terms")
+    getLegal: builder.query({
+      query: (type) => `/legal/?type=${type}`,
     }),
 
     // ✅ Contact Us (POST)
@@ -51,7 +57,7 @@ export const cmsApi = createApi({
       },
     }),
 
-    // ✅ Quote Submission (POST)
+    // ✅ Quote Submission (Moving)
     submitQuote: builder.mutation({
       query: (data) => {
         const fd = new FormData();
@@ -72,6 +78,7 @@ export const cmsApi = createApi({
       },
     }),
 
+    // ✅ Repair Quote
     submitRepairQuote: builder.mutation({
       query: (data) => {
         const fd = new FormData();
@@ -89,6 +96,65 @@ export const cmsApi = createApi({
         };
       },
     }),
+
+    // ✅ Laundry Price Calculate
+    getLaundryPrice: builder.mutation({
+      query: (data) => {
+        const fd = new FormData();
+        fd.append("bag_size", data.bag_size);
+        return { url: "/laundry/price/", method: "POST", body: fd };
+      },
+    }),
+
+    // ✅ Laundry Booking
+    submitLaundryBooking: builder.mutation({
+      query: (data) => ({
+        url: "/laundry/book/",
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name:            data.name,
+          email:           data.email,
+          phone:           data.phone,
+          bag_size:        data.bag_size,
+          washing_items:   data.washing_items,
+          detergent_type:  data.detergent_type,
+          laundry_date:    data.laundry_date,
+        }),
+      }),
+    }),
+
+    // ✅ Cleaning Price Calculate
+    getCleaningPrice: builder.mutation({
+      query: (data) => {
+        const fd = new FormData();
+        fd.append("bedrooms", data.bedrooms);
+        fd.append("bathrooms", data.bathrooms);
+        fd.append("services_category", data.services_category);
+        fd.append("frequency", data.frequency);
+        return { url: "/cleaning/price/", method: "POST", body: fd };
+      },
+    }),
+
+    // ✅ Cleaning Booking
+    submitCleaningBooking: builder.mutation({
+      query: (data) => ({
+        url: "/cleaning/book/",
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name:              data.name,
+          email:             data.email,
+          phone:             data.phone,
+          bedrooms:          data.bedrooms,
+          bathrooms:         data.bathrooms,
+          services_category: data.services_category,
+          frequency:         data.frequency,
+          cleaning_date:     data.cleaning_date,
+        }),
+      }),
+    }),
+
   }),
 });
 
@@ -98,7 +164,12 @@ export const {
   useGetServicePageQuery,
   useGetFaqsQuery,
   useGetAboutSystemQuery,
+  useGetLegalQuery,
   useContactUsMutation,
   useSubmitQuoteMutation,
   useSubmitRepairQuoteMutation,
+  useGetLaundryPriceMutation,
+  useSubmitLaundryBookingMutation,
+  useGetCleaningPriceMutation,
+  useSubmitCleaningBookingMutation,
 } = cmsApi;

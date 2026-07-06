@@ -72,7 +72,7 @@ export default function ChangePassword() {
         <div className="flex items-center gap-4">
           <button
             onClick={() => navigate("/profile")}
-            className="w-10 h-10 flex items-center justify-center rounded-full bg-[#FAFAFA] border border-[#E2E6EF] cursor-pointer hover:bg-white transition-colors duration-200"
+            className="w-10 h-10 flex items-center justify-center rounded-full bg-[#FAFAFA] border border-[#E2E6EF] cursor-pointer hover:bg-[#82b5f0] transition-colors duration-200"
           >
             ←
           </button>

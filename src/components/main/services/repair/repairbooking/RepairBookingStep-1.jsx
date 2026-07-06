@@ -7,8 +7,8 @@ const SERVICE_CATEGORIES = [
   { label: "Plumbing Repair", value: "plumbing_repair" },
   { label: "Electrical Work", value: "electrical_work" },
   { label: "Furniture Assembly", value: "furniture_assembly" },
-  { label: "Painting & Drywall", value: "painting_&_drywall" },
-  { label: "Door & Window Repair", value: "door_&_window_repair" },
+  { label: "Painting & Drywall", value: "painting&drywall" },
+  { label: "Door & Window Repair", value: "door&window_repair" },
   { label: "General Maintenance", value: "general_maintenance" },
 ];
 

@@ -78,7 +78,7 @@ export default function Hero() {
   const active = services[displayed] || services[0];
 
   return (
-    <section className="w-full px-4 sm:px-8 lg:px-16 pt-12 pb-16" style={{ backgroundColor: "#08203C" }}>
+    <section className="w-full px-4 sm:px-8 lg:px-16 pt-12 pb-16 rounded-b-3xl" style={{ backgroundColor: "#08203C" }}>
       <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
 
         {/* LEFT */}

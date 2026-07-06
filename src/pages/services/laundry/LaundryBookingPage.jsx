@@ -4,14 +4,12 @@ import LaundryBookingStep1 from "../../../components/main/services/laundry/laund
 import LaundryContactInfo from "../../../components/main/services/laundry/laundrybooking/LaundryContactInfo";
 import LaundrySuccess from "../../../components/main/services/laundry/laundrybooking/LaundrySuccess";
 
-
 export default function LaundryBookingPage() {
   const [bookingData, setBookingData] = useState({
-    bedrooms: 1,
-    bathrooms: 1,
-    serviceCategory: "Standard Clean",
+    bagSize: "Medium (up to 20 lbs)",
+    washType: "Standard Clothing",
+    detergent: "Standard Premium Detergent",
     serviceDate: "",
-    frequency: "One-time (0%)",
     fullName: "",
     email: "",
     phone: "",
@@ -25,8 +23,13 @@ export default function LaundryBookingPage() {
           <LaundryBookingStep1 data={bookingData} setData={setBookingData} />
         }
       />
-       
-      <Route path="laundry-contact-info" element={<LaundryContactInfo data={bookingData} setData={setBookingData} />} /> 
+
+      <Route
+        path="laundry-contact-info"
+        element={
+          <LaundryContactInfo data={bookingData} setData={setBookingData} />
+        }
+      />
       <Route path="success" element={<LaundrySuccess data={bookingData} />} />
     </Routes>
   );
