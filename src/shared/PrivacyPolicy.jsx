@@ -8,8 +8,8 @@ export default function PrivacyPolicyPage() {
     <div className="w-full bg-white">
 
       {/* Hero Header */}
-      <section className="font-rethink bg-[#08203C] px-4 sm:px-6 lg:px-16 py-4 mx-2 mb-2 rounded-b-3xl">
-        <div className="w-full flex flex-col justify-center items-center gap-5 md:gap-6 py-20 md:py-25">
+      <section className="font-rethink bg-[#08203C] px-4 sm:px-6 lg:px-16 py-2 mx-2 mb-2 rounded-b-3xl">
+        <div className="w-full flex flex-col justify-center items-center gap-2 md:gap-6 py-10 md:py-15">
           <h1 className="text-white text-center font-bold text-[28px] sm:text-4xl md:text-[48px] leading-tight px-6">
             Privacy Policy
           </h1>
